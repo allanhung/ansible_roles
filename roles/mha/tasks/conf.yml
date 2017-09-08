@@ -1,0 +1,64 @@
+---
+- name: get mha config
+  get_mha_conf: {}
+  when: (pillar.mha_setting.role == 'monitor')
+
+- name: Create mha config dir if it does not exist
+  file:
+    path: "{{ pillar.mha_common.config_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+  when: (pillar.mha_setting.role == 'monitor')
+
+- name: Create mha log dir if it does not exist
+  file:
+    path: "{{ pillar.mha_common.log_dir }}/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+  when: (pillar.mha_setting.is_mha == True)
+  with_items: "{{ pillar.mha_setting.group_list }}"
+
+- name: mha manager config
+  template:
+    src: mha.conf.j2
+    dest: "{{ pillar.mha_common.config_dir }}/{{ item.key }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mha_manager
+  when: (pillar.mha_setting.role == 'monitor')
+  with_dict: "{{ pillar.mha_conf }}"
+
+- name: mha systemd envirnment config
+  template:
+    src: mha.sysconfig.j2
+    dest: "/etc/sysconfig/mha_{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: (pillar.mha_setting.role == 'monitor')
+  with_items: "{{ pillar.mha_setting.group_list }}"
+
+- name: Copy custom mha script to dir
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ pillar.mha_common.script_dir }}/{{ item }}"
+    mode: 0755
+    force: yes
+  with_items: "{{ pillar.mha_script }}"
+
+- name: Ensure MySQL is stopped and disabled on boot.
+  service: "name={{ item }} state=stopped enabled=no"
+  with_items: "{{ pillar.mysql_cnf.service_list }}"
+  when: (pillar.mha_setting.role == 'monitor')
+  ignore_errors: true
+
+- name: Ensure MySQL mha is enabled on boot.
+  service: "name=mha@{{ item }} enabled=yes"
+  when: (pillar.mha_setting.role == 'monitor')
+  with_items: "{{ pillar.mha_setting.group_list }}"
+

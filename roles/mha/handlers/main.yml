@@ -1,0 +1,4 @@
+---
+- name: restart mha_manager
+  service: "name=mha@{{ item }} state=restarted sleep=10"
+  with_items: "{{ mha.meta.group_list }}"

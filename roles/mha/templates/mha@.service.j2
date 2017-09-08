@@ -1,0 +1,22 @@
+[Unit]
+Description=MHA for MySQL
+After=syslog.target 
+After=network.target 
+ 
+[Service]
+Type=simple
+User=root
+Group=root
+
+EnvironmentFile=/etc/sysconfig/mha_%i
+WorkingDirectory={{ pillar.mha_common.log_dir }}/%i
+ExecStart=/usr/bin/masterha_manager --ignore_last_failover --conf=${MHA_CONF}
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=900
+
+# Place temp files in a secure directory, not /tmp
+PrivateTmp=true
+ 
+[Install]
+WantedBy=multi-user.target

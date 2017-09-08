@@ -1,0 +1,35 @@
+---
+# Copy rpm to software dir 
+- name: Create mha software dir if it does not exist
+  file:
+    path: "{{ pillar.mha_common.software_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
+- name: Copy rpm to mha software dir
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ pillar.mha_common.software_dir }}/{{ item }}"
+    mode: 0644
+    force: no
+  with_items: "{{ pillar.mha_pkg }}"
+
+- name: Ensure mha packages are installed.
+  yum: "name={{ pillar.mha_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.mha_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: Copy mha systemd unit
+  template:
+    src: mha@.service.j2
+    dest: /usr/lib/systemd/system/mha@.service
+    mode: 0644
+    force: yes
+
+- name: daemon-reload
+  command: systemctl daemon-reload
+  when: pillar.myhost.os_ver == "7"

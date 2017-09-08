@@ -1,0 +1,9 @@
+---
+- name: Update Grub default config for RedHat >= 7
+  lineinfile:
+    dest: "{{ pillar.grub.path }}"
+    line: GRUB_CMDLINE_LINUX="{{ pillar.grub.add_args | join(' ') }}"
+    regexp: '^GRUB_CMDLINE_LINUX="'
+  notify:
+    - Update Grub2 config file
+  when: (pillar.grub|length > 0)

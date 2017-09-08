@@ -1,0 +1,7 @@
+---
+- name: Ensure pacemaker packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.pacemaker_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}

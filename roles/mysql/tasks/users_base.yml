@@ -1,0 +1,27 @@
+---
+- name: generate mysql base user
+  gen_mysql_base_user: {}
+
+- name: Configure replication on the slave.
+  mysql_replication:
+    mode: getslave
+    login_user: root
+    login_password: "{{ pillar.mysql_common.password }}"
+    login_unix_socket: "{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }}"
+  register: slave_status
+
+- name: Ensure MySQL base users are present.
+  mysql_user:
+    login_user: root
+    login_password: "{{ pillar.mysql_common.password }}"
+    login_unix_socket: "{{ item[0] }}"
+    name: "{{ item[1].name }}"
+    host: "{{ item[1].host | default('localhost') }}"
+    password: "{{ item[1].password }}"
+    priv: "{{ item[1].priv | default('*.*:USAGE') }}"
+    state: "{{ item[1].state | default('present') }}"
+    append_privs: "{{ item[1].append_privs | default('no') }}"
+  with_nested:
+    - "{{ pillar.mysql_cnf.socket_list }}"
+    - "{{ pillar.mysql_base_user }}"
+  when: slave_status.Is_Slave == false

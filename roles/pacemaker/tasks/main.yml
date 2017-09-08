@@ -1,0 +1,5 @@
+---
+- name: configure pacemaker
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ pillar.pacemaker_stage }}"

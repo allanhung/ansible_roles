@@ -1,0 +1,9 @@
+---
+- name: insert/update proxy setting
+  blockinfile:
+    path: /etc/profile
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertbefore: "export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL"
+    content: |
+      export http_proxy=http://{{ pillar.proxy.proxy }}
+      export https_proxy=https://{{ pillar.proxy.proxy }}

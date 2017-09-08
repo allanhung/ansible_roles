@@ -1,0 +1,15 @@
+---
+- name: Get mongodb version.
+  command: 'mongo --version'
+  ignore_errors: true
+
+- name: ps mongodb version.
+  command: '/trend/mongodb-3.0.0/bin/mongo --version'
+  ignore_errors: true
+
+- name: view mongodb config
+  shell: 'cat /etc/mongod.conf'
+  ignore_errors: true
+
+- name: ps mongodb
+  shell: 'ps aux |grep mongo |grep -v grep'

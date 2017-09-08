@@ -1,0 +1,119 @@
+---
+- name: get proxysql replication group
+  get_proxysql_replication_group: {}
+
+- name: get proxysql server
+  get_proxysql_server: {}
+
+- name: get proxysql query rule
+  get_proxysql_query_rule: {}
+
+- name: proxysql set monitor user
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    variable: mysql-monitor_username
+    value: "{{ item.name }}"
+  with_items: "{{ pillar.mysql_user.monitor }}"
+
+- name: proxysql set monitor password
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    variable: mysql-monitor_password
+    value: "{{ item.password }}"
+  with_items: "{{ pillar.mysql_user.monitor }}"
+
+- name: set listener
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    variable: mysql-interfaces
+    value: "0.0.0.0:{{ pillar.proxysql_common.listen_port }};{{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.socket }}"
+  notify: restart proxysql
+
+- name: set admin listener
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    variable: admin-mysql_ifaces
+    value: "127.0.0.1:{{ pillar.proxysql_common.admin_listen_port }};{{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.admin_socket }}"
+
+- name: proxysql set mysql version
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    variable: mysql-server_version
+    value: "{{ pillar.mysql_daemon.version }}"
+
+- name: proxysql set variables
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    variable: "{{ item.key }}"
+    value: "{{ item.value }}"
+  with_dict: "{{ pillar.proxysql_variables }}"
+
+- name: proxysql set backend servers
+  proxysql_backend_servers:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    hostname: "{{ item.value.hostname }}"
+    port: 3306
+    hostgroup_id: "{{ item.value.group_id }}"
+    weight: 1
+    max_replication_lag: 20
+    comment: "{{ item.value.group_name }}"
+    state: present
+    save_to_disk: True
+    load_to_runtime: True
+  with_dict: "{{ pillar.proxysql_server }}"
+
+- name: proxysql set replication hostgroups
+  proxysql_replication_hostgroups:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    writer_hostgroup: "{{ item.value.write }}"
+    reader_hostgroup: "{{ item.value.read }}"
+    comment: "{{ item.key }}"
+    state: present
+    save_to_disk: True
+    load_to_runtime: True
+  with_dict: "{{ pillar.proxysql_replication_group }}"
+
+- name: proxysql set query rule
+  proxysql_query_rules:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    state: present
+    rule_id: "{{ item.value.rule_id }}"
+    active: "{{ item.value.active }}"
+    match_pattern: "{{ item.value.match_pattern }}"
+    destination_hostgroup: "{{ item.value.destination_hostgroup }}"
+    apply: "{{ item.value.apply }}"
+    comment: "{{ item.value.group_name }}"
+    save_to_disk: True
+    load_to_runtime: True
+  with_dict: "{{ pillar.proxysql_qry_rule }}"
+
+- name: Copy check script to proxysql work dir
+  copy:
+    src: "{{ pillar.proxysql_common.check_script }}"
+    dest: "{{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.check_script }}"
+    mode: 0755
+    force: no
+
+- name: proxysql scheduler
+  proxysql_scheduler:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    state: present
+    interval_ms: 5000
+    filename: "{{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.check_script }}"
+    arg1: "--proxysql_password={{ pillar.proxysql_common.admin_password }}"
+    arg2: "--mysql_user={{ pillar.mysql_user.monitor[0].name }}"
+    arg3: "--mysql_password={{ pillar.mysql_user.monitor[0].password }}"
+    arg4: "--logfile={{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.check_script_log }}"
+    arg5: "--socket={{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.admin_socket }}"
+    save_to_disk: True
+    load_to_runtime: True

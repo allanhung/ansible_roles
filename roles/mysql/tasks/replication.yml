@@ -1,0 +1,65 @@
+---
+- name: get_replication
+  get_replication:
+    master_hostvars: "{{ hostvars[pillar.mysql_replication.master_host] }}"
+  when: (pillar.mysql_replication|length > 0)
+
+- name: gtid reset master
+  command: mysql -uroot -p{{ pillar.mysql_common.password }} -S{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }} -NBe "reset master;"
+  when: (pillar.mysql_replication|length > 0) and pillar.mysql_replication.master_auto_position is defined
+
+- name: check master replication status
+  mysql_replication:
+    mode: getmaster
+    login_user: root
+    login_password: "{{ pillar.mysql_common.password }}"
+    login_unix_socket: "{{ hostvars[pillar.mysql_replication.master_ansible_host].pillar.mysql_cnf.hostport_socket[pillar.mysql_replication.master_host] }}"
+    login_port: "{{ pillar.mysql_replication.master_port }}"
+  delegate_to: "{{ pillar.mysql_replication.master_ansible_host }}"
+  register: master
+  when: (pillar.mysql_replication|length > 0)
+
+- name: gtid purge
+  command: mysql -uroot -p{{ pillar.mysql_common.password }} -S{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }} -NBe "SET GLOBAL gtid_purged='{{ master.Executed_Gtid_Set }}';"
+  when: pillar.mysql_replication.master_auto_position is defined
+
+- name: Configure replication on the slave.
+  mysql_replication:
+    mode: changemaster
+    login_user: root
+    login_password: "{{ pillar.mysql_common.password }}"
+    login_unix_socket: "{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }}"
+    master_host: "{{ pillar.mysql_replication.master_ip }}"
+    master_port: "{{ pillar.mysql_replication.master_port }}"
+    master_user: "{{ pillar.mysql_replication.master_user }}"
+    master_password: "{{ pillar.mysql_replication.master_password }}"
+    master_log_file: "{{ master.File }}"
+    master_log_pos: "{{ master.Position }}"
+  ignore_errors: True
+  when: (pillar.mysql_replication|length > 0) and pillar.mysql_replication.master_auto_position is undefined
+
+- name: gtid Configure replication on the slave.
+  mysql_replication:
+    mode: changemaster
+    login_user: root
+    login_password: "{{ pillar.mysql_common.password }}"
+    login_unix_socket: "{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }}"
+    master_host: "{{ pillar.mysql_replication.master_ip }}"
+    master_port: "{{ pillar.mysql_replication.master_port }}"
+    master_user: "{{ pillar.mysql_replication.master_user }}"
+    master_password: "{{ pillar.mysql_replication.master_password }}"
+    master_auto_position: "{{ pillar.mysql_replication.master_auto_position }}"
+  ignore_errors: True
+  when: (pillar.mysql_replication|length > 0) and pillar.mysql_replication.master_auto_position is defined
+
+- name: start replication.
+  mysql_replication:
+    mode: startslave
+    login_user: root
+    login_password: "{{ pillar.mysql_common.password }}"
+    login_unix_socket: "{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }}"
+  when: (pillar.mysql_replication|length > 0)
+
+- name: set readonly
+  command: mysql -uroot -p{{ pillar.mysql_common.password }} -S{{ pillar.mysql_cnf.hostport_socket[pillar.myhost.hostname] }} -NBe "set  global read_only=1;"
+  when: (pillar.mysql_replication|length > 0)

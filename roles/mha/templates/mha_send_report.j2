@@ -1,0 +1,69 @@
+#!/bin/python
+
+from __future__ import print_function
+import os
+import sys
+import socket
+import smtplib
+from email.mime.text import MIMEText
+from optparse import OptionParser
+
+# Define exit codes
+ERR_CODE_FAILOVER_REPORT_COMMAND_ARG = 10
+ERR_CODE_FAILOVER_REPORT_CONFIG_ERR = 20
+ERR_CODE_FAILOVER_REPORT_EMAIL_ERR = 20
+SUCCESS_CODE_FAILOVER_REPORT = 0
+SMTP_HOST='{{ pillar.postfix.relay_host }}'
+MAIL_TO=['{{ pillar.mha_mail_to |join("\', \'") }}']
+
+class EmailHelper(object):
+    def __init__(self, host):
+        self._smtp_host = SMTP_HOST
+        self._sender = "mha@%s" % socket.getfqdn()
+        self._receiver = MAIL_TO
+
+    def send_email(self, subject, msg):
+        try:
+            smtp = smtplib.SMTP(self._smtp_host)
+
+            email_msg = MIMEText(msg)
+            email_msg['Subject'] = subject
+            email_msg['From'] = self._sender
+            email_msg['To'] = ';'.join(self._receiver)
+
+            print("Sending email to %s via %s with the subject '%s'" % (self._receiver, self._smtp_host, subject))
+            smtp.sendmail(self._sender, self._receiver, email_msg.as_string())
+            smtp.quit()
+        except Exception as e:
+            print("Failed to send email From: %s, To: %s" % (self._sender, self._receiver))
+            print(str(e))
+            return False
+
+        return True
+
+def main():
+    # parse comand line arguments
+    parser = OptionParser()
+    parser.add_option('--conf', type='string')
+    parser.add_option('--orig_master_host', type='string')
+    parser.add_option('--new_master_host', type='string')
+    parser.add_option('--new_slave_hosts', type='string')
+    parser.add_option('--subject', type='string')
+    parser.add_option('--body', type='string')
+    parser.add_option('--test_config_path', type='string')
+
+    (options, args) = parser.parse_args()
+
+    # Bail out if the required options are not provided
+    if options.orig_master_host is None or options.subject is None or options.body is None:
+        sys.exit(ERR_CODE_FAILOVER_REPORT_COMMAND_ARG)
+
+    email_sender = EmailHelper(options.orig_master_host)
+    if not email_sender.send_email('mha failover', options.subject+"\n\n"+options.body):
+        sys.exit(ERR_CODE_FAILOVER_REPORT_EMAIL_ERR)
+
+    # exit the script with the appropriate code
+    sys.exit(SUCCESS_CODE_FAILOVER_REPORT)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,6 @@
+---
+- name: restart mysql
+  service: "name={{ item }} state=restarted sleep=10"
+  with_items: "{{ pillar.mysql_cnf.service_list }}"
+  
+

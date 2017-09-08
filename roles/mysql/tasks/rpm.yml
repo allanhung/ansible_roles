@@ -1,0 +1,72 @@
+---
+- name: Create mysql software dir if it does not exist
+  file:
+    path: "{{ pillar.mysql_common.software_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
+- name: Copy pre rpm to mysql software dir
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ pillar.mysql_common.software_dir }}/{{ item }}"
+    mode: 0644
+    force: no
+  with_items: "{{ pillar.mysql_pre_pkg }}"
+
+- name: Copy rpm to mysql software dir
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ pillar.mysql_common.software_dir }}/{{ item }}"
+    mode: 0644
+    force: no
+  with_items: "{{ pillar.mysql_local_pkg }}"
+
+- name: Ensure MySQL pre packages are installed.
+  yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.mysql_pre_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: Ensure MySQL local packages are installed.
+  yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.mysql_local_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: Ensure MySQL packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.mysql_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: fix max num of process
+  lineinfile:
+    dest: /usr/lib/systemd/system/{{ pillar.mysql_daemon.mysql_daemon }}.service
+    regexp: "^{{ item.property }}"
+    line: "{{ item.property }}={{ item.value }}"
+  with_items:
+    - { property: 'LimitNOFILE', value: "{{ pillar.mysql_limits.mysql.nofile }}" }
+    - { property: 'LimitNPROC', value: "{{ pillar.mysql_limits.mysql.nproc }}" }
+  when: pillar.myhost.os_ver == "7"
+
+- name: fix max num of process
+  lineinfile:
+    dest: /usr/lib/systemd/system/{{ pillar.mysql_daemon.mysql_daemon }}@.service
+    regexp: "^{{ item.property }}"
+    line: "{{ item.property }}={{ item.value }}"
+  with_items:
+    - { property: 'LimitNOFILE', value: "{{ pillar.mysql_limits.mysql.nofile }}" }
+    - { property: 'LimitNPROC', value: "{{ pillar.mysql_limits.mysql.nproc }}" }
+  when: pillar.myhost.os_ver == "7"
+
+- name: daemon-reload
+  command: systemctl daemon-reload
+  when: pillar.myhost.os_ver == "7"
+
+- name: Ensure MySQL is disabled on boot.
+  service: "name={{ pillar.mysql_daemon.mysql_daemon }} enabled=no"

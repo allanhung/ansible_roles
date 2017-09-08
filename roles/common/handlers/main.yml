@@ -1,0 +1,9 @@
+---
+- name: restart snmpd
+  service: "name=snmpd state=restarted sleep=5"
+
+- name: Update Grub2 config file
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+- name: restart postfix
+  service: "name=postfix state=restarted sleep=5"

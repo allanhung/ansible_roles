@@ -1,0 +1,93 @@
+---
+# Copy rpm to software dir 
+- name: Create proxysql software dir if it does not exist
+  file:
+    path: "{{ pillar.proxysql_common.software_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
+- name: Create proxysql software dir if it does not exist
+  file:
+    path: "{{ pillar.proxysql_common.work_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy rpm to proxysql software dir
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ pillar.proxysql_common.software_dir }}/{{ item }}"
+    mode: 0644
+    force: no
+  with_items: "{{ pillar.proxysql_pkg }}"
+
+- name: Ensure proxysql pre packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.proxysql_pre_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: Ensure proxysql packages are installed.
+  yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.proxysql_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: mark monitor username
+  replace:
+    path: /etc/proxysql.cnf
+    regexp: '^\tmonitor_username'
+    replace: '#\tmonitor_username'
+
+- name: mark monitor password
+  replace:
+    path: /etc/proxysql.cnf
+    regexp: '^\tmonitor_password'
+    replace: '#\tmonitor_password'
+
+- name: my conf for proxysql
+  template:
+    src: my.cnf.j2
+    dest: "/root/.my.cnf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: listener addr
+  replace:
+    path: /etc/proxysql.cnf
+    regexp: '^\tinterfaces=.*'
+    replace: '\tinterfaces="0.0.0.0:{{ pillar.proxysql_common.listen_port }};{{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.socket }}"'
+
+- name: admin listener addr
+  replace:
+    path: /etc/proxysql.cnf
+    regexp: '^\tmysql_ifaces=.*'
+    replace: '\tmysql_ifaces="127.0.0.1:6032;{{ pillar.proxysql_common.work_dir }}/{{ pillar.proxysql_common.admin_socket }}"'
+
+- name: Ensure proxysql is started and enabled on boot.
+  service: "name=proxysql state=started enabled=yes"
+
+- name: proxysql set admin password
+  proxysql_global_variables:
+    login_user: "{{ pillar.proxysql_common.default_admin_user }}"
+    login_password: "{{ pillar.proxysql_common.default_admin_password }}"
+    variable: admin-admin_credentials
+    value: "{{ pillar.proxysql_common.admin_user }}:{{ pillar.proxysql_common.admin_password }}"
+  ignore_errors: yes
+
+- name: proxysql save admin password to disk
+  proxysql_manage_config:
+    login_user: "{{ pillar.proxysql_common.admin_user }}"
+    login_password: "{{ pillar.proxysql_common.admin_password }}"
+    action: "SAVE"
+    config_settings: "ADMIN VARIABLES"
+    direction: "TO"
+    config_layer: "DISK"
+
+- name: Restart proxysql
+  service: "name=proxysql state=restarted"

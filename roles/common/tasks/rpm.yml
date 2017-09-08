@@ -1,0 +1,20 @@
+---
+- name: Ensure selinux Python libraries are installed.
+  yum: "name={{ pillar.common_pkgs.selinux_pkg }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: disable selinux
+  selinux:
+    state: disabled
+
+- name: Ensure iptables is stopped and disabled on boot.
+  service: "name={{ pillar.common_pkgs.firewall_srv }} state=stopped enabled=false"
+
+- name: install common tool 
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.common_tool_pkgs }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}

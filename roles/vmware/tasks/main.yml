@@ -1,0 +1,5 @@
+---
+- name: configure vmware.
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ vmware_stage.meta }}"

@@ -1,0 +1,13 @@
+---
+- name: snmp config file
+  stat:
+    path: /etc/sysconfig/snmpd
+  register: f
+
+- name: adjust snmpd log level
+  copy: 
+    src: snmpd
+    dest: /etc/sysconfig/snmpd
+    mode: 0644
+  when: f.stat.exists
+  notify: restart snmpd

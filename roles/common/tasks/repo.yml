@@ -1,0 +1,7 @@
+---
+- name: Ensure extenal repo is installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.repo_list }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}

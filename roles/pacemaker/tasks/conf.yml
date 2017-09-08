@@ -1,0 +1,89 @@
+---
+- name: get pacemaker setting
+  get_pacemaker_setting: {}
+
+- name: Enable and start PCS daemon
+  service: name=pcsd enabled=yes state=started
+
+- name: Ensure the password for the cluster user
+  user:
+    name: "{{ pillar.pacemaker_user.user }}"
+    password: "{{ pillar.pacemaker_user.enc_pass }}"
+
+- name: debug
+  debug:
+    msg: "{{ pillar.pacemaker_setting.nodes|join(' ') }}"
+
+- name: Authenticate all nodes
+  command: "pcs cluster auth {{ pillar.pacemaker_setting.nodes|join(' ') }} -u {{ pillar.pacemaker_user.user }} -p {{ pillar.pacemaker_user.password }}"
+  run_once: true
+  args:
+    creates: /var/lib/pcsd/tokens
+
+- name: setup cluster message bus
+  command: "pcs cluster setup --name {{ pillar.pacemaker_setting.cluster_name }} {{ pillar.pacemaker_setting.nodes|join(' ') }}"
+  run_once: true
+  args:
+    creates: /etc/corosync/corosync.conf
+
+- name: start all cluster nodes
+  service: name={{ item }} enabled=yes state=started
+  with_items:
+    - corosync
+    - pacemaker
+
+- name: set cluster properties
+  command: pcs property set {{ item.key }}={{ item.value }}
+  run_once: true
+  with_dict: "{{ pillar.pacemaker_setting.property }}"
+  when: (pillar.pacemaker_setting.property|length > 0)
+
+- name: Create resources
+  command: >
+    pcs resource create {{ item.id }} {{ item.type }}
+    {% if item.options is defined %}
+      {% for k, v in item.options.items() %}
+        {{ k }}={{ v }}
+      {% endfor %}
+    {% endif %}
+    {% if item.op is defined %}
+      op
+      {% for op in item.op %}
+        {{ op.action }}
+        {% for k, v in op.options.items() %}
+          {{ k}}={{ v }}
+        {% endfor %}
+      {% endfor %}
+    {% endif %}
+    {% if item.meta is defined %}
+      meta {{ item.meta.id }}
+      {% if item.meta.options is defined %}
+        {% for k, v in item.meta.options.items() %}
+          {{ k }}={{ v }}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+    {% if item.clone is defined %}
+      {% if item.clone %} --clone {% endif %}
+    {% elif item.masterslave is defined %}
+      --master
+      {% if item.masterslave.name is defined %}
+        {{ item.masterslave.name }}
+      {% endif %}
+    {% elif item.group is defined %}
+      --group {{ item.group.name }}
+      {% if item.group.before is defined %}
+        --before {{ item.group.before }}
+      {% elif item.group.after is defined %}
+        --after {{ item.group.after }}
+      {% endif %}
+    {% endif %}
+    {% if item.disabled is defined %}
+      {% if item.disabled %} --disabled {% endif %}
+    {% endif %}
+    {% if item.wait is defined %}
+      wait={{ item.wait }}
+    {% endif %}
+  run_once: true
+  with_items: "{{ pillar.pacemaker_setting.resource }}"
+  when: (pillar.pacemaker_setting.resource|length > 0)

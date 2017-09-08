@@ -1,0 +1,15 @@
+---
+- name: insert/update relay host
+  blockinfile:
+    path: /etc/postfix/main.cf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertafter: '^#relayhost = \[an\.ip\.add\.ress\]'
+    content: relayhost = {{ pillar.postfix.relay_host }}
+  notify: restart postfix
+
+- name: disable support for ipv6
+  replace:
+    path: /etc/postfix/main.cf
+    regexp: '^inet_protocols = all$'
+    replace: 'inet_protocols = ipv4'
+  notify: restart postfix

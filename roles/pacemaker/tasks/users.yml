@@ -1,0 +1,6 @@
+---
+- name: set pacemaker user
+  user:
+    name: "{{ pillar.pacemaker_user.user }}"
+    password: "{{ pillar.pacemaker_user.password }}"
+    update_password: always

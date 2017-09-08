@@ -1,0 +1,5 @@
+---
+- name: configure proxysql
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ pillar.proxysql_stage }}"

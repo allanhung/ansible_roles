@@ -1,0 +1,17 @@
+---
+- name: config rsyslog
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.d/{{ item }}.conf
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ pillar.rsyslog_conf }}"
+
+- name: config logrotate
+  template:
+    src: rsyslog.logrotate.j2
+    dest: /etc/logrotate.d/syslog
+    owner: root
+    group: root
+    mode: 0644

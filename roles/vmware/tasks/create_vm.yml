@@ -1,0 +1,76 @@
+---
+- name: Create new vm guest
+  vsphere_guest:
+    vcenter_hostname: "{{ pillar.vmware_info.vcenter_name }}"
+    username: "{{ pillar.vmware_info.username }}"
+    password: "{{ pillar.vmware_info.password }}"
+    guest: "{{ item.ip }}-{{ item.vm_name }}"
+    state: present
+    cluster: "{{ pillar.vmware_info.cluster }}"
+    resource_pool: "{{ pillar.vmware_info.resource_pool }}"
+    vm_extra_config:
+      vcpu.hotadd: yes
+      mem.hotadd:  yes
+      time.synchronize.continue: 0
+      time.synchronize.restore: 0
+      time.synchronize.resume.disk: 0
+      time.synchronize.shrink: 0
+      time.synchronize.tools.startup: 0
+      time.synchronize.tools.enable: 0
+      time.synchronize.resume.host: 0
+      folder: "{{ pillar.vmware_info.folder }}"
+    vm_disk:
+      disk1:
+        size_gb: "{{ item.size_gb }}"
+        type: thin
+        datastore: "{{ item.storage }}"
+    vm_nic:
+      nic1:
+        type: vmxnet3
+        network: "{{ item.nic1_vlan }}"
+        network_type: standard
+    vm_hardware:
+      memory_mb: "{{ item.memory_mb }}"
+      num_cpus: "{{ item.cpu_count }}"
+      osid: "{{ item.os_id }}"
+      scsi: paravirtual
+    esxi:
+      datacenter: "{{ pillar.vmware_info.datacenter }}"
+      hostname: "{{ item.esxi_host }}"
+  with_items: "{{ pillar.vmware_new_host }}"
+
+- name: Gather VM facts
+  vsphere_guest:
+    vcenter_hostname: "{{ pillar.vmware_info.vcenter_name }}"
+    username: "{{ pillar.vmware_info.username }}"
+    password: "{{ pillar.vmware_info.password }}"
+    guest: "{{ item.ip }}-{{ item.vm_name }}"
+    vmware_guest_facts: yes
+  with_items: "{{ pillar.vmware_new_host }}"
+  register: vsphere_facts
+
+- name: remove system from cobbler
+  shell: "docker exec cobbler cobbler system remove --name={{ item.vm_name }}"
+  with_items: "{{ pillar.vmware_new_host }}"
+  ignore_errors: yes
+
+- name: add system to cobbler step 1
+  shell: "docker exec cobbler cobbler system add  --name={{ item.item.vm_name }} --profile={{ item.item.profile }} --hostname={{ item.item.vm_name }}"
+  with_items: "{{ vsphere_facts.results }}"
+
+- name: add system to cobbler step 2
+  shell: "docker exec cobbler cobbler system edit --name={{ item.item.vm_name }} --interface=eth0 --mac={{ item.ansible_facts.hw_eth0.macaddress }} --static=1  --ip-address={{ item.item.ip }} --netmask=255.255.255.0 --if-gateway=10.42.231.1 --name-servers=10.42.21.242"
+  with_items: "{{ vsphere_facts.results }}"
+
+- name: add system to cobbler step 3
+  shell: "docker exec cobbler cobbler system edit --name={{ item.item.vm_name }} --ksmeta=\"swapsize={{ item.item.memory_mb }}  tree=http://192.168.24.248/cblr/links/{{ item.item.profile }}  server=192.168.24.248\""
+  with_items: "{{ vsphere_facts.results }}"
+
+- name: power on vm guest
+  vsphere_guest:
+    vcenter_hostname: "{{ pillar.vmware_info.vcenter_name }}"
+    username: "{{ pillar.vmware_info.username }}"
+    password: "{{ pillar.vmware_info.password }}"
+    guest: "{{ item.ip }}-{{ item.vm_name }}"
+    state: powered_on
+  with_items: "{{ pillar.vmware_new_host }}"
