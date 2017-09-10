@@ -1,0 +1,62 @@
+---
+- name: mysql mmm common config
+  template:
+    src: mmm_common.conf.j2
+    dest: "{{ pillar.mmm_common.config_dir }}/{{ pillar.mmm_common.common_config_file }}"
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+  notify:
+    - restart mmm agent
+
+- name: mysql mmm agent config
+  template:
+    src: mmm_agent.conf.j2
+    dest: "{{ pillar.mmm_common.config_dir }}/{{ pillar.mmm_common.agent_config_file }}"
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+  notify:
+    - restart mmm agent
+  when: "{{ pillar.mmm_setting.mmm_role != 'monitor' }}"
+
+- name: remove mysql mmm agent config
+  file:
+    path: "{{ pillar.mmm_common.config_dir }}/{{ pillar.mmm_common.agent_config_file }}"
+    state: absent
+  when: "{{ pillar.mmm_setting.mmm_role == 'monitor' }}"
+
+- name: mysql mmm monitor config
+  template:
+    src: mmm_mon.conf.j2
+    dest: "{{ pillar.mmm_common.config_dir }}/{{ pillar.mmm_common.monitor_config_file }}"
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+  when: "{{ pillar.mmm_setting.mmm_role == 'monitor' }}"
+
+- name: remove mysql mmm monitor config
+  file:
+    path: "{{ pillar.mmm_common.config_dir }}/{{ pillar.mmm_common.monitor_config_file }}"
+    state: absent
+  when: "{{ pillar.mmm_setting.mmm_role != 'monitor' }}"
+
+- name: remove mysql mmm mon log config
+  file:
+    path: "{{ pillar.mmm_common.config_dir }}/mmm_mon_log.conf"
+    state: absent
+
+- name: remove mysql mmm tools config
+  file:
+    path: "{{ pillar.mmm_common.config_dir }}/mmm_tools.conf"
+    state: absent
+
+- name: Ensure mmm-monitor is stop and disabled on boot in server.
+  service: "name=mysql-mmm-monitor state=stopped enabled=no"
+
+- name: Ensure mmm-agent is started and enabled on boot in database server.
+  service: "name=mysql-mmm-agent state=started enabled=yes"
+  when: "{{ pillar.mmm_setting.mmm_role != 'monitor' }}"

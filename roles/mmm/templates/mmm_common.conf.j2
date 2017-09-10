@@ -1,0 +1,37 @@
+active_master_role      writer
+
+<host default>
+    cluster_interface       eth0
+    pid_path                /var/run/mysql-mmm/mmm_agentd.pid
+    bin_path                /usr/libexec/mysql-mmm/
+    replication_user        {{ pillar['mysql_user']['replication'][0]['name'] }}
+    replication_password    {{ pillar['mysql_user']['replication'][0]['password'] }}
+    agent_user              {{ pillar['mysql_user']['mmm_agent'][0]['name'] }}
+    agent_password          {{ pillar['mysql_user']['mmm_agent'][0]['password'] }}
+</host>
+{% for myhost in pillar['mmm_setting']['hosts'] %}
+<host {{ myhost['name'] }}>
+    ip                      {{ myhost['ip'] }}
+    mode                    {{ myhost['mode'] }}
+{%    if 'peer' in myhost.keys() %}
+    peer                    {{ myhost['peer'] }}
+{%    endif   %}
+</host>
+{% endfor %}
+{% for role in pillar['mmm_setting']['roles'] %}
+<role {{ role['name'] }}>
+    hosts                   {{ role['hosts'] }}
+    ips                     {{ role['ips'] }}
+    mode                    {{ role['mode'] }}
+</role>
+{% endfor %}
+<check rep_backlog>
+    max_backlog 3600
+    timeout 5
+</check>
+<check mysql>
+    timeout 5
+</check >
+<check rep_threads>
+    timeout 5
+</check>

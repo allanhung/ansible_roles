@@ -1,0 +1,33 @@
+---
+- name: heartbeat authkeys
+  template:
+    src: authkeys.j2
+    dest: "{{ pillar.heartbeat_common.config_dir }}/authkeys"
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+  notify: restart heartbeat
+
+- name: heartbeat ha.cf
+  template:
+    src: ha.cf.j2
+    dest: "{{ pillar.heartbeat_common.config_dir }}/ha.cf"
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+  notify: restart heartbeat
+
+- name: heartbeat haresource config
+  template:
+    src: haresources.j2
+    dest: "{{ pillar.heartbeat_common.config_dir }}/haresources"
+    owner: root
+    group: root
+    mode: 0600
+    force: yes
+  notify: restart heartbeat
+
+- name: Ensure heartbeat is started and disabled on boot in server.
+  service: "name=heartbeat state=started enabled=yes"

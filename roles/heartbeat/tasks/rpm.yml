@@ -1,0 +1,7 @@
+---
+- name: Ensure heartbeat packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.heartbeat_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}    

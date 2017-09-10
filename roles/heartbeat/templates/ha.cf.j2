@@ -1,0 +1,15 @@
+debug 0
+debugfile /var/log/ha-debug
+logfile /var/log/ha-log
+logfacility local0
+autojoin none
+ucast eth0 {{ pillar['mmm_setting']['heartbeat']['ucast'] }}
+{% for host in pillar['mmm_setting']['heartbeat']['ha_nodes'] %}
+node {{ host }}
+{% endfor %}
+auto_failback off
+
+warntime 30
+deadtime 45
+initdead 90
+keepalive 2

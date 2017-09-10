@@ -7,14 +7,6 @@
     group: root
     mode:  0755
 
-- name: Copy pre rpm to mysql software dir
-  copy: 
-    src: "{{ item }}"
-    dest: "{{ pillar.mysql_common.software_dir }}/{{ item }}"
-    mode: 0644
-    force: no
-  with_items: "{{ pillar.mysql_pre_pkg }}"
-
 - name: Copy rpm to mysql software dir
   copy: 
     src: "{{ item }}"
@@ -22,13 +14,6 @@
     mode: 0644
     force: no
   with_items: "{{ pillar.mysql_local_pkg }}"
-
-- name: Ensure MySQL pre packages are installed.
-  yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.mysql_pre_pkg }}"
-  environment:
-    http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}
 
 - name: Ensure MySQL local packages are installed.
   yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"

@@ -16,7 +16,15 @@
     mode: 0644
   notify: restart mysql
 
-- name: Ensure MySQL is started and enabled on boot.
-  service: "name={{ item }} state=started enabled=yes"
+- name: change owner for datadir
+  file:
+    path: "{{ item }}"
+    owner: mysql
+    group: mysql
+    recurse: yes
+  with_items: "{{ pillar.mysql_cnf.datadir_list }}"
+
+- name: Ensure MySQL is enabled on boot.
+  service: "name={{ item }} enabled=yes"
   with_items: "{{ pillar.mysql_cnf.service_list }}"
 

@@ -1,0 +1,17 @@
+include mmm_common.conf
+
+<monitor>
+    ip                  127.0.0.1
+    pid_path            /var/run/mysql-mmm/mmm_mond.pid
+    bin_path            /usr/libexec/mysql-mmm
+    status_path         /var/lib/mysql-mmm/mmm_mond.status
+    ping_ips            {{ ansible_default_ipv4['gateway'] }}, {{ pillar['mmm_setting']['reader_host_ip'] }}
+    auto_set_online     60
+</monitor>
+
+<host default>
+    monitor_user        {{ pillar['mysql_user']['mmm_monitor'][0]['name'] }}
+    monitor_password    {{ pillar['mysql_user']['mmm_monitor'][0]['password'] }}
+</host>
+
+debug 0

@@ -1,7 +1,6 @@
 ---
 - name: get_replication
-  get_replication:
-    master_hostvars: "{{ hostvars[pillar.mysql_replication.master_host] }}"
+  get_replication: {}
   when: (pillar.mysql_replication|length > 0)
 
 - name: gtid reset master

@@ -1,0 +1,3 @@
+---
+- name: restart heartbeat
+  service: name=heartbeat state=restarted sleep=10

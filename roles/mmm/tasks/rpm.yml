@@ -1,0 +1,23 @@
+---
+- name: Create mmm software dir if it does not exist
+  file:
+    path: "{{ pillar.mmm_common.software_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
+- name: Copy rpm to mmm software dir
+  copy: 
+    src: "{{ item }}"
+    dest: "{{ pillar.mmm_common.software_dir }}/{{ item }}"
+    mode: 0644
+    force: no
+  with_items: "{{ pillar.mmm_pkg }}"
+
+- name: Ensure MySQL packages are installed.
+  yum: "name={{ pillar.mmm_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.mmm_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}

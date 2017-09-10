@@ -8,7 +8,7 @@
     mode: 0644
   with_items: "{{ pillar.mysql_cnf.service_cnf }}"
 
-- name: Create mysql software dir if it does not exist
+- name: Create mysql data dir if it does not exist
   file:
     path: "{{ item }}"
     state: directory
@@ -36,6 +36,10 @@
   with_items: "{{ pillar.mysql_cnf.service_cnf }}"
   when: "{{ pillar.mysql_cnf.multi_instance }}"
 
+- name: start MySQL
+  service: "name={{ item }} state=started"
+  with_items: "{{ pillar.mysql_cnf.service_list }}"
+
 - name: mysql secure installation
   command: mysql -S {{ item[0] }} -NBe "{{ item[1] }}"
   with_nested:
@@ -56,7 +60,7 @@
 
 # Set root password
 - name: Update MySQL root password for localhost root account
-  shell: mysql -S {{ item[0] }} -NBe 'SET PASSWORD FOR "root"@"{{ item[1] }}" = PASSWORD("{{ mysql_common.meta.password }}");'
+  shell: mysql -S {{ item[0] }} -NBe 'SET PASSWORD FOR "root"@"{{ item[1] }}" = PASSWORD("{{ pillar.mysql_common.password }}");'
   with_nested:
     - "{{ pillar.mysql_cnf.socket_list }}"
     - "{{ mysql_root_hosts.stdout_lines | default([]) }}"

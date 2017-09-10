@@ -1,0 +1,8 @@
+---
+- name: get mmm setting
+  get_mmm_setting: {}
+
+- name: configure mmm.
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ pillar.mmm_stage }}"
