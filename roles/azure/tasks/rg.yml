@@ -1,0 +1,5 @@
+- name: Create a resource group
+  azure_rm_resourcegroup:
+    name: "{{ item.key }}"
+    location: "{{ item.value.location }}"
+  with_dict: "{{ pillar.azure_resource_group }}"

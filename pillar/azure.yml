@@ -1,0 +1,35 @@
+azure_resource_group:
+  default:
+    rg001:
+      location: "West US 2"
+      security_group:
+        - name: dmz
+          rules:
+            -
+        - name: lan
+          rules:
+            -
+      virtual_network:
+        - name:
+          vlan:
+          subnet:
+            - name:
+              vlan:
+            - name:
+              vlan:
+          gateway:
+            - name:
+      stroage_account:
+        - name:
+          type:
+          container:
+            - name:
+              type:
+      public_ip:
+        - name:
+          type:
+      tunnel:
+        - name:
+          connect_to:
+    rg002:
+      location: "East US"

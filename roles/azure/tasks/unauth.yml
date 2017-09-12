@@ -1,0 +1,5 @@
+---
+- name: remove azure credentials
+  file:
+    path: ~/.azure/credentials
+    state: absent

@@ -79,11 +79,9 @@ mysql_config:
     character_set_filesystem: utf8
     character_set_server: utf8
     connect_timeout: "10"
-    enforce_gtid_consistency: "on"
     expire_logs_days: "7"
     explicit_defaults_for_timestamp: "1"
     event_scheduler: "1"
-    gtid_mode: "on"
     innodb_autoextend_increment: "10"
 # innodb_buffer_pool_size: 50% of total RAM for RAM <: 16G
 # innodb_buffer_pool_size: 55% of total RAM for RAM > 16G and <:24G
@@ -182,6 +180,8 @@ mysql_config_by_version:
       binlog_group_commit_sync_delay: 10
       binlog_group_commit_sync_no_delay_count: 0
       default_password_lifetime : 0
+      enforce_gtid_consistency: "on"
+      gtid_mode: "on"
       innodb_max_undo_log_size: 4G
       innodb_undo_directory: my_datadir
       innodb_undo_logs: 128

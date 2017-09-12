@@ -1,0 +1,5 @@
+---
+- name: configure azure
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ pillar.azure_stage }}"

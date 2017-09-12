@@ -169,3 +169,11 @@ pmm_stage:
     type: list
   default:
     - rpm
+
+azure_stage:
+  args:
+    type: list
+  default:
+    - auth
+    - rg
+    - unauth
