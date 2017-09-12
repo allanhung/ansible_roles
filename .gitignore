@@ -1,5 +1,6 @@
 ara*
 host*
+pillar/config
 pillar/protect
 site*
 *rpm
