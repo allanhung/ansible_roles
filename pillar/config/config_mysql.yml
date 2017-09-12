@@ -1,9 +1,0 @@
-mysql_replication:
-  hostname:
-    mysql04-allan:
-      master_host: mysql03-allan.sjc1
-      mode: gtid
-    tmscp-p-dbce01:
-      master_host: tmscp-p-dbce02.sjc1
-    tmscp-p-dbce02:
-      master_host: tmscp-p-dbce01.sjc1
