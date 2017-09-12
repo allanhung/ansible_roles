@@ -1,0 +1,12 @@
+heartbeat_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    6:
+      - heartbeat
+
+heartbeat_common:
+  default:
+    authkey: topsecrete
+    config_dir: /etc/ha.d

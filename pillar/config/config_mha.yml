@@ -1,0 +1,48 @@
+mha_group:
+  default:
+    mygroup:
+      - hostname: dcs-t-mysqlmha-managernode1.sjc1
+        role: monitor
+      - hostname: dcs-t-mysqlmha-managernode2.sjc1
+        role: monitor
+      - hostname: dcs-t-mysqlmha-datanode1.sjc1
+        role: master
+        mha_args:
+          - candidate_master: "1"
+      - hostname: dcs-t-mysqlmha-datanode2.sjc1
+        role: slave
+        mha_args:
+          - candidate_master: "1"
+    lab:
+      - hostname: gr01-allan.sjc1
+        role: monitor
+      - hostname: gr02-allan.sjc1
+        role: monitor
+      - hostname: gr03-allan.sjc1
+        role: slave
+        mha_args:
+          - candidate_master: "1"
+      - hostname: mmm05-allan.sjc1
+        role: master
+        mha_args:
+          - candidate_master: "1"
+    stella:
+      - hostname: mysql01-allan.sjc1
+        role: monitor
+      - hostname: mysql02-allan.sjc1
+        role: monitor
+      - hostname: mysql03-allan.sjc1
+        role: master
+        mha_args:
+          - candidate_master: "1"
+      - hostname: mysql04-allan.sjc1
+        role: slave
+        mha_args:
+          - candidate_master: "1"
+
+mha_mail_to:
+  args:
+    type: list
+  default:
+    - allan_hung@trend.com.tw
+    - gibson_huang@trend.com.tw

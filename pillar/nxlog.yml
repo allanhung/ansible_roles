@@ -1,0 +1,28 @@
+nxlog_common:
+  default:
+    software_dir: /opt/software
+    win_software_dir: D:\Software
+  hostname:
+    sjc1-tpt-wit01:
+      win_software_dir: C:\Software
+
+nxlog_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    6:
+      - nxlog-ce-2.9.1716-1_rhel6.x86_64.rpm
+      - pyparsing-1.5.6-1.el6.noarch.rpm
+
+nxlog_win_pkg:
+  args:
+    type: list
+  default:
+    - nxlog-ce-2.9.1716.msi
+
+nxlog_context:
+  default:
+    mysql:
+      - mysql_error
+      - mysql_slowlog

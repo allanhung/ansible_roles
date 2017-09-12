@@ -1,0 +1,171 @@
+common_stage:
+  args:
+    type: list
+  example:
+    default:
+      - proxy
+      - repo
+      - rpm
+      - grub
+      - ifcfg
+      - sysctl
+      - limits
+      - snmpd
+      - ssh
+      - postfix
+      - rsyslog
+  hostname:
+    mysql01-allan:
+      - proxy
+    mysql02-allan:
+      - proxy
+    mysql03-allan:
+      - proxy
+    mysql04-allan:
+      - proxy
+
+mmm_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - conf
+  hostname:
+    tmscp-p-mmmce01.sjc1:
+      - conf
+    tmscp-p-mmmce02.sjc1:
+      - conf
+    tmscp-p-dbce01:
+      - conf
+    tmscp-p-dbce02:
+      - conf
+
+heartbeat_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - conf
+  hostname:
+    tmscp-p-mmmce01.sjc1:
+      - rpm
+      - conf
+    tmscp-p-mmmce02.sjc1:
+      - rpm
+      - conf
+  
+mysql_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - conf
+      - limits
+      - initdb
+      - databases
+      - users_app
+      - users_base
+      - users_dba
+      - users_mha
+      - users_mmm
+      - import
+      - replication
+  hostname:
+    tmscp-p-dbce01:
+      - replication
+    tmscp-p-dbce02:
+      - replication
+
+mha_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - ssh
+      - conf
+  hostname:
+    mysql01-allan:
+      - conf
+    mysql02-allan:
+      - conf
+
+proxysql_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - conf
+      - users
+  hostname:
+    dcs-t-mysqlmha-managernode1:
+      - rpm
+      - conf
+      - users
+    dcs-t-mysqlmha-managernode2:
+      - rpm
+      - conf
+      - users
+    mysql01-allan:
+      - rpm
+      - conf
+      - users
+    mysql02-allan:
+      - rpm
+      - conf
+      - users
+
+pacemaker_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - conf
+  hostname:
+    mysql01-allan:
+      - rpm
+      - conf
+    mysql02-allan:
+      - rpm
+      - conf
+    xdcs-t-mysqlmha-managernode1:
+      - rpm
+      - conf
+    xdcs-t-mysqlmha-managernode2:
+      - rpm
+      - conf
+
+nxlog_stage:
+  args:
+    type: list
+  default:
+    mysql:
+      - rpm
+      - conf_mysql
+    mongodb:
+      - rpm
+      - conf_mongodb
+    mssql:
+      - msi
+      - conf_mssql
+  example:
+    default:
+      - rpm
+      - conf
+
+vmware_stage:
+  args:
+    type: list
+  default:
+    - create_vm
+
+pmm_stage:
+  args:
+    type: list
+  default:
+    - rpm

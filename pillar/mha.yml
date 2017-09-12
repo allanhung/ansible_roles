@@ -1,0 +1,25 @@
+mha_common:
+  default:
+    config_dir: /etc/mha
+    log_dir: /var/log/mha
+    script_dir: /usr/bin
+    software_dir: /opt/software
+    ssh_user: root
+
+mha_script:
+  args:
+    type: list
+  default:
+    - master_ip_failover
+    - master_ip_online_change
+    - mha_send_report
+ 
+mha_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - mha4mysql-manager-0.57-0.el7.noarch.rpm
+      - mha4mysql-node-0.57-0.el7.noarch.rpm
+      - perl-DBD-MySQL-4.042-1.el7.x86_64.rpm

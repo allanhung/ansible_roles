@@ -1,0 +1,16 @@
+pacemaker_user:
+  default:
+    user: hacluster
+    password: hacluster
+    # python -c 'import crypt; print crypt.crypt("hacluster", "$1$mysalt$")'
+    enc_pass: "$1$mysalt$6egZOUOWFLFJW32JaR4oF/"
+
+pacemaker_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - corosync
+      - pacemaker
+      - pcs

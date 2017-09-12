@@ -1,0 +1,17 @@
+grafana_common:
+  default:
+    admin_password: password for the Grafana administrator account (mandatory).
+    admin_user: user name for the Grafana administrator account.
+    apt_dependencies: packages needed to be able to run this playbook or install Grafana.
+    conf_file: the file that will contain Grafana's configuration.
+    conf_data: the contents of Grafana's configuration file.
+    default: the contents of Grafana's init script environment.
+    dir_conf: the directory where the Grafana configuration file will be stored.
+    dir_data: the directory where the Grafana data will be stored.
+    dir_home: the Grafana home directory.
+    dir_log: the directory where the Grafana log files will be stored.
+    dir_plugins: the directory where the Grafana plugins will be stored.
+    http_port: the port where the Grafana service will be running.
+    group: the Grafana group.
+    user: the Grafana user.
+

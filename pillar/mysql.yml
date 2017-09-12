@@ -1,0 +1,207 @@
+# not support multi source replication on this version
+#innobackupex --user=backup --password=backup --parallel=4 --socket=/tmp/mysql.sock --no-timestamp --stream=xbstream . | lz4 -B4 | ssh server2 "cat - | lz4 -d -B7 | xbstream -x -C /dbdata/mysql"
+mysql_local_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    6:
+      - mysql-connector-python-2.1.7-1.el6.x86_64.rpm
+      - MySQL-client-5.6.33-1.el6.x86_64.rpm
+      - MySQL-devel-5.6.33-1.el6.x86_64.rpm
+      - MySQL-server-5.6.33-1.el6.x86_64.rpm
+      - MySQL-shared-compat-5.6.33-1.el6.x86_64.rpm
+      - mysql-utilities-1.6.5-1.el6.noarch.rpm
+      - percona-xtrabackup-24-2.4.8-1.el6.x86_64.rpm
+      - percona-toolkit-3.0.1-1.el6.x86_64.rpm
+      - pmm-client-1.2.2-1.el6.x86_64.rpm
+      - qpress-11-1.el6.x86_64.rpm
+    7:
+      - mysql-connector-python-2.1.7-1.el7.x86_64.rpm
+      - mysql-community-server-5.7.18-1.el7.x86_64.rpm
+      - mysql-community-client-5.7.18-1.el7.x86_64.rpm
+      - mysql-community-common-5.7.18-1.el7.x86_64.rpm
+      - mysql-community-libs-5.7.18-1.el7.x86_64.rpm
+      - mysql-community-libs-compat-5.7.18-1.el7.x86_64.rpm
+      - mysql-utilities-1.6.5-1.el7.noarch.rpm
+      - percona-xtrabackup-24-2.4.8-1.el7.x86_64.rpm
+      - percona-toolkit-3.0.1-1.el7.x86_64.rpm
+      - pmm-client-1.2.2-1.el7.x86_64.rpm
+      - qpress-11-1.el7.x86_64.rpm
+
+mysql_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    6:
+      - lz4
+      - MySQL-python
+    7:
+      - lz4
+      - MySQL-python
+
+mysql_limits:
+  default:
+    mysql:
+      nofile: 65535
+      nproc: 15000
+
+mysql_daemon:
+  args:
+    check_osver: True
+  default:
+    6:
+      mysql_daemon: mysql
+      version: 5.6.33    
+    7:
+      mysql_daemon: mysqld
+      version: 5.7.18    
+
+mysql_common:
+  default:
+    config_file: /etc/my.cnf
+    datadir: /data/mysql
+    error_log: mysql.err
+    pid_file: mysqld.pid
+    password: root123
+    socket: mysql.sock
+    software_dir: /opt/software/mysql
+    slow_log: mysql-slow.log    
+    port:
+      - 3306
+
+mysql_config:
+  default:
+    binlog_cache_size: "524288"
+    binlog_format: row
+    bulk_insert_buffer_size: 64M
+    character_set_filesystem: utf8
+    character_set_server: utf8
+    connect_timeout: "10"
+    enforce_gtid_consistency: "on"
+    expire_logs_days: "7"
+    explicit_defaults_for_timestamp: "1"
+    event_scheduler: "1"
+    gtid_mode: "on"
+    innodb_autoextend_increment: "10"
+# innodb_buffer_pool_size: 50% of total RAM for RAM <: 16G
+# innodb_buffer_pool_size: 55% of total RAM for RAM > 16G and <:24G
+# innodb_buffer_pool_size: 60% of total RAM for RAM > 24G and <:32G
+# innodb_buffer_pool_size: 65% of total RAM for RAM > 32G and <:64G
+# innodb_buffer_pool_size: 70% of total RAM for RAM > 64G
+    innodb_buffer_pool_size: 0.5*my_memoryM
+    innodb_concurrency_tickets: 5000
+    innodb_data_file_path: ibdata1:2048M;ibdata2:10M:autoextend
+    innodb_file_per_table: "1"
+    innodb_flush_log_at_trx_commit: "1"
+    innodb_flush_method: O_DIRECT
+# adjust by iops    
+# for ssd: 10000 - 20000
+# for pcie-ssd: 50000 - 80000
+    innodb_io_capacity: 4000
+    innodb_io_capacity_max: 8000
+    innodb_large_prefix: "1"
+    innodb_lock_wait_timeout: "300"
+    innodb_log_files_in_group: "3"
+    innodb_log_buffer_size: 8M
+    innodb_log_file_size: 0.02*my_memoryM
+    innodb_lru_scan_depth: 4000
+    innodb_max_dirty_pages_pct: 50
+    innodb_monitor_enable: 
+      - "'module_adaptive_hash'"
+      - "'module_buffer'"
+      - "'module_buffer_page'"
+      - "'module_ddl'"
+      - "'module_dml'"
+      - "'module_ibuf_system'"
+      - "'module_index'"
+      - "'module_innodb'"
+      - "'module_lock'"
+      - "'module_log'"
+      - "'module_os'"
+      - "'module_purge'"
+      - "'module_server'"
+      - "'module_trx'"
+    innodb_numa_interleave: 1
+    innodb_read_io_threads: my_vcpu_count
+    # rollback whole transaction
+    innodb_rollback_on_timeout: "1"
+    innodb_sync_spin_loops: 100
+    innodb_spin_wait_delay: 30
+    innodb_write_io_threads: my_vcpu_count
+    interactive_timeout: 28800
+    join_buffer_size: 4M
+    key_buffer_size: 256M
+    log_bin: mysql-bin
+    log_slave_updates: 1
+    log_queries_not_using_indexes: "1"
+    long_query_time: 10
+    lower_case_table_names: "0"
+    master_info_repository: table
+    max_allowed_packet: 64M
+    max_binlog_cache_size: 2G
+    max_connect_errors: 1000000
+    max_connections: 0.33*my_memory
+    max_heap_table_size: 24M
+    myisam_sort_buffer_size: 64M
+    open_files_limit: 65535
+    performance_schema: "1"
+    performance_schema_instrument:
+      "'%=on'"
+    plugin_load:
+      rpl_semi_sync_master: semisync_master.so
+      rpl_semi_sync_slave: semisync_slave.so
+    # http://imysql.com/2015/03/27/mysql-faq-why-should-we-disable-query-cache.shtml
+    query_cache_size: 0
+    query_cache_type: 0
+    query_cache_limit: "1M"
+    read_buffer_size: "8M"
+    read_rnd_buffer_size: 4M
+    relay_log_info_repository: table
+    relay_log_recovery: "1"
+    rpl_semi_sync_master_enabled: "1"
+    rpl_semi_sync_slave_enabled: "1"
+    socket: my_datadir/mysql.sock
+    skip_name_resolve: "0"
+    slow_query_log: "1"
+    slow_query_log_file: my_datadir/mysql-slow.log
+    sort_buffer_size: "4M"
+    sync_binlog: "1"
+    transaction_isolation: "READ-COMMITTED"
+    table_open_cache : 0.1*my_memory
+    thread_cache_size: "50"
+    tmp_table_size: "16M"
+    wait_timeout: "28800"
+
+mysql_config_by_version:
+  default:
+    5.6:
+      innodb_file_format: barracuda
+    5.7: 
+      binlog_group_commit_sync_delay: 10
+      binlog_group_commit_sync_no_delay_count: 0
+      default_password_lifetime : 0
+      innodb_max_undo_log_size: 4G
+      innodb_undo_directory: my_datadir
+      innodb_undo_logs: 128
+      innodb_undo_log_truncate: 1
+      innodb_undo_tablespaces: 3 
+      slave_parallel_type: LOGICAL_CLOCK
+      slave_parallel_workers: 4
+
+mysql_database:
+  args:
+    type: list
+  example:
+    - name: orchestrator
+      collation: utf8_general_ci
+      encoding: utf8
+
+
+mysql_run_script:
+  args:
+    type: list
+  example:
+    - name: common_schema
+      sql: 'common_schema-2.3.sql'

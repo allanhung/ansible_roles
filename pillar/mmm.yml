@@ -1,0 +1,18 @@
+mmm_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    6:
+      - mysql-mmm-2.2.1-2.el6.noarch.rpm
+      - mysql-mmm-agent-2.2.1-2.el6.noarch.rpm
+      - mysql-mmm-monitor-2.2.1-2.el6.noarch.rpm
+      - mysql-mmm-tools-2.2.1-2.el6.noarch.rpm
+
+mmm_common:
+  default:
+    software_dir: /opt/software/mysql
+    config_dir: /etc/mysql-mmm
+    agent_config_file: mmm_agent.conf
+    common_config_file: mmm_common.conf
+    monitor_config_file: mmm_mon.conf

@@ -1,0 +1,28 @@
+mmm_group:
+  default:
+    tmrm:
+      monitor_vip:
+        tmscp-p-dbce-m.sjc1:
+          - 10.42.66.187
+      write_vip:
+        tmscp-p-dbce-w.sjc1:
+          - 10.42.66.184
+      read_vip:
+        tmscp-p-dbce-r.sjc1:
+          - 10.42.66.185
+          - 10.42.66.186
+      hosts:
+        - hostname: tmscp-p-mmmce01.sjc1
+          ha_peer: tmscp-p-mmmce02.sjc1
+          role: monitor
+        - hostname: tmscp-p-mmmce02.sjc1
+          ha_peer: tmscp-p-mmmce01.sjc1
+          role: monitor
+        - hostname: tmscp-p-dbce01.sjc1
+          mmm_host: master1
+          peer: master2
+          role: master
+        - hostname: tmscp-p-dbce02.sjc1
+          mmm_host: master2
+          peer: master1
+          role: master
