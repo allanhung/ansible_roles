@@ -1,7 +1,9 @@
 ara*
 host*
+inventory*
 pillar/config
 pillar/protect
 site*
 *rpm
 *pyc
+*retry
