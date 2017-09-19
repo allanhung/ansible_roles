@@ -1,5 +1,6 @@
-- name: Create a resource group
-  azure_rm_resourcegroup:
-    name: "{{ item.key }}"
-    location: "{{ item.value.location }}"
-  with_dict: "{{ pillar.azure_resource_group }}"
+---
+- name: resource group file for terraform
+  template:
+    src: resource_group.tf.j2
+    dest: "{{ pillar.terraform.root_path }}/inventory/azure/resource_group.tf"
+    mode: 0644

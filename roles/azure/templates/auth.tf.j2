@@ -1,0 +1,6 @@
+provider "azurerm" {
+  subscription_id = "{{ pillar['azure_info']['subscription_id'] }}"
+  client_id       = "{{ pillar['azure_info']['client_id'] }}"
+  client_secret   = "{{ pillar['azure_info']['client_secret'] }}" 
+  tenant_id       = "{{ pillar['azure_info']['tenant_id'] }}"
+}

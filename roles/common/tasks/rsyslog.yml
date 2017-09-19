@@ -1,4 +1,12 @@
 ---
+- name: Create rsyslog.d dir if it does not exist
+  file:
+    path: /etc/rsyslog.d
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
 - name: config rsyslog
   template:
     src: rsyslog.conf.j2

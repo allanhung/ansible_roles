@@ -1,5 +1,5 @@
 ---
 - name: remove azure credentials
   file:
-    path: "{{ pillar.terraform.root_path }}/azure_auth.tf"
+    path: ~/.azure/credentials
     state: absent

@@ -49,8 +49,10 @@ def get_mmm_setting(myhost, mmm_group, hostvars):
                     elif m['role'] == 'slave':
                         reader_host_list.append(host['name'])
                         reader_host_ip_list.append(host['ip'])
-                    if 'peer' in m.keys():
-                        host['peer']='mmm_'+m['peer']
+                    if 'mmm_peer' in m.keys():
+                        host['peer']='mmm_'+m['mmm_peer']
+                    if 'ha_peer' in m.keys():
+                        host['ha_peer']=m['ha_peer']
                     result['hosts'].append(host)
     result['heartbeat']['ha_nodes']=ha_host_list
     result['roles'].append({'name': 'writer', 'hosts': ', '.join(writer_host_list), 'ips': ', '.join(writer_ip_list), 'mode': 'exclusive'})

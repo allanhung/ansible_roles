@@ -31,6 +31,7 @@ mmm_stage:
     all:
       - rpm
       - conf
+      - inv_mmm
   hostname:
     tmscp-p-mmmce01.sjc1:
       - conf
@@ -177,3 +178,9 @@ azure_stage:
     - auth
     - rg
     - unauth
+
+inv_stage:
+  args:
+    type: list
+  default:
+    - inv_rd

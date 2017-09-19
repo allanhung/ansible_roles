@@ -1,0 +1,8 @@
+---
+- name: common
+  hosts: all
+  remote_user: root
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - common

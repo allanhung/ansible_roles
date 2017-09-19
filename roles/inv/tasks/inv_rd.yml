@@ -1,0 +1,3 @@
+---
+- name: insert_inv_rd
+  insert_inv_rd: {}

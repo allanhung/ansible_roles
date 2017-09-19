@@ -1,12 +1,12 @@
 ---
-- name: Create ~/.azure dir if it does not exist
+- name: Create terraform dir if it does not exist
   file:
-    path: ~/.azure
+    path: "{{ pillar.terraform.root_path }}/inventory/azure"
     state: directory
     mode:  0755
 
 - name: azure credentials
   template:
-    src: credentials.j2
-    dest: ~/.azure/credentials
+    src: auth.tf.j2
+    dest: "{{ pillar.terraform.root_path }}/inventory/azure/azure_auth.tf"
     mode: 0644

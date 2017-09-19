@@ -1,0 +1,3 @@
+terraform:
+  default:
+    root_path: /opt/terraform

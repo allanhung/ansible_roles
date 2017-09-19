@@ -5,3 +5,12 @@
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: repo file
+  template:
+    src: repo.conf.j2
+    dest: "/etc/yum.repos.d/{{ item.key }}.repo"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ pillar.repo_file }}"

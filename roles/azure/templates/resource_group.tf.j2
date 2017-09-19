@@ -1,0 +1,6 @@
+{% for k, v in pillar['azure_resource_group'].items() %}
+resource "azurerm_resource_group" "{{ k }}" {
+    name = "{{ k }}"
+    location = "{{ v.location }}"
+}
+{% endfor %}

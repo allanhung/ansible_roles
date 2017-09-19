@@ -1,0 +1,12 @@
+---
+- name: Create ~/.azure dir if it does not exist
+  file:
+    path: ~/.azure
+    state: directory
+    mode:  0755
+
+- name: azure credentials
+  template:
+    src: credentials.j2
+    dest: ~/.azure/credentials
+    mode: 0644
