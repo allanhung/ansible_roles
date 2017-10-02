@@ -21,7 +21,7 @@ LogLevel INFO
 
 <Input slowlog>
     Module           im_file
-    File             '{{ mysql_log.meta.slow_log }}'
+    File             '{{ mysql_config.slow_log }}'
     InputType        multiline_db_slowlog
     SavePos          TRUE
     ReadFromLast     TRUE
@@ -32,7 +32,7 @@ LogLevel INFO
 
 <Input error_log>
     Module           im_file
-    File             '{{ mysql_log.meta.error_log }}'
+    File             '{{ mysql_config.error_log }}'
     SavePos          TRUE
     ReadFromLast     TRUE
     PollInterval     1
@@ -42,7 +42,7 @@ LogLevel INFO
 
 <Output tcp>
     Module      om_tcp
-    Host        {{ graylog_server.meta.log_server }}
+    Host        {{ pillar.graylog_server.log_server }}
     Port        1514
     Exec        to_syslog_bsd();
 </Output> 

@@ -1,13 +1,13 @@
 ---
 - name: get mysql log setting
   get_mysql_log:
-    myhost: "{{ myhost }}"
+    myhost: "{{ pillar.myhost }}"
     mode: get_mysql_log
-  register: mysql_log
+  register: mysql_config
 
 - name: check folder status
   stat:
-    path: "{{ mysql_log.meta.data_dir }}"
+    path: "{{ mysql_config.data_dir }}"
   register: data_dir
 
 - name: append nxlog to mysql group
@@ -18,7 +18,7 @@
 
 - name: change owner for error log file
   file:
-    path: "{{ mysql_log.meta.error_log }}"
+    path: "{{ mysql_config.error_log }}"
     owner: mysql
     group: mysql
   when: data_dir.stat.exists
@@ -26,7 +26,7 @@
 
 - name: change owner for slow log file
   file:
-    path: "{{ mysql_log.meta.slow_log }}"
+    path: "{{ mysql_config.slow_log }}"
     owner: mysql
     group: mysql
   when: data_dir.stat.exists

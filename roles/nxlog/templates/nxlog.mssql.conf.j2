@@ -49,7 +49,7 @@ LogFile %ROOT%\data\nxlog.log
 
 <Output out_1>
     Module      om_tcp
-    Host        {{ graylog_server.meta.log_server }}
+    Host        {{ pillar.graylog_server.log_server }}
     Port        1514
     Exec        to_syslog_bsd();
 </Output>
