@@ -1,0 +1,8 @@
+---
+- name: powershell
+  hosts: all
+  remote_user: root
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - powershell

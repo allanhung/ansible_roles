@@ -142,8 +142,6 @@ pacemaker_stage:
       - conf
 
 nxlog_stage:
-  args:
-    type: list
   default:
     mysql:
       - rpm
@@ -158,6 +156,11 @@ nxlog_stage:
     default:
       - rpm
       - conf
+
+telegraf_stage:
+  default:
+    mssql:
+      - msi  
 
 vmware_stage:
   args:

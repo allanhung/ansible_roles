@@ -1,0 +1,19 @@
+---
+- name: get mssql log setting
+  win_shell: "(Invoke-Sqlcmd -Query \"SELECT ServerProperty('ErrorLogFileName')\").ItemArray[0]"
+  register: mssql_log
+  ignore_errors: yes
+
+- name: nxlog config
+  win_template:
+    src: nxlog.mssql.conf.j2
+    dest: 'C:\Program Files (x86)\nxlog\conf\nxlog.conf'
+  notify: restart nxlog for windows
+  when: mssql_log.rc == 0
+
+- name: nxlog config
+  win_template:
+    src: nxlog.win_eventlog.conf.j2
+    dest: 'C:\Program Files (x86)\nxlog\conf\nxlog.conf'
+  notify: restart nxlog for windows
+  when: mssql_log.rc == 1

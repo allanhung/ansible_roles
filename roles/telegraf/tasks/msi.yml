@@ -1,0 +1,35 @@
+---
+- name: Create directory structure
+  win_file:
+    path: "{{ pillar.telegraf_win.install_path }}"
+    state: directory
+
+- name: Copy exec file to target
+  win_copy:
+    src: "{{ item }}"
+    dest: "{{ pillar.telegraf_win.install_path }}\\{{ item }}"
+  with_items: "{{ pillar.telegraf_win_files }}"
+  notify: restart telegraf for windows
+
+- name: Copy conf file to target
+  win_copy:
+    src: "{{ pillar.telegraf_conf_files.conf }}"
+    dest: "{{ pillar.telegraf_win.install_path }}\\telegraf.conf"
+  with_dict: "{{ pillar.telegraf_conf_files }}"
+  notify: restart telegraf for windows
+
+- name: check service
+  win_shell: "Get-Service telegraf -ErrorAction SilentlyContinue"
+  register: service_result
+  ignore_errors: true
+
+- name: Install telegraf
+  win_shell: "{{ pillar.telegraf_win.install_path }}\\telegraf.exe --service install"
+  args:
+    executable: cmd
+  when: service_result.rc > 0
+
+- name: restart telegraf for windows
+  win_service:
+    name: telegraf
+    state: restarted  

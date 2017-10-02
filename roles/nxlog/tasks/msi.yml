@@ -1,0 +1,26 @@
+---
+- name: nxlog_win_pkg
+  get_setting:
+    myhost: "{{ myhost }}"
+    setting: "{{ nxlog_win_pkg }}"
+    value_type: list
+  delegate_to: 127.0.0.1
+  register: nxlog_win_pkg
+
+- name: Create directory structure
+  win_file:
+    path: "{{ nxlog_common.meta.win_software_dir }}"
+    state: directory
+
+- name: Copy a install file
+  win_copy:
+    src: "{{ item }}"
+    dest: "{{ nxlog_common.meta.win_software_dir }}\\{{ item }}"
+  with_items: "{{ nxlog_win_pkg.meta }}"
+
+- name: Install an MSI file
+  win_msi:
+    path: "{{ nxlog_common.meta.win_software_dir }}\\{{ item }}"
+    state: present
+    wait: true
+  with_items: "{{ nxlog_win_pkg.meta }}"

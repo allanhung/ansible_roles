@@ -1,0 +1,7 @@
+---
+- name: reporting
+  hosts: all
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - aho

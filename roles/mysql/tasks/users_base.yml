@@ -1,7 +1,4 @@
 ---
-- name: generate mysql base user
-  gen_mysql_base_user: {}
-
 - name: Configure replication on the slave.
   mysql_replication:
     mode: getslave
@@ -23,5 +20,5 @@
     append_privs: "{{ item[1].append_privs | default('no') }}"
   with_nested:
     - "{{ pillar.mysql_cnf.socket_list }}"
-    - "{{ pillar.mysql_base_user }}"
+    - "{{ pillar.mysql_user.monitor }} + {{ pillar.mysql_user.replication }}"
   when: slave_status.Is_Slave == false

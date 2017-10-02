@@ -1,0 +1,5 @@
+---
+- name: Restart a service
+  win_service:
+    name: nxlog
+    state: restarted

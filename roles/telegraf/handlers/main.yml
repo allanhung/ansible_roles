@@ -1,0 +1,8 @@
+---
+- name: restart telegraf for linux
+  service: "name=telegraf state=restarted sleep=10"
+
+- name: restart telegraf for windows
+  win_service:
+    name: telegraf
+    state: restarted

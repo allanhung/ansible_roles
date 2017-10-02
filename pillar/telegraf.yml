@@ -1,0 +1,16 @@
+telegraf_win:
+  default:
+    install_path: "C:\\Progra~1\\telegraf"
+
+telegraf_win_files:
+  args:
+    type: list  
+  default:
+    - telegraf.exe
+
+telegraf_conf_files:
+  default:
+    conf: telegraf.conf
+  hostname:
+    dcs-alwayson1-allan:
+      conf: telegraf_sqlserver.conf

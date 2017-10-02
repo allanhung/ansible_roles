@@ -1,0 +1,43 @@
+---
+- name: get mysql log setting
+  get_mysql_log:
+    myhost: "{{ myhost }}"
+    mode: get_mysql_log
+  register: mysql_log
+
+- name: check folder status
+  stat:
+    path: "{{ mysql_log.meta.data_dir }}"
+  register: data_dir
+
+- name: append nxlog to mysql group
+  user:
+    name: nxlog
+    groups: nxlog, mysql
+    append: yes
+
+- name: change owner for error log file
+  file:
+    path: "{{ mysql_log.meta.error_log }}"
+    owner: mysql
+    group: mysql
+  when: data_dir.stat.exists
+  ignore_errors: yes
+
+- name: change owner for slow log file
+  file:
+    path: "{{ mysql_log.meta.slow_log }}"
+    owner: mysql
+    group: mysql
+  when: data_dir.stat.exists
+  ignore_errors: yes
+
+- name: nxlog config
+  template:
+    src: nxlog.mysql.conf.j2
+    dest: /etc/nxlog.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nxlog for linux
+  when: data_dir.stat.exists

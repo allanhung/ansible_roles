@@ -1,3 +1,8 @@
 2017-09-05 23:16:04,529 - ara - INFO - Initializing new DB from scratch
 2017-09-05 23:21:50,447 - ara - INFO - Initializing new DB from scratch
 2017-09-05 23:43:50,999 - ara - INFO - Initializing new DB from scratch
+2017-09-19 23:35:07,526 - ara - ERROR - Play b2d441df-b62c-4705-a93a-8afdf8fe5fc7 could not be found
+2017-09-19 23:51:57,588 - ara - ERROR - Result help could not be found
+2017-09-19 23:56:06,897 - ara - ERROR - Stats 580e7dc-9445-438d-b57b-7d4c25b35285 could not be found
+2017-09-19 23:56:46,286 - ara - ERROR - No recognized column names in ['result']
+2017-09-19 23:57:05,497 - ara - ERROR - No recognized column names in ['Result']

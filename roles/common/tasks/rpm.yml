@@ -11,6 +11,7 @@
 
 - name: Ensure iptables is stopped and disabled on boot.
   service: "name={{ pillar.common_pkgs.firewall_srv }} state=stopped enabled=false"
+  ignore_errors: true
 
 - name: install common tool 
   yum: "name={{ item }} state=installed"

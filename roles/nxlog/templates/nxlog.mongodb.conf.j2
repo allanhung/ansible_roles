@@ -1,0 +1,41 @@
+########################################
+# Global directives                    #
+########################################
+User nxlog
+Group nxlog
+
+LogFile /var/log/nxlog/nxlog.log
+LogLevel INFO
+
+########################################
+# Modules                              #
+########################################
+<Extension _syslog>
+    Module       xm_syslog
+</Extension>
+
+<Extension multiline_graylog_server>
+    Module       xm_multiline
+    HeaderLine   /^\d\d\d\d-\d\d-\d\dT\d\d/
+</Extension>
+
+<Input mongodb>
+    Module           im_file
+    File             '{{ mongodb_log.stdout }}'
+    SavePos          TRUE
+    ReadFromLast     TRUE
+    PollInterval     1
+    Exec             $Message = $raw_event;
+    Exec             $SourceName = 'mongodb';
+</Input> 
+
+<Output tcp>
+    Module      om_tcp
+    Host        {{ graylog_server.meta.log_server }}
+    Port        1514
+    Exec        to_syslog_bsd();
+</Output> 
+
+<Route 1>
+    Path        mongodb => tcp
+</Route>

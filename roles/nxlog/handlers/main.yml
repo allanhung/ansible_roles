@@ -1,0 +1,8 @@
+---
+- name: restart nxlog for linux
+  service: "name=nxlog state=restarted sleep=10"
+
+- name: restart nxlog for windows
+  win_service:
+    name: nxlog
+    state: restarted

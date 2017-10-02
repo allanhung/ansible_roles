@@ -1,0 +1,9 @@
+---
+- name: get_stage_by_os
+  get_stage_by_os:
+    role_name: telegraf
+
+- name: configure telegraf
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ pillar.telegraf_stage_by_os }}"

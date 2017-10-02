@@ -1,0 +1,9 @@
+---
+- name: get_stage_by_os
+  get_stage_by_os:
+    role_name: nxlog
+
+- name: configure nxlog
+  include: "{{ item }}.yml"
+  static: no
+  with_items: "{{ pillar.nxlog_stage_by_os }}"

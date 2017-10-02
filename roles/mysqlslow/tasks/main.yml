@@ -1,0 +1,44 @@
+---
+- name: install epel
+  yum: "name=epel-release state=installed"
+
+- name: install pyparsing
+  yum: "name=pyparsing state=installed"
+
+- name: get mysql config
+  get_mysql_config:
+    myhost: "{{ pillar.myhost }}"
+    mode: get_mysql_log
+  register: mysql_config
+
+- name: check data dir
+  stat:
+    path: "{{ mysql_config.data_dir }}"
+  register: data_dir
+
+- name: check slow log
+  stat:
+    path: "{{ mysql_config.slow_log }}"
+  register: slowlog
+
+- name: check slow log bak
+  stat:
+    path: "{{ mysql_config.slow_log }}.bak"
+  register: slowlog_bak
+
+- name: slow log analyze
+  shell: "mysqldumpslow -s c -t 50 {{ mysql_config.slow_log }}.bak > /tmp/slowlog_analyze.txt"
+  when: data_dir.stat.exists and slowlog_bak.stat.exists
+  ignore_errors: yes
+
+- name: slow log analyze
+  shell: "mysqldumpslow -s c -t 50 {{ mysql_config.slow_log }} > /tmp/slowlog_analyze.txt"
+  when: data_dir.stat.exists and slowlog.stat.exists and (not slowlog_bak.stat.exists)
+  ignore_errors: yes
+    
+- name: fetch log
+  fetch:
+    src: /tmp/slowlog_analyze.txt
+    dest: /tmp/slowlog_analyze-{{ inventory_hostname }}
+    flat: yes
+  when: data_dir.stat.exists and (slowlog.stat.exists or slowlog_bak.stat.exists)

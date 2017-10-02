@@ -3,7 +3,7 @@ from ansible.plugins.action import ActionBase
 def get_mysql_base_user(mysql_user):
     result = []
     for k, v in mysql_user.items():
-        if k in ['monitor', 'orch', 'replication']:
+        if k in ['monitor', 'replication']:
             result.extend(v)
     return result
 

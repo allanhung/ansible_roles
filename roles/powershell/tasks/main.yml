@@ -1,0 +1,8 @@
+---
+- name: Retrieving Documentation for Raw and Formatted Performance Data Objects
+  win_shell: New-Object System.Management.ManagementClass Win32_PerfFormattedData_APPPOOLCountersProvider_APPPOOLWAS
+  register: shellout
+
+- name: debug
+  debug:
+    var: shellout  

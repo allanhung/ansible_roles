@@ -1,0 +1,13 @@
+---
+- name: get mongodb log setting
+  shell: "cat /etc/mongod.conf|grep logpath|awk -F'=' {'print $2'}"
+  register: mongodb_log
+
+- name: nxlog config
+  template:
+    src: nxlog.mongodb.conf.j2
+    dest: /etc/nxlog.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nxlog for linux
