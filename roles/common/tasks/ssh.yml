@@ -10,3 +10,12 @@
     owner: root
     group: root
     mode: 0644
+
+- name: sshd_config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+  with_dict: "{{ pillar.sshd_config }}"
+  notify: restart sshd      

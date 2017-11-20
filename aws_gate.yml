@@ -1,9 +1,8 @@
 ---
-- name: mysql
-  hosts: sjc1
+- name: aws gate
+  hosts: gate
   remote_user: root
   pre_tasks:
     - pillar: {}
   roles:
-    - common
-    - mysql
+    - squid

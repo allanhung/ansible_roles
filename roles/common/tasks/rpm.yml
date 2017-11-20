@@ -19,3 +19,10 @@
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: install python tool
+  shell: "echo y | pip install {{ item }}"
+  with_items: "{{ pillar.common_python_pkgs }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}

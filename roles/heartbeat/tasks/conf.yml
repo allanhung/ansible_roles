@@ -1,4 +1,7 @@
 ---
+- name: get mmm setting
+  get_mmm_setting: {}
+
 - name: heartbeat authkeys
   template:
     src: authkeys.j2

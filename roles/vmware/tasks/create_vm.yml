@@ -27,7 +27,7 @@
     vm_nic:
       nic1:
         type: vmxnet3
-        network: "{{ item.nic1_vlan }}"
+        network: VLAN1231_10.42.231.0/24
         network_type: standard
     vm_hardware:
       memory_mb: "{{ item.memory_mb }}"
@@ -59,7 +59,7 @@
   with_items: "{{ vsphere_facts.results }}"
 
 - name: add system to cobbler step 2
-  shell: "docker exec cobbler cobbler system edit --name={{ item.item.vm_name }} --interface=eth0 --mac={{ item.ansible_facts.hw_eth0.macaddress }} --static=1  --ip-address={{ item.item.ip }} --netmask=255.255.255.0 --if-gateway=10.42.231.1 --name-servers=10.42.21.242"
+  shell: "docker exec cobbler cobbler system edit --name={{ item.item.vm_name }} --interface=eth0 --mac={{ item.ansible_facts.hw_eth0.macaddress }} --static=1  --ip-address={{ item.item.ip }} --netmask=255.255.255.0 --if-gateway={{ item.item.ip.split('.')[0] }}.{{ item.item.ip.split('.')[1] }}.{{ item.item.ip.split('.')[2] }}.1 --name-servers=10.42.21.242"
   with_items: "{{ vsphere_facts.results }}"
 
 - name: add system to cobbler step 3

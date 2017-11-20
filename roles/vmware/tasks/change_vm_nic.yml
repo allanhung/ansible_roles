@@ -1,0 +1,13 @@
+---
+- name: change vm network
+  vsphere_guest:
+    vcenter_hostname: "{{ pillar.vmware_info.vcenter_name }}"
+    username: "{{ pillar.vmware_info.username }}"
+    password: "{{ pillar.vmware_info.password }}"
+    guest: "{{ item.ip }}-{{ item.vm_name }}"
+    vm_nic:
+      nic1:
+        type: vmxnet3
+        network: "{{ item.nic1_vlan }}"
+        network_type: standard
+  with_items: "{{ pillar.vmware_new_host }}"

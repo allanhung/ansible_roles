@@ -1,5 +1,4 @@
 ---
 - name: run task
-  include: "{{ item }}.yml"
-  static: no
+  include_tasks: "{{ item }}.yml"
   with_items: "{{ pillar.common_stage }}"

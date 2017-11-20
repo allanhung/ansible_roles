@@ -61,15 +61,14 @@ mysql_daemon:
 mysql_common:
   default:
     config_file: /etc/my.cnf
-    datadir: /data/mysql
+    data_dir: /data/mysql
     error_log: mysql.err
     pid_file: mysqld.pid
     password: root123
-    socket: mysql.sock
+    socket: /data/mysql/mysql.sock
     software_dir: /opt/software/mysql
-    slow_log: mysql-slow.log    
-    port:
-      - 3306
+    slow_log: mysql-slow.log
+    port: 3306
 
 mysql_config:
   default:

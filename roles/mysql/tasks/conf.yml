@@ -18,13 +18,11 @@
 
 - name: change owner for datadir
   file:
-    path: "{{ item }}"
+    path: "{{ pillar.mysql_common.data_dir }}"
     owner: mysql
     group: mysql
     recurse: yes
-  with_items: "{{ pillar.mysql_cnf.datadir_list }}"
 
 - name: Ensure MySQL is enabled on boot.
-  service: "name={{ item }} enabled=yes"
-  with_items: "{{ pillar.mysql_cnf.service_list }}"
+  service: "name={{ pillar.mysql_daemon.mysql_daemon }} enabled=yes"
 

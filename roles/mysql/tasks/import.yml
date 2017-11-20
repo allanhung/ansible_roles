@@ -13,10 +13,8 @@
   mysql_db:
     login_user: root
     login_password: "{{ pillar.mysql_common.password }}"
-    login_unix_socket: "{{ item[0] }}"
-    name: "{{ item[1].name }}"
-    target: "/tmp/{{ item[1].sql }}"
+    login_unix_socket: "{{ pillar.mysql_common.socket }}"
+    name: "{{ item.name }}"
+    target: "/tmp/{{ item.sql }}"
     state: import
-  with_nested:
-    - "{{ pillar.mysql_cnf.socket_list }}"
-    - "{{ pillar.mysql_run_script }}"
+  with_items: "{{ pillar.mysql_run_script }}"

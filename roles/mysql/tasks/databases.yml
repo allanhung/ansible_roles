@@ -3,11 +3,9 @@
   mysql_db:
     login_user: root
     login_password: "{{ pillar.mysql_common.password }}"
-    login_unix_socket: "{{ item[0] }}"
-    name: "{{ item[1].name }}"
-    collation: "{{ item[1].collation | default('utf8_general_ci') }}"
-    encoding: "{{ item[1].encoding | default('utf8') }}"
+    login_unix_socket: "{{ pillar.mysql_common.socket }}"
+    name: "{{ item.name }}"
+    collation: "{{ item.collation | default('utf8_general_ci') }}"
+    encoding: "{{ item.encoding | default('utf8') }}"
     state: present
-  with_nested:
-    - "{{ pillar.mysql_cnf.socket_list }}"
-    - "{{ pillar.mysql_database }}"
+  with_items: "{{ pillar.mysql_database }}"

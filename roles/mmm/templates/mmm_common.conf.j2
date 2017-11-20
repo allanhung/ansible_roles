@@ -16,6 +16,9 @@ active_master_role      writer
 {%    if 'peer' in myhost.keys() %}
     peer                    {{ myhost['peer'] }}
 {%    endif   %}
+{%    if 'eni' in myhost.keys() %}
+    eni                     {{ myhost['eni'] }}
+{%    endif   %}
 </host>
 {% endfor %}
 {% for role in pillar['mmm_setting']['roles'] %}

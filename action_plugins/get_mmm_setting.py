@@ -53,6 +53,8 @@ def get_mmm_setting(myhost, mmm_group, hostvars):
                         host['peer']='mmm_'+m['mmm_peer']
                     if 'ha_peer' in m.keys():
                         host['ha_peer']=m['ha_peer']
+                    if 'eni' in m.keys():
+                        host['eni']=m['eni']
                     result['hosts'].append(host)
     result['heartbeat']['ha_nodes']=ha_host_list
     result['roles'].append({'name': 'writer', 'hosts': ', '.join(writer_host_list), 'ips': ', '.join(writer_ip_list), 'mode': 'exclusive'})

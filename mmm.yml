@@ -1,10 +1,7 @@
 ---
 - name: mysql mmm
-  hosts: all
-  remote_user: root
+  hosts: stage
   pre_tasks:
     - pillar: {}
   roles:
     - mmm
-    - heartbeat
-    - mysql

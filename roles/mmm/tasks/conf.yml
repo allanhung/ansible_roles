@@ -9,6 +9,7 @@
     force: yes
   notify:
     - restart mmm agent
+    - restart mmm monitor
 
 - name: mysql mmm agent config
   template:
@@ -36,6 +37,8 @@
     group: root
     mode: 0600
     force: yes
+  notify:
+    - restart mmm monitor
   when: "{{ pillar.mmm_setting.mmm_role == 'monitor' }}"
 
 - name: remove mysql mmm monitor config
@@ -56,6 +59,7 @@
 
 - name: Ensure mmm-monitor is stop and disabled on boot in server.
   service: "name=mysql-mmm-monitor state=stopped enabled=no"
+  when: "{{ pillar.mmm_setting.mmm_role != 'monitor' }}"
 
 - name: Ensure mmm-agent is started and enabled on boot in database server.
   service: "name=mysql-mmm-agent state=started enabled=yes"

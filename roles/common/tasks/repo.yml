@@ -1,4 +1,10 @@
 ---
+- name: Ensure yum-utils is installed.
+  yum: "name=yum-utils state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
 - name: Ensure extenal repo is installed.
   yum: "name={{ item }} state=installed"
   with_items: "{{ pillar.repo_list }}"
@@ -8,7 +14,7 @@
 
 - name: repo file
   template:
-    src: repo.conf.j2
+    src: "repo.conf.j2"
     dest: "/etc/yum.repos.d/{{ item.key }}.repo"
     owner: root
     group: root

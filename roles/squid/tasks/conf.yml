@@ -1,0 +1,9 @@
+---
+- name: squid.conf
+  template:
+    src: squid.conf.j2
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart squid

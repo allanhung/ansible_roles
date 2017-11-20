@@ -1,66 +1,44 @@
 ---
-- name: my.cnf for every service
-  template:  
-    src: my.cnf.service.j2
-    dest: /etc/{{ item.filename }}
-    owner: root
-    group: root
-    mode: 0644
-  with_items: "{{ pillar.mysql_cnf.service_cnf }}"
-
 - name: Create mysql data dir if it does not exist
   file:
-    path: "{{ item }}"
+    path: "{{ pillar.mysql_common.data_dir }}"
     state: directory
     owner: mysql
     group: mysql
     mode:  0755
-  with_items: "{{ pillar.mysql_cnf.datadir_list }}"
 
 - name: mysql install db single instance
   command: mysql_install_db
   become: true
   become_user: mysql
-  when: (not {{ pillar.mysql_cnf.multi_instance }}) and '5.6.' in mysql_version.stdout
+  when: '"5.6." in mysql_version.stdout'
 
 - name: mysql install db single instance
   command: mysqld --initialize-insecure
   become: true
   become_user: mysql
-  when: (not {{ pillar.mysql_cnf.multi_instance }}) and '5.7.' in mysql_version.stdout
-
-- name: mysql install db multi instance
-  command: mysqld --defaults-file=/etc/{{ item.filename }} --initialize-insecure
-  become: true
-  become_user: mysql
-  with_items: "{{ pillar.mysql_cnf.service_cnf }}"
-  when: "{{ pillar.mysql_cnf.multi_instance }}"
+  when: '"5.7." in mysql_version.stdout'
 
 - name: Change owner for mysql data dir
   file:
-    path: "{{ item }}"
+    path: "{{ pillar.mysql_common.data_dir }}"
     owner: mysql
     group: mysql
     recurse: yes
-  with_items: "{{ pillar.mysql_cnf.datadir_list }}"
 
 - name: start MySQL
-  service: "name={{ item }} state=started"
-  with_items: "{{ pillar.mysql_cnf.service_list }}"
+  service: "name={{ pillar.mysql_daemon.mysql_daemon }} state=started"
 
 - name: mysql secure installation
-  command: mysql -S {{ item[0] }} -NBe "{{ item[1] }}"
-  with_nested:
-    - "{{ pillar.mysql_cnf.socket_list }}"
-    - ["DELETE FROM mysql.user WHERE User=''", "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')", "update mysql.user set password_expired='N' where user='root'", "flush privileges"]
+  command: mysql -S {{ pillar.mysql_common.socket }} -NBe "{{ item }}"
+  with_items: ["DELETE FROM mysql.user WHERE User=''", "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')", "update mysql.user set password_expired='N' where user='root'", "flush privileges"]
 
 - name: Remove MySQL test database.
   mysql_db:
     login_user: root
-    login_unix_socket: "{{ item }}"
+    login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: test
     state: absent
-  with_items: "{{ pillar.mysql_cnf.socket_list }}"
 
 - name: Get list of hosts for the root user.
   command: "mysql -NBe \"SELECT Host FROM mysql.user WHERE User = 'root' ORDER BY (Host='localhost') ASC\""
@@ -68,7 +46,5 @@
 
 # Set root password
 - name: Update MySQL root password for localhost root account
-  shell: mysql -S {{ item[0] }} -NBe 'SET PASSWORD FOR "root"@"{{ item[1] }}" = PASSWORD("{{ pillar.mysql_common.password }}");'
-  with_nested:
-    - "{{ pillar.mysql_cnf.socket_list }}"
-    - "{{ mysql_root_hosts.stdout_lines | default([]) }}"
+  shell: mysql -S {{ pillar.mysql_common.socket }} -NBe 'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ pillar.mysql_common.password }}");'
+  with_items: "{{ mysql_root_hosts.stdout_lines | default([]) }}"

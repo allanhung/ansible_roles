@@ -10,6 +10,5 @@
   when: mysql_version is defined
 
 - name: configure MySQL.
-  include: "{{ item }}.yml"
-  static: no
+  include_tasks: "{{ item }}.yml"
   with_items: "{{ pillar.mysql_stage }}"

@@ -3,6 +3,5 @@
   get_mmm_setting: {}
 
 - name: configure mmm.
-  include: "{{ item }}.yml"
-  static: no
+  include_tasks: "{{ item }}.yml"
   with_items: "{{ pillar.mmm_stage }}"

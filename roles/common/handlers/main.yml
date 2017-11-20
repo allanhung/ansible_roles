@@ -7,3 +7,6 @@
 
 - name: restart postfix
   service: "name=postfix state=restarted sleep=5"
+
+- name: restart sshd
+  service: "name=sshd state=restarted"  

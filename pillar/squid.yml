@@ -1,0 +1,9 @@
+squid_pkg:
+  args:
+    type: list
+  default:
+    - squid
+
+squid_conf:
+  default:
+    port: 8080
