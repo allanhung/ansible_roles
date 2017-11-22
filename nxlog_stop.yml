@@ -1,0 +1,6 @@
+---
+- name: mysql dba account
+  hosts: wfbss
+  tasks:
+    - name: stop nxlog for linux
+      service: "name=nxlog state=stopped enabled=no"

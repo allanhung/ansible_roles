@@ -1,7 +1,8 @@
 ---
 - name: mysql mmm
-  hosts: stage
+  hosts: prod
   pre_tasks:
     - pillar: {}
   roles:
+    - common
     - mmm
