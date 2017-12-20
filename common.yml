@@ -1,7 +1,6 @@
 ---
 - name: common
-  hosts: all
-  remote_user: root
+  hosts: test
   pre_tasks:
     - pillar: {}
   roles:

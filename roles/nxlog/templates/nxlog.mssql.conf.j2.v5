@@ -1,0 +1,85 @@
+## Please set the ROOT to the folder your nxlog was installed into,
+## otherwise it will not start.
+#define ROOT C:\Program Files\nxlog
+
+define ROOT C:\Program Files (x86)\nxlog
+define ROOT_STRING C:\Program Files (x86)\\nxlog
+
+Moduledir %ROOT%\modules
+CacheDir %ROOT%\data
+
+Pidfile %ROOT%\data\nxlog.pid
+SpoolDir %ROOT%\data
+LogFile %ROOT%\data\nxlog.log
+LogLevel INFO
+
+# Enable nxlog.log file rotate
+<Extension logrotate>
+	Module xm_fileop
+	<Schedule>
+		When @daily
+		Exec file_cycle('%ROOT%\data\nxlog.log', 7);
+	</Schedule>
+</Extension>
+
+# Enable json extension
+<Extension charconv>
+	PAGE 13
+	©2008 TREND MICRO, INC. WWW.TRENDMICRO.COM. ALL RIGHTS RESERVED
+	Module xm_charconv
+	AutodetectCharsets utf-8, euc-jp, utf-16, utf-32, iso8859-2
+</Extension>
+
+<Extension json>
+    Module      xm_json
+</Extension>
+
+<Extension _syslog>
+    Module      xm_syslog
+</Extension>
+
+<Extension multiline_mssql_error>
+    Module      xm_multiline
+    HeaderLine  /^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/
+</Extension>
+
+# Windows Event Log
+<Input eventlog>
+	Module im_msvistalog
+# For windows 2003 and earlier use the following:
+# Module im_mseventlog
+	Exec convert_fields("AUTO", "utf-8");
+	Query <QueryList>\
+		<Query Id="0">\
+		<Select Path="Application">*</Select>\
+		<Select Path="System">*</Select>\
+		<Select Path="Security">*</Select>\
+		<Select Path="Setup">*</Select>\
+		</Query>\
+	</QueryList>
+	Exec $host = $Hostname;
+	Exec to_json();
+</Input>
+
+<Input sql_error>
+    Module        im_file
+    File          '{{ mssql_log.stdout_lines[0] }}'
+    InputType     multiline_mssql_error
+    SavePos       TRUE
+    ReadFromLast  TRUE
+    PollInterval  1
+    Exec          $Message = $raw_event;
+#    Exec          convert_fields('UCS-2LE','UTF-8');
+    Exec          $SourceName = 'mssql_errorlog';
+    Exec          to_syslog_bsd();
+</Input>
+
+<Output out_1>
+    Module      om_tcp
+    Host        {{ pillar.graylog_server.log_server }}
+    Port        1514
+</Output>
+
+<Route 1>
+    Path        sql_error, event_log => out_1
+</Route>

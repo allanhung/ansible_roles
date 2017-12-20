@@ -1,0 +1,47 @@
+---
+- name: register pmm server
+  command: "pmm-admin config --server {{ pillar.pmm_server.pmm_server }} --bind-address {{ ansible_ssh_host }} --client-address {{ ansible_ssh_host }}"
+
+- name: get_service_group
+  get_service_group: {}
+
+- name: get mysql log setting
+  get_mysql_log:
+    myhost: "{{ pillar.myhost }}"
+    mode: get_mysql_log
+  register: mysql_config
+  when: pillar.service_group == 'mysql'
+    
+- name: generate mysql metrics
+  shell: "pmm-admin add mysql --user {{ item.name }} --password '{{ item.password }}' --socket '{{ mysql_config.socket }}' --query-source perfschema"
+  with_items: "{{ pillar.mysql_user.monitor }}"
+  when: pillar.service_group == 'mysql'
+
+- name: generate mongodb metrics
+  shell: "pmm-admin add mongodb --uri {{ item.name }}:{{ item.password }}@localhost:27017"
+  with_items: "{{ pillar.mongodb_user.monitor }}"
+  when: pillar.service_group == 'mongodb'
+    
+- name: start linux metrics
+  shell: "pmm-admin restart linux:metrics"
+  ignore_errors: yes
+
+- name: start mysql metrics
+  shell: "pmm-admin restart mysql:metrics"
+  ignore_errors: yes
+  when: pillar.service_group == 'mysql'
+
+- name: start mysql queries
+  shell: "pmm-admin restart mysql:queries"
+  ignore_errors: yes
+  when: pillar.service_group == 'mysql'
+
+- name: start mongodb metrics
+  shell: "pmm-admin restart mongodb:metrics"
+  ignore_errors: yes
+  when: pillar.service_group == 'mongodb'
+
+- name: start mongodb queries
+  shell: "pmm-admin restart mongodb:queries"
+  ignore_errors: yes
+  when: pillar.service_group == 'mongodb'    

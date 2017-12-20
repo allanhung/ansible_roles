@@ -1,0 +1,10 @@
+---
+- name: Ensure docker packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.docker_pkg }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: https://{{ pillar.proxy.proxy }}
+
+- name: Ensure docker is enabled on boot.
+  service: "name=docker enabled=yes"

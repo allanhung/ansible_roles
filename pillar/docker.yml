@@ -1,0 +1,7 @@
+docker_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - docker

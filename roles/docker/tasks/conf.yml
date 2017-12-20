@@ -1,0 +1,17 @@
+---
+- name: Copy docker config file
+  copy:
+    src: docker
+    dest: /etc/sysconfig/docker
+    mode: 0644
+    force: no
+  notify: restart docker
+
+- name: docker-network
+  template:
+    src: docker-network.j2
+    dest: /etc/sysconfig/docker-network
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart docker

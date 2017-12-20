@@ -1,0 +1,15 @@
+{
+    "key": {
+        "algo": "rsa",
+        "size": 4096
+    },
+    "names": [
+        {
+            "C":  "TW",
+            "L":  "Taipei",
+            "O":  "personal.com",
+            "OU": "etcd",
+            "ST": "Taipei"
+        }
+    ]
+}

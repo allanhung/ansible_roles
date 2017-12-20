@@ -1,0 +1,5 @@
+plugin-load=AUDIT=libaudit_plugin.so
+audit_json_file=1
+audit_json_file_sync=10
+audit_record_cmds=alter,drop,truncate,rename,create,grant
+audit_uninstall_plugin=1

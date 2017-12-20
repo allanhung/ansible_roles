@@ -61,6 +61,18 @@ common_stage:
     mysql04-allan:
       - proxy
 
+docker_stage:
+  args:
+    type: list
+  example:
+    all:
+      - rpm
+      - conf
+  hostname:
+    tmscp-p-mmmce01.sjc1:
+      - rpm
+      - conf
+
 heartbeat_stage:
   args:
     type: list
@@ -189,6 +201,7 @@ pmm_stage:
     type: list
   default:
     - rpm
+    - conf
 
 proxysql_stage:
   args:

@@ -14,7 +14,6 @@ mysql_local_pkg:
       - mysql-utilities-1.6.5-1.el6.noarch.rpm
       - percona-xtrabackup-24-2.4.8-1.el6.x86_64.rpm
       - percona-toolkit-3.0.1-1.el6.x86_64.rpm
-      - pmm-client-1.2.2-1.el6.x86_64.rpm
       - qpress-11-1.el6.x86_64.rpm
     7:
       - mysql-connector-python-2.1.7-1.el7.x86_64.rpm
@@ -26,7 +25,6 @@ mysql_local_pkg:
       - mysql-utilities-1.6.5-1.el7.noarch.rpm
       - percona-xtrabackup-24-2.4.8-1.el7.x86_64.rpm
       - percona-toolkit-3.0.1-1.el7.x86_64.rpm
-      - pmm-client-1.2.2-1.el7.x86_64.rpm
       - qpress-11-1.el7.x86_64.rpm
 
 mysql_pkg:

@@ -3,6 +3,12 @@
   hosts: prod
   pre_tasks:
     - pillar: {}
-  roles:
-    - common
-    - mmm
+  tasks:
+    - name: load profile in mmm agent
+      lineinfile:
+        path: /etc/init.d/mysql-mmm-agent
+        state: present
+        regexp: ". /etc/profile"
+        line: ". /etc/profile"
+        insertafter: '. /etc/default/mysql-mmm-agent'
+      when: pillar.myhost.os_ver == 6

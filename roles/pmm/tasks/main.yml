@@ -1,5 +1,4 @@
 ---
 - name: configure pmm
-  include: "{{ item }}.yml"
-  static: no
+  include_tasks: "{{ item }}.yml"
   with_items: "{{ pillar.pmm_stage }}"

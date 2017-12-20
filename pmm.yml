@@ -1,0 +1,7 @@
+---
+- name: pmm
+  hosts: test
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - pmm

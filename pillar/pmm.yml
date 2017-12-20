@@ -11,3 +11,15 @@ pmm_common:
     pmm_user: pmm
     prometheus_dir: /opt/prometheus/data
     consul_dir: /opt/consul/data
+    software_dir: /opt/software
+
+# https://repo.percona.com/release/6/RPMS/x86_64
+pmm_admin_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    6:
+      - pmm-client-1.5.2-1.el6.x86_64.rpm
+    7:
+      - pmm-client-1.5.2-1.el7.x86_64.rpm

@@ -1,0 +1,7 @@
+---
+- name: mysqlslow
+  hosts: xxx
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mysqlslow

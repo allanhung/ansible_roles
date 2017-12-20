@@ -1,0 +1,16 @@
+{
+    "CN": "root-ca",
+    "key": {
+        "algo": "rsa",
+        "size": 4096
+    },
+    "names": [
+        {
+            "C":  "TW",
+            "L":  "Taipei",
+            "O":  "personal.com",
+            "OU": "root",
+            "ST": "Taipei"
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+---
+- name: get_service_group
+  get_service_group: {}
+    
+- name: start linux metrics
+  command: "pmm-admin restart linux:metrics"
+  ignore_errors: yes
+    
+- name: start mysql metrics
+  command: "pmm-admin restart mysql:metrics"
+  ignore_errors: yes
+  when: pillar.service_group == 'mysql'
+    
+- name: start mysql queries
+  command: "pmm-admin restart mysql:queries"
+  ignore_errors: yes
+  when: pillar.service_group == 'mysql'
+    
+- name: start mongodb metrics
+  command: "pmm-admin restart mongodb:metrics"
+  ignore_errors: yes
+  when: pillar.service_group == 'mongodb'
+    
+- name: start mongodb queries
+  command: "pmm-admin restart mongodb:queries"
+  ignore_errors: yes
+  when: pillar.service_group == 'mongodb'

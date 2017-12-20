@@ -6,7 +6,7 @@
   yum: "name=pyparsing state=installed"
 
 - name: get mysql config
-  get_mysql_config:
+  get_mysql_log:
     myhost: "{{ pillar.myhost }}"
     mode: get_mysql_log
   register: mysql_config
