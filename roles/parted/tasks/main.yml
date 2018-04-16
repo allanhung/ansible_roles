@@ -1,0 +1,4 @@
+---
+- name: run task
+  include_tasks: "{{ item }}.yml"
+  with_items: "{{ pillar.parted_stage }}"

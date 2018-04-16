@@ -1,14 +1,4 @@
 ---
-- name: Get MySQL version.
-  command: 'mysql --version'
-  register: mysql_version
-  ignore_errors: true
-
-- name: generate mysql config
-  gen_mysql_cnf:
-    mysql_version: "{{ mysql_version }}"
-  when: mysql_version is defined
-
 - name: configure MySQL.
   include_tasks: "{{ item }}.yml"
   with_items: "{{ pillar.mysql_stage }}"

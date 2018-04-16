@@ -1,8 +1,7 @@
 ---
 - name: docker
-  hosts: docker
+  hosts: all
   pre_tasks:
     - pillar: {}
   roles:
-    - common
     - docker

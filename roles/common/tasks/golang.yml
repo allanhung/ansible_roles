@@ -1,0 +1,21 @@
+---
+- name: Ensure golang packages are installed
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.golang_pkgs }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure golang packages are installed
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.golang_pkgs }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
+
+- name: insert/update GOPATH setting
+  blockinfile:
+    path: /etc/profile
+    marker: "# {mark} ANSIBLE GOLANG BLOCK"
+    insertbefore: "export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL"
+    content: |
+      export GOPATH={{ pillar.golang.gopath }}

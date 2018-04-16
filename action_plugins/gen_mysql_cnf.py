@@ -1,6 +1,10 @@
-from ansible.plugins.action import ActionBase
+#!/bin/python
 
-def get_mycnf(myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, config_by_version, mysql_version):
+from __future__ import (absolute_import, division, print_function)
+from ansible.plugins.action import ActionBase
+from copy import deepcopy
+
+def get_mycnf(myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, config_by_version, config_by_plugin, mysql_version, with_plugin):
     """
     mysql_daemon:
       default:
@@ -39,6 +43,22 @@ def get_mycnf(myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, 
         "5.7": 
           default_password_lifetime : 0
           innodb_undo_log_truncate: 1
+          
+    mysql_config_by_plugin:
+      default:
+        audit:
+          plugin-load: AUDIT=libaudit_plugin.so
+          audit_json_file: 1
+          audit_json_file_sync: 100
+          audit_record_cmds: alter,drop,truncate,rename,create,grant
+          audit_uninstall_plugin: 1
+        validate_password:
+          plugin-load-add: validate_password.so
+          validate_password_length: 8
+          validate_password_mixed_case_count: 1
+          validate_password_number_count: 1
+          validate_password_policy: 1
+          validate_password_special_char_count: 1
     """
     server_id=ip.replace(".","")
     my_cnf=[]
@@ -55,14 +75,22 @@ def get_mycnf(myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, 
     tmp_cnf.append('datadir='+datadir)
     tmp_cnf.append('log_error='+datadir+'/'+mysql_common['error_log'])
     tmp_cnf.append('server_id='+server_id)
+    tmp_cnf.append('report_host='+ip)
    
-    if '5.7.' in mysql_version:
-       config.update(config_by_version['5.7'])
-    elif '5.6.' in mysql_version:
-       config.update(config_by_version['5.6'])
+    config.update(config_by_version[eval(mysql_version['main'])])
+
+    if with_plugin:
+        for k, v in config_by_plugin.items():
+            for m, n in v.items():
+                if m in config.keys():
+                    config[m].update(n)
+                else:
+                    config[m]=n
 
     for k, v in config.items():
-        if isinstance(v, list):
+        if k == 'sql_mode':
+            tmp_cnf.append(k+'='+','.join(v))
+        elif isinstance(v, list):
             for m in v:
                 tmp_cnf.append(k+'='+str(m))
         elif k == 'plugin_load':
@@ -120,13 +148,15 @@ class ActionModule(ActionBase):
         myhost = pillar['myhost']
         daemon = pillar['mysql_daemon']
         common = pillar['mysql_common']
-        config = pillar['mysql_config']
+        config = deepcopy(pillar['mysql_config'])
         config_by_version = pillar['mysql_config_by_version']
+        config_by_plugin = pillar['mysql_config_by_plugin']
         ip = task_vars['ansible_ssh_host']
         cpucount = task_vars['ansible_processor_vcpus']
         memory = task_vars['ansible_memtotal_mb']
-        mysql_version = self._task.args.get('mysql_version', '')
-        my_cnf = get_mycnf(myhost, ip, cpucount, memory, daemon, common, config, config_by_version, mysql_version)
+        mysql_version = self._task.args.get('mysql_version', {})
+        with_plugin = self._task.args.get('with_plugin', False)
+        my_cnf = get_mycnf(myhost, ip, cpucount, memory, daemon, common, config, config_by_version, config_by_plugin, mysql_version, with_plugin)
         facts['mysql_cnf']={'my_cnf': my_cnf}
 
         result['failed'] = False

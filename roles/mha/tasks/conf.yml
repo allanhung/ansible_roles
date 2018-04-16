@@ -51,9 +51,12 @@
     force: yes
   with_items: "{{ pillar.mha_script }}"
 
+- name: config mha db vip
+  shell: "ip addr add {{ pillar.mha_vip.db_vip }}/32 dev eth0"
+  when: (pillar.mha_setting.role == 'master')
+
 - name: Ensure MySQL is stopped and disabled on boot.
-  service: "name={{ item }} state=stopped enabled=no"
-  with_items: "{{ pillar.mysql_cnf.service_list }}"
+  service: "name={{ pillar.mysql_daemon.mysql_daemon }} state=stopped enabled=no"
   when: (pillar.mha_setting.role == 'monitor')
   ignore_errors: true
 

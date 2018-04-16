@@ -20,14 +20,26 @@
   with_items: "{{ pillar.mysql_local_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure MySQL local packages are installed.
+  yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.mysql_local_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure MySQL packages are installed.
   yum: "name={{ item }} state=installed"
   with_items: "{{ pillar.mysql_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure MySQL packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.mysql_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: fix max num of process
   lineinfile:

@@ -1,11 +1,6 @@
 ---
-- name: Get MySQL version.
-  command: 'mysql --version'
-  register: mysql_version
-
-- name: generate mysql config
-  gen_mysql_cnf:
-    mysql_version: "{{ mysql_version }}"
+- name: check MySQL version
+  include_tasks: check_version.yml
 
 - name: my.cnf
   template:

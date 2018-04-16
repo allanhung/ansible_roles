@@ -1,0 +1,59 @@
+ca_common:
+  default:
+    cfssl_url: github.com/cloudflare/cfssl/cmd
+    config_dir: /etc/kubernetes
+    ca_config_dir: ca
+    ca_dir: ssl
+    algo: rsa
+    key_size: 2048
+    country: TW
+    state: Taiwan
+    city: Taipei
+    organization: k8s
+    ou: IT
+    cn: kubernetes
+
+cfssl_pkgs:
+  args:
+    type: list
+  default:
+    - cfssl
+    - cfssl-bundle
+    - cfssl-certinfo
+    - cfssljson
+    - cfssl-newkey
+    - cfssl-scan
+
+ca_files:
+  args:
+    type: list
+  default:
+    - ca-csr.json
+    - ca-config.json
+    - kubernetes-csr.json
+    - admin-csr.json
+
+k8s_cluster:
+  default:
+    name: kubernetes
+    api_server: 172.31.16.89
+    
+
+k8s_host_list:
+  args:
+    type: list
+  default:
+    - 172.31.16.89
+    - 172.31.16.165
+    - 172.31.16.22
+
+# token: str(uuid.uuid4()).replace('-','')[:16] 
+k8s_token:
+  args:
+    type: list
+  default:
+    - token: a61c8b3e09ce473e
+      username: kubelet-bootstrap
+      uid: 10001
+      group:
+        - system:kubelet-bootstrap

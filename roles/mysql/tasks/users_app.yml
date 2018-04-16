@@ -2,7 +2,7 @@
 - name: Ensure MySQL application users are present.
   mysql_user:
     login_user: root
-    login_password: "{{ pillar.mysql_common.password }}"
+    login_password: "{{ pillar.mysql_root.password }}"
     login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: "{{ item.name }}"
     host: "{{ item.host | default('localhost') }}"
@@ -12,4 +12,4 @@
     state: "{{ item.state | default('present') }}"
     append_privs: "{{ item.append_privs | default('no') }}"
     sql_log_bin: no
-  with_items: "{{ pillar.mysql_user.app }}"
+  with_items: "{{ pillar.mysql_app_user.app }}"

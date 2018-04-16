@@ -23,3 +23,10 @@ mha_pkg:
       - mha4mysql-manager-0.57-0.el7.noarch.rpm
       - mha4mysql-node-0.57-0.el7.noarch.rpm
       - perl-DBD-MySQL-4.042-1.el7.x86_64.rpm
+
+mha_mail_to:
+  args:
+    type: list
+  default:
+    - allan_hung@trend.com.tw
+    - gibson_huang@trend.com.tw

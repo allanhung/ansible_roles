@@ -12,7 +12,7 @@
 - name: import mysql scripts
   mysql_db:
     login_user: root
-    login_password: "{{ pillar.mysql_common.password }}"
+    login_password: "{{ pillar.mysql_root.password }}"
     login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: "{{ item.name }}"
     target: "/tmp/{{ item.sql }}"

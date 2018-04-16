@@ -1,0 +1,54 @@
+---
+- name: compile cfssl packages
+  shell: "GOPATH={{ pillar.golang.gopath }} go get -u {{ pillar.ca_common.cfssl_url }}/{{ item }}/"
+  with_items: "{{ pillar.cfssl_pkgs }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: compile cfssl packages
+  shell: "GOPATH={{ pillar.golang.gopath }} go get -u {{ pillar.ca_common.cfssl_url }}/{{ item }}/"
+  with_items: "{{ pillar.cfssl_pkgs }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
+
+- name: copy cfssl bin
+  command: "/bin/cp -f {{ pillar.golang.gopath }}/bin/{{ item }} /usr/bin/{{ item }}"
+  with_items: "{{ pillar.cfssl_pkgs }}"
+
+- name: create ca dir
+  file:
+    path: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_dir }}"
+    state: directory
+    mode: 0755
+    
+- name: create ca setting dir
+  file:
+    path: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}"
+    state: directory
+    mode: 0755
+    
+- name: set k8s hosts
+  set_fact:
+    k8s_hosts: "{{ pillar.k8s_host_list | join('\",\n      \"') }}"
+
+- name: copy ca setting files to remote
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/{{ item }}"
+  with_items: "{{ pillar.ca_files }}"
+
+- name: generating a new CA key and certificate from CSR
+  shell: "cfssl gencert -initca {{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/ca-csr.json | cfssljson -bare ca"
+  args:
+    chdir: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_dir }}"
+
+- name: generating certificate for kubernetes
+  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/ca-config.json -profile={{ pillar.ca_common.cn }} {{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/kubernetes-csr.json | cfssljson -bare {{ pillar.ca_common.cn }}"
+  args:
+    chdir: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_dir }}"
+
+- name: generating certificate for admin
+  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config={{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/ca-config.json -profile={{ pillar.ca_common.cn }} {{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/admin-csr.json | cfssljson -bare admin"
+  args:
+    chdir: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_dir }}"

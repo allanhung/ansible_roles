@@ -15,3 +15,4 @@
     group: root
     mode: 0644
   notify: restart docker
+  when: "pillar.proxy.proxy != 'no_proxy'"

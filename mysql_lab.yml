@@ -1,0 +1,7 @@
+---
+- name: mysql 5.7 install
+  hosts: lab
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mysql

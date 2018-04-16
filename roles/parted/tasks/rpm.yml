@@ -1,0 +1,13 @@
+---
+- name: Ensure nfs packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.nfs_pkgs }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure nfs packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.nfs_pkgs }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"

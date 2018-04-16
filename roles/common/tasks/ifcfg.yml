@@ -1,12 +1,26 @@
 ---
+- name: remove udev rule
+  file:
+    path: /etc/udev/rules.d/90-eno-fix.rules
+    state: absent
+    
+- name: remove dracut rule
+  file:
+    path: /etc/dracut.conf.d/90-eno-fix.conf
+    state: absent
+    
 - name: check ifcfg-eth0 file exists
   stat:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
-  register: ifcfg_eth0
+  register: ifcfg_eth0_ori
+
+- name: check network device name
+  shell: ls -1 /sys/class/net |grep -v lo
+  register: ifname
 
 - name: move network setting
-  shell: "/bin/mv /etc/sysconfig/network-scripts/ifcfg-ens* /etc/sysconfig/network-scripts/ifcfg-eth0"
-  when: ifcfg_eth0.stat.exists == False
+  shell: "/bin/mv /etc/sysconfig/network-scripts/ifcfg-{{ ifname.stdout_lines[0] }} /etc/sysconfig/network-scripts/ifcfg-eth0"
+  when: ifcfg_eth0_ori.stat.exists == False
 
 - name: check ifcfg-eth0 file exists
   stat:
@@ -26,3 +40,21 @@
     regexp: '^DEVICE=.*'
     replace: 'DEVICE=eth0'
   when: ifcfg_eth0.stat.exists
+
+- name: add HWADDR in eth0 cfg
+  shell: "grep HWADDR /etc/sysconfig/network-scripts/ifcfg-eth0 || echo \"HWADDR=`ip addr |egrep ^2: -A 1|grep ether|awk {'print $2'}`\" >> /etc/sysconfig/network-scripts/ifcfg-eth0"
+  when: ifcfg_eth0.stat.exists
+
+- name: run all notified handlers
+  meta: flush_handlers
+
+- name: reboot 
+  shell: shutdown -r now
+  async: 0
+  poll: 0
+  when: ifcfg_eth0_ori.stat.exists == False
+
+- name: wait for system reboot
+  wait_for_connection: 
+    delay: 5
+  when: ifcfg_eth0_ori.stat.exists == False

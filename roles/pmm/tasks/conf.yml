@@ -5,10 +5,9 @@
 - name: get_service_group
   get_service_group: {}
 
-- name: get mysql log setting
-  get_mysql_log:
+- name: get mysql setting
+  get_mysql_config:
     myhost: "{{ pillar.myhost }}"
-    mode: get_mysql_log
   register: mysql_config
   when: pillar.service_group == 'mysql'
     

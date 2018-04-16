@@ -1,0 +1,5 @@
+---
+- name: pillar test
+  hosts: all
+  pre_tasks:
+    - pillar: {}

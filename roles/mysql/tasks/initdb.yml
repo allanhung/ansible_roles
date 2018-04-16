@@ -1,4 +1,20 @@
 ---
+- name: check MySQL version
+  include_tasks: check_version.yml
+
+- name: generate mysql config without plugin
+  gen_mysql_cnf:
+    mysql_version: "{{ pillar.mysql_version }}"
+    with_plugin: False
+
+- name: my.cnf for initdb
+  template:
+    src: my.cnf.j2
+    dest: "{{ pillar.mysql_common.config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Create mysql data dir if it does not exist
   file:
     path: "{{ pillar.mysql_common.data_dir }}"
@@ -7,17 +23,34 @@
     group: mysql
     mode:  0755
 
+- name: Create mysql tmp dir if it does not exist
+  file:
+    path: "{{ pillar.mysql_common.tmp_dir }}"
+    state: directory
+    owner: mysql
+    group: mysql
+    mode:  0755
+
+- name: Change owner for mysql tmp dir
+  file:
+    path: "{{ pillar.mysql_common.tmp_dir }}"
+    owner: mysql
+    group: mysql
+    recurse: yes
+
 - name: mysql install db single instance
   command: mysql_install_db
   become: true
   become_user: mysql
-  when: '"5.6." in mysql_version.stdout'
+  become_method: sudo
+  when: pillar.mysql_version.main == '5.6'
 
 - name: mysql install db single instance
   command: mysqld --initialize-insecure
   become: true
   become_user: mysql
-  when: '"5.7." in mysql_version.stdout'
+  become_method: sudo
+  when: pillar.mysql_version.main == '5.7'
 
 - name: Change owner for mysql data dir
   file:
@@ -46,5 +79,20 @@
 
 # Set root password
 - name: Update MySQL root password for localhost root account
-  shell: mysql -S {{ pillar.mysql_common.socket }} -NBe 'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ pillar.mysql_common.password }}");'
+  shell: mysql -S {{ pillar.mysql_common.socket }} -NBe 'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ pillar.mysql_root.password }}");'
   with_items: "{{ mysql_root_hosts.stdout_lines | default([]) }}"
+
+- name: check MySQL version
+  include_tasks: check_version.yml
+
+- name: copy plugin file
+  include_tasks: plugin.yml  
+
+- name: my.cnf
+  template:
+    src: my.cnf.j2
+    dest: "{{ pillar.mysql_common.config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mysql

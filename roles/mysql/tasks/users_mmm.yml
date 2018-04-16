@@ -2,7 +2,7 @@
 - name: Ensure MySQL mmm monitor users are present.
   mysql_user:
     login_user: root
-    login_password: "{{ pillar.mysql_common.password }}"
+    login_password: "{{ pillar.mysql_root.password }}"
     login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: "{{ item.name }}"
     host: "{{ item.host | default('localhost') }}"
@@ -17,7 +17,7 @@
 - name: Ensure MySQL mmm agent users are present.
   mysql_user:
     login_user: root
-    login_password: "{{ pillar.mysql_common.password }}"
+    login_password: "{{ pillar.mysql_root.password }}"
     login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: "{{ item.name }}"
     host: "{{ item.host | default('localhost') }}"

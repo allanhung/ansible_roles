@@ -1,0 +1,25 @@
+vrrp_script chk_mysqld {
+        script "/usr/bin/mysqld_check.sh"
+        interval 2
+        timeout 2
+        fall 3
+}
+
+vrrp_instance mysqld {
+    state BACKUP
+    interface eth0
+    virtual_router_id 52
+    priority 150
+    nopreempt
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        192.168.1.11
+    }
+    track_script {
+        chk_mysqld
+    }
+}

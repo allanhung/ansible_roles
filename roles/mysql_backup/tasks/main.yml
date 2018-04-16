@@ -1,0 +1,4 @@
+---
+- name: configure MySQL backup
+  include_tasks: "{{ item }}.yml"
+  with_items: "{{ pillar.mysql_backup_stage }}"

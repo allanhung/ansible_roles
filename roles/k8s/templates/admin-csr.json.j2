@@ -1,0 +1,17 @@
+{
+  "CN": "admin",
+  "hosts": [],
+  "key": {
+    "algo": "{{ pillar.ca_common.algo }}",
+    "size": {{ pillar.ca_common.key_size }}
+  },
+  "names": [
+    {
+      "C": "{{ pillar.ca_common.country }}",
+      "ST": "{{ pillar.ca_common.state }}",
+      "L": "{{ pillar.ca_common.city }}",
+      "O": "system:masters",
+      "OU": "{{ pillar.ca_common.ou }}"
+    }
+  ]
+}

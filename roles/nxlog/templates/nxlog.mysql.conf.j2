@@ -1,0 +1,83 @@
+########################################
+# Global directives                    #
+########################################
+User nxlog
+Group nxlog
+
+LogFile /var/log/nxlog/nxlog.log
+LogLevel INFO
+
+########################################
+# Modules                              #
+########################################
+<Extension _syslog>
+    Module      xm_syslog
+</Extension>
+
+<Extension multiline_db_slowlog>
+    Module    xm_multiline
+    HeaderLine   /^# Time:/
+</Extension>
+
+<Output tcp>
+    Module      om_tcp
+    Host        {{ pillar.graylog_server.log_server }}
+    Port        1514
+    Exec        to_syslog_bsd();
+</Output> 
+
+{% if error_log.stat.exists %}
+<Input error_log>
+    Module           im_file
+    File             '{{ mysql_config.log_error }}'
+    SavePos          TRUE
+    ReadFromLast     TRUE
+    PollInterval     1
+    Exec             $Message = $raw_event;
+    Exec             $SourceName = 'mysql_errorlog';
+</Input>
+
+<Route 1>
+    Path        error_log => tcp
+</Route>
+{% endif %}
+
+{% if slow_log.stat.exists %}
+<Input slowlog>
+    Module           im_file
+    File             '{{ mysql_config.slow_query_log_file }}'
+    InputType        multiline_db_slowlog
+    SavePos          TRUE
+    ReadFromLast     TRUE
+    PollInterval     1
+    Exec             $Message = $raw_event;
+    Exec             $SourceName = 'mysql_slowlog';
+</Input>
+
+<Route 2>
+    Path        slowlog => tcp
+</Route>
+{% endif %}
+
+{% if audit_log.stat.exists %}
+<Input audit_log>
+    Module           im_file
+    File             '{{ mysql_config.audit_json_log_file }}'
+    SavePos          TRUE
+    ReadFromLast     TRUE
+    PollInterval     1
+    Exec             $Message = $raw_event;
+    Exec             $SourceName = 'mysql_auditlog';
+</Input>
+
+<Output tcp_ietf>
+    Module      om_tcp
+    Host        {{ pillar.graylog_server.log_server }}
+    Port        1514
+    Exec        to_syslog_ietf();
+</Output>
+
+<Route 3>
+    Path        audit_log => tcp_ietf
+</Route>
+{% endif %}

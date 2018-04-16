@@ -1,0 +1,10 @@
+---
+- name: mount file system
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.opts | default('defaults') }}"
+    state: mounted
+  with_items: "{{ pillar.mount }}" 
+  ignore_errors: True

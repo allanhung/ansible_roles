@@ -1,6 +1,6 @@
 ---
-- name: common
-  hosts: all
+- name: nxlog
+  hosts: rerun
   remote_user: root
   pre_tasks:
     - pillar: {}

@@ -1,0 +1,14 @@
+---
+- name: copy rpm
+  hosts: all
+  gather_facts: True
+  pre_tasks:
+    - pillar: {}    
+  tasks:
+    - name: Copy rpm to mmm software dir
+      copy:
+        src: "{{ item }}"
+        dest: "{{ pillar.mmm_common.software_dir }}/{{ item }}"
+        mode: 0644
+        force: no
+      with_items: "{{ pillar.mmm_pkg }}"    

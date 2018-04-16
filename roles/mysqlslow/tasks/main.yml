@@ -6,33 +6,32 @@
   yum: "name=pyparsing state=installed"
 
 - name: get mysql config
-  get_mysql_log:
+  get_mysql_config:
     myhost: "{{ pillar.myhost }}"
-    mode: get_mysql_log
   register: mysql_config
 
 - name: check data dir
   stat:
-    path: "{{ mysql_config.data_dir }}"
+    path: "{{ mysql_config.datadir }}"
   register: data_dir
 
 - name: check slow log
   stat:
-    path: "{{ mysql_config.slow_log }}"
+    path: "{{ mysql_config.slow_query_log_file }}"
   register: slowlog
 
 - name: check slow log bak
   stat:
-    path: "{{ mysql_config.slow_log }}.bak"
+    path: "{{ mysql_config.slow_query_log_file }}.bak"
   register: slowlog_bak
 
 - name: slow log analyze
-  shell: "mysqldumpslow -s c -t 50 {{ mysql_config.slow_log }}.bak > /tmp/slowlog_analyze.txt"
+  shell: "mysqldumpslow -s c -t 50 {{ mysql_config.slow_query_log_file }}.bak > /tmp/slowlog_analyze.txt"
   when: data_dir.stat.exists and slowlog_bak.stat.exists
   ignore_errors: yes
 
 - name: slow log analyze
-  shell: "mysqldumpslow -s c -t 50 {{ mysql_config.slow_log }} > /tmp/slowlog_analyze.txt"
+  shell: "mysqldumpslow -s c -t 50 {{ mysql_config.slow_query_log_file }} > /tmp/slowlog_analyze.txt"
   when: data_dir.stat.exists and slowlog.stat.exists and (not slowlog_bak.stat.exists)
   ignore_errors: yes
     

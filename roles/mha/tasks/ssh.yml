@@ -12,6 +12,7 @@
   shell: "sshpass -p '{{ hostvars[item]['ansible_ssh_pass'] }}' ssh root@{{ hostvars[item]['ansible_ssh_host'] }} cat /root/.ssh/id_rsa.pub"
   register: key_list
   with_items: "{{ pillar.mha_setting.all_server_list }}"
+  ignore_errors: yes
 
 - name: set authorized key took from file
   authorized_key:

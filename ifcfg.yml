@@ -1,0 +1,7 @@
+---
+- name: ifcfg
+  hosts: mts
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - common

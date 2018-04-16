@@ -2,7 +2,7 @@
 - name: Ensure MySQL databases are present.
   mysql_db:
     login_user: root
-    login_password: "{{ pillar.mysql_common.password }}"
+    login_password: "{{ pillar.mysql_root.password }}"
     login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: "{{ item.name }}"
     collation: "{{ item.collation | default('utf8_general_ci') }}"

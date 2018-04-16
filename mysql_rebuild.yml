@@ -1,0 +1,7 @@
+---
+- name: rebuild mysql
+  hosts: all
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mysql

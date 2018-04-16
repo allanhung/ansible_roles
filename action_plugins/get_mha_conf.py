@@ -1,6 +1,6 @@
 from ansible.plugins.action import ActionBase
 
-def get_mha_conf(myhost, mha_common, mha_setting, mha_user, mysql_common, mysql_repl_user):
+def get_mha_conf(myhost, mha_common, mha_setting, mha_user, mysql_common, mysql_repl_user, hostvars):
     result={}
     for group_name in mha_setting['group_list']:
         conf=[]
@@ -10,20 +10,24 @@ def get_mha_conf(myhost, mha_common, mha_setting, mha_user, mysql_common, mysql_
         conf.append('password='+mha_user['password'])
         conf.append('repl_user='+mysql_repl_user['name'])
         conf.append('repl_password='+mysql_repl_user['password'])
-        conf.append('master_binlog_dir='+mysql_common['datadir'])
+        conf.append('master_binlog_dir='+mysql_common['data_dir'])
         conf.append('master_ip_failover_script='+mha_common['script_dir']+'/master_ip_failover')
         conf.append('master_ip_online_change_script='+mha_common['script_dir']+'/master_ip_online_change')
         conf.append('manager_workdir='+mha_common['log_dir']+'/'+group_name)
         conf.append('manager_log='+mha_common['log_dir']+'/'+group_name+'/manager.log')
         conf.append('remote_workdir='+mha_common['log_dir']+'/'+group_name)
-        conf.append('secondary_check_script=masterha_secondary_check -s '+' -s '.join(mha_setting['slave_list'][group_name])+' ping_interval=3')
+        slave_ip_list=[]
+        for slave in mha_setting['slave_list'][group_name]:
+            slave_ip_list.append(hostvars[slave]['ansible_ssh_host'])
+        conf.append('secondary_check_script=masterha_secondary_check -s '+' -s '.join(slave_ip_list)+' ping_interval=3')
         conf.append('report_script='+mha_common['script_dir']+'/mha_send_report')
         conf.append('')
         tmp_conf=[]
         for i, n in enumerate(mha_setting['mha_node_list'][group_name]):
             node_conf=[]
             node_conf.append('[server'+str(i+1)+']')
-            node_conf.append('hostname='+n['hostname'])
+            host_ip=hostvars[n['hostname']]['ansible_ssh_host']
+            node_conf.append('hostname='+host_ip)
             for m in n['mha_args']:
                 for x, y in m.items():
                     node_conf.append(x+'='+y)
@@ -45,6 +49,7 @@ class ActionModule(ActionBase):
             return result
         
         pillar = task_vars.get('pillar', {})
+        hostvars = task_vars.get('hostvars', {})
         myhost = pillar['myhost']
         mha_common = pillar['mha_common']
         mha_setting = pillar['mha_setting']
@@ -52,7 +57,7 @@ class ActionModule(ActionBase):
         mha_user = pillar['mysql_user']['mha'][0]
         mysql_repl_user = pillar['mysql_user']['replication'][0]
 
-        facts['mha_conf'] = get_mha_conf(myhost, mha_common, mha_setting, mha_user, mysql_common, mysql_repl_user)
+        facts['mha_conf'] = get_mha_conf(myhost, mha_common, mha_setting, mha_user, mysql_common, mysql_repl_user, hostvars)
 
         result['failed'] = False
         pillar.update(facts)

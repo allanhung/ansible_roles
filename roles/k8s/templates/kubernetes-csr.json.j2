@@ -1,0 +1,26 @@
+{
+  "CN": "{{ pillar.ca_common.cn }}",
+  "hosts": [
+    "127.0.0.1",
+    "{{ k8s_hosts }}",
+    "10.254.0.1",
+    "kubernetes",
+    "kubernetes.default",
+    "kubernetes.default.svc",
+    "kubernetes.default.svc.cluster",
+    "kubernetes.default.svc.cluster.local"
+  ],
+  "key": {
+    "algo": "{{ pillar.ca_common.algo }}",
+    "size": {{ pillar.ca_common.key_size }}
+  },
+  "names": [
+    {
+      "C": "{{ pillar.ca_common.country }}",
+      "ST": "{{ pillar.ca_common.state }}",
+      "L": "{{ pillar.ca_common.city }}",
+      "O": "{{ pillar.ca_common.organization }}",
+      "OU": "{{ pillar.ca_common.ou }}"
+    }
+  ]
+}

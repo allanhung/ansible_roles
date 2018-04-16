@@ -68,10 +68,9 @@ docker_stage:
     all:
       - rpm
       - conf
-  hostname:
-    tmscp-p-mmmce01.sjc1:
-      - rpm
-      - conf
+  default:
+    - rpm
+    - conf
 
 heartbeat_stage:
   args:
@@ -126,17 +125,29 @@ mha_stage:
       - rpm
       - ssh
       - conf
-  hostname:
-    mysql01-allan:
+  default:
+    - rpm
+    - ssh
+    - conf
+
+mysql_backup_stage:
+  args:
+    type: list
+  example:
+    all:
       - conf
-    mysql02-allan:
-      - conf
+      - cron
+  default:
+    - conf
+    - cron
 
 mysql_stage:
   args:
     type: list
   example:
     all:
+      - check_version
+      - common
       - rpm
       - conf
       - limits
@@ -174,6 +185,15 @@ nxlog_stage:
     default:
       - rpm
       - conf
+
+parted_stage:
+  args:
+    type: list
+  example:
+    all:
+      - parted
+      - rpm
+      - mount
 
 pacemaker_stage:
   args:

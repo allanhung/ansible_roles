@@ -20,8 +20,14 @@
   yum: "name={{ pillar.nxlog_common.software_dir }}/{{ item }} state=installed"
   with_items: "{{ pillar.nxlog_pkg }}"
   environment:
-    http_proxy: http://{{ pillar.myhost.domain }}-prxy.sdi.trendnet.org:8080
-    https_proxy: https://{{ pillar.myhost.domain }}-prxy.sdi.trendnet.org:8080
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure nxlog packages are installed.
+  yum: "name={{ pillar.nxlog_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.nxlog_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure nxlog is enabled on boot.
   service: "name=nxlog enabled=yes"

@@ -6,4 +6,5 @@
     insertbefore: "export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL"
     content: |
       export http_proxy=http://{{ pillar.proxy.proxy }}
-      export https_proxy=https://{{ pillar.proxy.proxy }}
+      export https_proxy=http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"

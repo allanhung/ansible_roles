@@ -4,7 +4,13 @@
   with_items: "{{ pillar.squid_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure squid packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.squid_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure squid is enabled on boot.
   service: "name=squid enabled=yes"

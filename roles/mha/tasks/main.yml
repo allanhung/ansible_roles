@@ -3,6 +3,5 @@
   get_mha_setting: {}
 
 - name: configure mha.
-  include: "{{ item }}.yml"
-  static: no
+  include_tasks: "{{ item }}.yml"
   with_items: "{{ pillar.mha_stage }}"

@@ -1,0 +1,22 @@
+---
+- name: check partition status
+  parted:
+    device: "{{ item.device }}"
+  with_items: "{{ pillar.parted }}"
+  register: partition_info
+
+- name: create partition
+  parted:
+    device: "{{ item[1].device }}"
+    number: "{{ item[1].number }}"
+    state: present 
+  when: not item[0].partitions
+  with_nested:
+    - "{{ partition_info.results }}"
+    - "{{ pillar.parted }}"
+
+- name: format file system
+  filesystem:
+    fstype: "{{ item.fstype }}"
+    dev: "{{ item.device }}"
+  with_items: "{{ pillar.mkfs }}" 

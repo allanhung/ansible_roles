@@ -16,6 +16,20 @@ repo_file:
       epel: http://download.fedoraproject.org/pub/epel/6/$basearch
     7:
       epel: http://download.fedoraproject.org/pub/epel/7/$basearch
+      golang: https://mirror.go-repo.io/centos/7/$basearch/
+
+golang:
+  default:
+    gopath: /usr/share/gocode
+
+golang_pkgs:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - golang
+      - git
 
 common_pkgs:
   args:
@@ -38,6 +52,7 @@ common_tool_pkgs:
       - iftop
       - jq
       - nethogs
+      - nmap
       - patch
       - python-pip
       - pyparsing
@@ -52,6 +67,7 @@ common_tool_pkgs:
       - jq
       - nc
       - nethogs
+      - nmap
       - patch
       - python-pip
       - pyparsing

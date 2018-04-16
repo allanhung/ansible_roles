@@ -32,10 +32,11 @@ my (
   $new_master_password
 );
 
-my $vip = '192.168.0.88/24';
+my $vip = '{{ pillar.mha_vip.db_vip }}';
 my $vip_dev = 'eth0';
-my $ssh_start_vip = "/sbin/ip addr add $vip dev $vip_dev";
-my $ssh_stop_vip = "/sbin/ip addr del $vip dev $vip_dev";
+my $ssh_start_vip = "/sbin/ip addr add $vip/32 dev $vip_dev";
+my $ssh_send_arp = "/sbin/arpingr -U $vip -I $vip_dev -c 1";
+my $ssh_stop_vip = "/sbin/ip addr del $vip/32 dev $vip_dev";
 
 GetOptions(
   'command=s'             => \$command,
@@ -54,6 +55,7 @@ exit &main();
 
 sub start_vip() {
     `ssh $ssh_user\@$new_master_host \"$ssh_start_vip\"`;
+    `ssh $ssh_user\@$new_master_host \"$ssh_send_arp\"`;
 }
 
 sub stop_vip() {

@@ -1,0 +1,4 @@
+---
+- name: configure keepalived
+  include_tasks: "{{ item }}.yml"
+  with_items: "{{ pillar.keepalived_stage }}"

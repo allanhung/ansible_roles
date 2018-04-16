@@ -4,4 +4,10 @@
   with_items: "{{ pillar.heartbeat_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}    
+    https_proxy: http://{{ pillar.proxy.proxy }}    
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure heartbeat packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.heartbeat_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"

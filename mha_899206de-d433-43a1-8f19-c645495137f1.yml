@@ -1,0 +1,6 @@
+- name: mysql with mha
+  hosts: mha
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mysql

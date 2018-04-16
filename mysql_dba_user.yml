@@ -1,22 +1,10 @@
 ---
 - name: mysql dba account
-  hosts: prod
+  hosts: token
   gather_facts: False
   pre_tasks:
     - pillar: {}    
   tasks:
-    - name: show script for create mysql user.
-      debug:
-        msg: "GRANT ALL PRIVILEGES ON *.* TO '{{ item.name }}'@'{{ item.host | default('localhost') }}' IDENTIFIED BY PASSWORD '{{ item.password }}' WITH GRANT OPTION;"
-      when: item.state is not defined or item.state == 'present'
-      with_items: "{{ pillar.mysql_user.dba }}"
-
-    - name: show script for create mysql user.
-      debug:
-        msg: "DROP USER '{{ item.name }}'@'{{ item.host | default('localhost') }}';"
-      when: item.state is defined and item.state == 'absent'
-      with_items: "{{ pillar.mysql_user.dba }}"
-
     - name: install mysql python module
       yum: 
         name: MySQL-python
@@ -28,7 +16,7 @@
     - name: Ensure MySQL dba users are present.
       mysql_user:
         login_user: root
-        login_password: "{{ pillar.mysql_common.password }}"
+        login_password: "{{ pillar.mysql_root.password }}"
         login_unix_socket: "{{ pillar.mysql_common.socket }}"
         name: "{{ item.name }}"
         host: "{{ item.host | default('localhost') }}"

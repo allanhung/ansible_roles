@@ -1,0 +1,7 @@
+---
+- name: k8s
+  hosts: k8s
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - common

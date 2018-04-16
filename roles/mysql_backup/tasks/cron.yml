@@ -1,0 +1,11 @@
+---
+- cron:
+    name: backup mysql database
+    minute: 0
+    hour: 2
+    job: "{{ pillar.mysql_backup.base_dir }}/{{ pillar.mysql_backup.file_prefix }}.sh > {{ pillar.mysql_backup.base_dir }}/{{ pillar.mysql_backup.file_prefix }}.log 2>&1"
+
+- cron:
+    name: backup mysql binlog
+    minute: "*/5"
+    job: "{{ pillar.mysql_backup.base_dir }}/{{ pillar.mysql_backup.file_prefix }}.sh blog > {{ pillar.mysql_backup.base_dir }}/{{ pillar.mysql_backup.file_prefix }}_binlog.log 2>&1"

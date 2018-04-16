@@ -28,14 +28,26 @@
   with_items: "{{ pillar.proxysql_pre_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure proxysql pre packages are installed.
+  yum: "name={{ item }} state=installed"
+  with_items: "{{ pillar.proxysql_pre_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure proxysql packages are installed.
   yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
   with_items: "{{ pillar.proxysql_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: https://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure proxysql packages are installed.
+  yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
+  with_items: "{{ pillar.proxysql_pkg }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: mark monitor username
   replace:

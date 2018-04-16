@@ -1,0 +1,3 @@
+{% for item in pillar.k8s_token %}
+{{ item.token }},{{ item.username }},{{ item.uid }},{{ item.group | join(',') }}
+{% endfor %}

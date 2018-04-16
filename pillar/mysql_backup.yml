@@ -1,0 +1,21 @@
+mysql_backup:
+  default:
+    file_prefix: xtrabackup_mysql_database
+    backup_compress: 'on'
+    backup_dir: /dbbackup
+    backup_throttle: 20
+    backup_type1: incr
+    backup_type2: incr
+    backup_type3: full
+    backup_type4: incr
+    backup_type5: incr
+    backup_type6: incr
+    backup_type7: full
+    base_dir: /opt/dba_script
+    binlog_search_mins: 240
+    lock_wait_timeout: 600 
+    lock_waitthreshold: 60
+    retention_days: 7
+    send_to: allan_hung@trend.com.tw
+    b_send_to: DCSWebDB@trendmicro.com
+    storage_usage: 80

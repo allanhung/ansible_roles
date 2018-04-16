@@ -1,18 +1,42 @@
 ---
+- name: check driver d exists
+  win_stat:
+    path: "d:"
+  register: driver_d
+
+- name: check driver e exists
+  win_stat:
+    path: "e:"
+  register: driver_e
+  
+- name: set software dir
+  set_fact:
+    win_software_dir: "c:\\{{ pillar.nxlog_common.win_software_dir }}"  
+
+- name: set software dir
+  set_fact:
+    win_software_dir: "d:\\{{ pillar.nxlog_common.win_software_dir }}"  
+  when: driver_d.stat.exists
+
+- name: set software dir
+  set_fact:
+    win_software_dir: "e:\\{{ pillar.nxlog_common.win_software_dir }}"  
+  when: driver_e.stat.exists
+
 - name: Create directory structure
   win_file:
-    path: "{{ pillar.nxlog_common.win_software_dir }}"
+    path: "{{ win_software_dir }}"
     state: directory
-
+  
 - name: Copy a install file
   win_copy:
     src: "{{ item }}"
-    dest: "{{ pillar.nxlog_common.win_software_dir }}\\{{ item }}"
+    dest: "{{ win_software_dir }}\\{{ item }}"
   with_items: "{{ pillar.nxlog_win_pkg }}"
 
 - name: Install an MSI file
   win_msi:
-    path: "{{ pillar.nxlog_common.win_software_dir }}\\{{ item }}"
+    path: "{{ win_software_dir }}\\{{ item }}"
     state: present
     wait: true
   with_items: "{{ pillar.nxlog_win_pkg }}"
