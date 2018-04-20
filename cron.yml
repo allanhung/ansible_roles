@@ -1,0 +1,18 @@
+---
+- name: cron test
+  hosts: cron
+  gather_facts: False
+  tasks:
+    - name: Test Cron
+      mycron: 
+        name: "Clear Cache"
+        minute: "30"
+        hour: "03"
+        job: "ls -l /opt"
+        state: query
+      register: crontab
+
+    - name: Record crontab result
+      ara_record:
+        key: "mysql_backup_crontab"
+        value: "{{ crontab }}"

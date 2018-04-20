@@ -40,3 +40,48 @@
 2018-03-23 16:55:03.721 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.013701 ---
 2018-03-23 16:55:03.721 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
 2018-03-23 16:55:03.721 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -ppassword -h10.42.220.91
+2018-04-18 12:06:36.482 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'conca',
+ '--data_host': 'tr-b-concad03.sjc1:10.42.220.103,tr-b-concad04.sjc1:10.42.220.104',
+ '--monitor_host': 'tr-b-concadmm02.sjc1:10.42.220.105:tr-b-concadmm03.sjc1:10.42.220.106',
+ '--monitor_vip': '10.42.220.112',
+ '--password': 'My@dm1n!@#',
+ '--reader_vip': '10.42.220.110,10.42.220.111',
+ '--ssh_try_limit': '1800',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': False,
+ '--workdir': '/opt/ansible',
+ '--writer_vip': '10.42.220.109',
+ 'TASKID': None,
+ 'mmm': True}
+2018-04-18 12:06:36.482 - pyansibleinv - mmm_stderr - ERROR - Traceback (most recent call last):
+2018-04-18 12:06:36.482 - pyansibleinv - mmm_stderr - ERROR -   File "/usr/bin/pyansibleinv", line 11, in <module>
+2018-04-18 12:06:36.482 - pyansibleinv - mmm_stderr - ERROR - load_entry_point('pyansibleinv==0.1.0', 'console_scripts', 'pyansibleinv')()
+2018-04-18 12:06:36.483 - pyansibleinv - mmm_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/pyansibleinv.py", line 32, in main
+2018-04-18 12:06:36.483 - pyansibleinv - mmm_stderr - ERROR - return getattr(module_script, 'gen_inv')(module_args)
+2018-04-18 12:06:36.483 - pyansibleinv - mmm_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/inv_module/mmm.py", line 78, in gen_inv
+2018-04-18 12:06:36.483 - pyansibleinv - mmm_stderr - ERROR - (k, v) = host_info.split(":")
+2018-04-18 12:06:36.483 - pyansibleinv - mmm_stderr - ERROR - ValueError
+2018-04-18 12:06:36.484 - pyansibleinv - mmm_stderr - ERROR - :
+2018-04-18 12:06:36.484 - pyansibleinv - mmm_stderr - ERROR - too many values to unpack
+2018-04-18 12:14:57.174 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'conca',
+ '--data_host': 'tr-b-concad03.sjc1:10.42.220.103,tr-b-concad04.sjc1:10.42.220.104',
+ '--monitor_host': 'tr-b-concadmm02.sjc1:10.42.220.105,tr-b-concadmm03.sjc1:10.42.220.106',
+ '--monitor_vip': '10.42.220.112',
+ '--password': 'My@dm1n!@#',
+ '--reader_vip': '10.42.220.110,10.42.220.111',
+ '--ssh_try_limit': '1800',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': False,
+ '--workdir': '/opt/ansible',
+ '--writer_vip': '10.42.220.109',
+ 'TASKID': None,
+ 'mmm': True}
+2018-04-18 12:14:57.174 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/b8aa91de-9754-4956-b12b-4fdb40a78551/hosts
+2018-04-18 12:14:57.174 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_b8aa91de-9754-4956-b12b-4fdb40a78551.yml
+2018-04-18 12:14:57.177 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/b8aa91de-9754-4956-b12b-4fdb40a78551/pillar/mmm.yml
+2018-04-18 12:14:57.189 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/b8aa91de-9754-4956-b12b-4fdb40a78551/hosts /opt/ansible/mmm_b8aa91de-9754-4956-b12b-4fdb40a78551.yml
+2018-04-18 12:14:57.189 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.015762 ---
+2018-04-18 12:14:57.189 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
+2018-04-18 12:14:57.189 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -pMy@dm1n!@# -h10.42.220.109

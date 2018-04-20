@@ -12,7 +12,7 @@
     src: "{{ item }}"
     dest: "{{ pillar.mmm_common.software_dir }}/{{ item }}"
     mode: 0644
-    force: no
+    force: yes
   with_items: "{{ pillar.mmm_pkg }}"
 
 - name: Ensure mmm packages are installed.

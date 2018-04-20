@@ -1,1 +1,4 @@
 2018-04-10 19:25:43,379 - ara - INFO - Initializing new DB from scratch
+2018-04-20 11:13:44,288 - ara - ERROR - Result 0728ae6b-0794-490d-990b-a48eeb31a1ca could not be found
+2018-04-20 11:17:21,326 - ara - ERROR - No recognized column names in ['Results']. Recognized columns are ['ID', 'Name', 'Playbook ID', 'Playbook Path', 'Play ID', 'Play Name', 'Task ID', 'Task Name', 'Host', 'Action', 'Status', 'Ignore Errors', 'Time Start', 'Time End', 'Duration'].
+2018-04-20 11:17:39,387 - ara - ERROR - No recognized column names in ['Result']. Recognized columns are ['ID', 'Name', 'Playbook ID', 'Playbook Path', 'Play ID', 'Play Name', 'Task ID', 'Task Name', 'Host', 'Action', 'Status', 'Ignore Errors', 'Time Start', 'Time End', 'Duration'].
