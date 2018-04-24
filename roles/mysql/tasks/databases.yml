@@ -8,4 +8,4 @@
     collation: "{{ item.collation | default('utf8_general_ci') }}"
     encoding: "{{ item.encoding | default('utf8') }}"
     state: present
-  with_items: "{{ pillar.mysql_database }}"
+  loop: "{{ pillar.mysql_database }}"

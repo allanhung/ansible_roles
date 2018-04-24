@@ -4,7 +4,7 @@
     name: "{{ item.username }}"
     gid: "{{ item.id }}"
     state: present
-  with_items: "{{ pillar.linux_accounts }}"
+  loop: "{{ pillar.linux_accounts }}"
 
 - name: add linux user
   user:
@@ -12,7 +12,7 @@
     group: "{{ item.username }}"
     uid: "{{ item.id }}"
     password: "{{ item.password }}"
-  with_items: "{{ pillar.linux_accounts }}"
+  loop: "{{ pillar.linux_accounts }}"
 
 - name: add user to sudoers file
   lineinfile:
@@ -22,4 +22,4 @@
     line: '{{ item.username }}           ALL=(ALL)       NOPASSWD: ALL'
     validate: '/usr/sbin/visudo -cf %s'
   when: "{{ item.sudo }}"
-  with_items: "{{ pillar.linux_accounts }}"
+  loop: "{{ pillar.linux_accounts }}"

@@ -2,4 +2,4 @@
 - name: configure squid
   include: "{{ item }}.yml"
   static: no
-  with_items: "{{ pillar.squid_stage }}"
+  loop: "{{ pillar.squid_stage }}"

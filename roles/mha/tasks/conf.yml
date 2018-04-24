@@ -20,7 +20,7 @@
     group: root
     mode:  0755
   when: (pillar.mha_setting.is_mha == True)
-  with_items: "{{ pillar.mha_setting.group_list }}"
+  loop: "{{ pillar.mha_setting.group_list }}"
 
 - name: mha manager config
   template:
@@ -41,7 +41,7 @@
     group: root
     mode: 0644
   when: (pillar.mha_setting.role == 'monitor')
-  with_items: "{{ pillar.mha_setting.group_list }}"
+  loop: "{{ pillar.mha_setting.group_list }}"
 
 - name: Copy custom mha script to dir
   template:
@@ -49,7 +49,7 @@
     dest: "{{ pillar.mha_common.script_dir }}/{{ item }}"
     mode: 0755
     force: yes
-  with_items: "{{ pillar.mha_script }}"
+  loop: "{{ pillar.mha_script }}"
 
 - name: config mha db vip
   shell: "ip addr add {{ pillar.mha_vip.db_vip }}/32 dev eth0"
@@ -63,5 +63,5 @@
 - name: Ensure MySQL mha is enabled on boot.
   service: "name=mha@{{ item }} enabled=yes"
   when: (pillar.mha_setting.role == 'monitor')
-  with_items: "{{ pillar.mha_setting.group_list }}"
+  loop: "{{ pillar.mha_setting.group_list }}"
 

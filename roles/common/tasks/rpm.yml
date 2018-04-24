@@ -20,7 +20,7 @@
 
 - name: install common tool 
   yum: "name={{ item }} state=installed"
-  with_items: "{{ pillar.common_tool_pkgs }}"
+  loop: "{{ pillar.common_tool_pkgs }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -28,12 +28,12 @@
 
 - name: install common tool 
   yum: "name={{ item }} state=installed"
-  with_items: "{{ pillar.common_tool_pkgs }}"
+  loop: "{{ pillar.common_tool_pkgs }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: install python tool
   shell: "echo y | pip install {{ item }}"
-  with_items: "{{ pillar.common_python_pkgs }}"
+  loop: "{{ pillar.common_python_pkgs }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -41,5 +41,5 @@
 
 - name: install python tool
   shell: "echo y | pip install {{ item }}"
-  with_items: "{{ pillar.common_python_pkgs }}"
+  loop: "{{ pillar.common_python_pkgs }}"
   when: "pillar.proxy.proxy == 'no_proxy'"

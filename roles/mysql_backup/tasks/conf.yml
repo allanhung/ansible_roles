@@ -40,4 +40,4 @@
     priv: "{{ item.priv | default('*.*:USAGE') }}"
     state: "{{ item.state | default('present') }}"
     append_privs: "{{ item.append_privs | default('no') }}"
-  with_items: "{{ pillar.mysql_user.backup }}"
+  loop: "{{ pillar.mysql_user.backup }}"

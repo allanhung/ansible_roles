@@ -10,4 +10,4 @@
         type: vmxnet3
         network: "{{ item.nic1_vlan }}"
         network_type: standard
-  with_items: "{{ pillar.vmware_new_host }}"
+  loop: "{{ pillar.vmware_new_host }}"

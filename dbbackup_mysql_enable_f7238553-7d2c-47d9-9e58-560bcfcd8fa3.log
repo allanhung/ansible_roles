@@ -1,0 +1,61 @@
+2018-04-24 15:42:36.002 - pyansibleinv -        dbbackup_mysql_enable -  INFO - args:{'--cluster_id': None,
+ '--data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57',
+ '--day': '*',
+ '--day_of_week': None,
+ '--dbfqdn': 'dcs-db-c00aee9f.iad1',
+ '--dbtype': 'mysql',
+ '--hour': '23',
+ '--isets': '2',
+ '--minute': '2',
+ '--month': '*',
+ '--rsets': '3',
+ '--ssh_try_limit': '600',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': False,
+ '--workdir': '/opt/ansible',
+ 'dbbackup': True,
+ 'debug': False,
+ 'disable': False,
+ 'enable': True,
+ 'list': False,
+ 'status': False}
+2018-04-24 15:42:36.002 - pyansibleinv -        dbbackup_mysql_enable -  INFO - dict:{'template_only': False, 'rsets': '3', 'month': '*', 'cluster_id': None, 'data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57', 'sshkey': '/opt/ansible/db.pem', 'atus': False, 'dbtype': 'mysql', 'able': True, 'day': '*', 'taskid': None, 'dbfqdn': 'dcs-db-c00aee9f.iad1', 'workdir': '/opt/ansible', 'sable': False, 'sshpass': 'LR1!Ika', 'bug': False, 'minute': '2', 'uuid': 'f7238553-7d2c-47d9-9e58-560bcfcd8fa3', 'ssh_try_limit': '600', 'task_id': '  external_task_id: f7238553-7d2c-47d9-9e58-560bcfcd8fa3\n', 'hour': '23', 'day_of_week': None, 'st': False, 'backup': True, 'isets': '2'}
+2018-04-24 15:42:36.002 - pyansibleinv -        dbbackup_mysql_enable -  INFO - create ansible hosts: /opt/ansible/inventory/f7238553-7d2c-47d9-9e58-560bcfcd8fa3/hosts
+2018-04-24 15:42:36.003 - pyansibleinv -        dbbackup_mysql_enable -  INFO - craete ansible playbooks: /opt/ansible/dbbackup_mysql_enable_f7238553-7d2c-47d9-9e58-560bcfcd8fa3.yml
+2018-04-24 15:42:36.006 - pyansibleinv -        dbbackup_mysql_enable -  INFO - check ssh availability
+2018-04-24 15:42:36.006 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:42:36.073 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:42:36.073 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:42:36.141 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:42:36.141 - pyansibleinv -        dbbackup_mysql_enable -  INFO - run ansible from python
+2018-04-24 15:42:36.739 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - 
+2018-04-24 15:42:36.739 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - PLAY [crontab] ********************************************************************************************************************************************************************************
+2018-04-24 15:42:37.505 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - 
+2018-04-24 15:42:37.506 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - TASK [set crontab] ****************************************************************************************************************************************************************************
+2018-04-24 15:42:40.297 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - [0;31mfatal: [dcs-db-c00aee9f.iad1]: FAILED! => {"changed": false, "msg": "\"/tmp/crontabfjwSA8\":2: bad day-of-week\nerrors in crontab file, can't install.\n"}[0m
+2018-04-24 15:42:40.333 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - 	to retry, use: --limit @/opt/ansible/dbbackup_mysql_enable_f7238553-7d2c-47d9-9e58-560bcfcd8fa3.retry
+2018-04-24 15:42:40.333 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - 
+2018-04-24 15:42:40.333 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - PLAY RECAP ************************************************************************************************************************************************************************************
+2018-04-24 15:42:40.333 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - [0;31mdcs-db-c00aee9f.iad1[0m       : ok=0    changed=0    unreachable=0    [0;31mfailed=1   [0m
+2018-04-24 15:42:40.368 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - --- Total Excution time: 0:00:04.366471 ---
+2018-04-24 15:42:40.403 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - No handlers could be found for logger "pyansibleinv"
+2018-04-24 15:42:40.403 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - Traceback (most recent call last):
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/bin/pyansibleinv", line 11, in <module>
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - load_entry_point('pyansibleinv==0.1.0', 'console_scripts', 'pyansibleinv')()
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/pyansibleinv.py", line 34, in main
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - return getattr(module_script, func)(module_args)
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/inv_module/dbbackup.py", line 145, in enable
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - return json.dumps(dbbackup(args, 'enable', fields))
+2018-04-24 15:42:40.404 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/inv_module/dbbackup.py", line 112, in dbbackup
+2018-04-24 15:42:40.405 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - tmp_dict = json.loads(result['stdout'])['Value']
+2018-04-24 15:42:40.405 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib64/python2.7/json/__init__.py", line 338, in loads
+2018-04-24 15:42:40.405 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - return _default_decoder.decode(s)
+2018-04-24 15:42:40.405 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib64/python2.7/json/decoder.py", line 366, in decode
+2018-04-24 15:42:40.405 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+2018-04-24 15:42:40.405 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib64/python2.7/json/decoder.py", line 384, in raw_decode
+2018-04-24 15:42:40.406 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - raise ValueError("No JSON object could be decoded")
+2018-04-24 15:42:40.406 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - ValueError
+2018-04-24 15:42:40.406 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - :
+2018-04-24 15:42:40.406 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - No JSON object could be decoded

@@ -2,4 +2,4 @@
 - name: load inv tasks.
   include: "{{ item }}.yml"
   static: no
-  with_items: "{{ pillar.inv_stage }}"
+  loop: "{{ pillar.inv_stage }}"

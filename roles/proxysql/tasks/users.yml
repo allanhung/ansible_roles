@@ -5,7 +5,7 @@
 - name: proxysql all users
   set_fact:
     proxysql_all_users: "{{ all_users|default([]) + hostvars[item]['pillar']['mysql_user']['app'] }}"
-  with_items: "{{ pillar.mha_setting.all_server_list }}"
+  loop: "{{ pillar.mha_setting.all_server_list }}"
 
 - name: proxysql set users
   proxysql_mysql_users:
@@ -16,4 +16,4 @@
     default_hostgroup: "{{ pillar.proxysql_hostgroup }}"
     fast_forward: False
     state: present
-  with_items: "{{ proxysql_all_users }}"
+  loop: "{{ proxysql_all_users }}"

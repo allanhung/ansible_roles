@@ -28,7 +28,7 @@
 
 - name: start all cluster nodes
   service: name={{ item }} enabled=yes state=started
-  with_items:
+  loop:
     - corosync
     - pacemaker
 
@@ -85,5 +85,5 @@
       wait={{ item.wait }}
     {% endif %}
   run_once: true
-  with_items: "{{ pillar.pacemaker_setting.resource }}"
+  loop: "{{ pillar.pacemaker_setting.resource }}"
   when: (pillar.pacemaker_setting.resource|length > 0)

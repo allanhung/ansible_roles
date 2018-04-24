@@ -14,5 +14,5 @@
 
     - name: Record crontab result
       ara_record:
-        key: "mysql_backup_crontab"
+        key: "mysql_backup_{{ inventory_hostname }}"
         value: "{{ crontab }}"

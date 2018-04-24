@@ -1,0 +1,46 @@
+2018-04-24 15:14:19.867 - pyansibleinv -        dbbackup_mysql_query -  INFO - args:{'--cluster_id': None,
+ '--data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57',
+ '--day': '*',
+ '--day_of_week': None,
+ '--dbfqdn': 'dcs-db-c00aee9f.iad1',
+ '--dbtype': 'mysql',
+ '--hour': '23',
+ '--isets': '2',
+ '--minute': '2',
+ '--month': '*',
+ '--rsets': '3',
+ '--ssh_try_limit': '600',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': False,
+ '--workdir': '/opt/ansible',
+ 'dbbackup': True,
+ 'debug': False,
+ 'disable': False,
+ 'enable': False,
+ 'list': False,
+ 'status': True}
+2018-04-24 15:14:19.867 - pyansibleinv -        dbbackup_mysql_query -  INFO - dict:{'template_only': False, 'rsets': '3', 'month': '*', 'cluster_id': None, 'data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57', 'sshkey': '/opt/ansible/db.pem', 'atus': True, 'dbtype': 'mysql', 'able': False, 'day': '*', 'taskid': None, 'dbfqdn': 'dcs-db-c00aee9f.iad1', 'workdir': '/opt/ansible', 'sable': False, 'sshpass': 'LR1!Ika', 'bug': False, 'minute': '2', 'uuid': '1f6cdf8c-c25e-4f56-9eec-27bf5f5e3aae', 'ssh_try_limit': '600', 'task_id': '  external_task_id: 1f6cdf8c-c25e-4f56-9eec-27bf5f5e3aae\n', 'hour': '23', 'day_of_week': None, 'st': False, 'backup': True, 'isets': '2'}
+2018-04-24 15:14:19.868 - pyansibleinv -        dbbackup_mysql_query -  INFO - create ansible hosts: /opt/ansible/inventory/1f6cdf8c-c25e-4f56-9eec-27bf5f5e3aae/hosts
+2018-04-24 15:14:19.868 - pyansibleinv -        dbbackup_mysql_query -  INFO - craete ansible playbooks: /opt/ansible/dbbackup_mysql_query_1f6cdf8c-c25e-4f56-9eec-27bf5f5e3aae.yml
+2018-04-24 15:14:19.889 - pyansibleinv -        dbbackup_mysql_query -  INFO - check ssh availability
+2018-04-24 15:14:19.889 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:14:19.955 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:14:19.956 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:14:20.023 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:14:20.024 - pyansibleinv -        dbbackup_mysql_query -  INFO - run ansible from python
+2018-04-24 15:14:20.633 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - 
+2018-04-24 15:14:20.634 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - PLAY [crontab] ********************************************************************************************************************************************************************************
+2018-04-24 15:14:21.383 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - 
+2018-04-24 15:14:21.383 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - TASK [query crontab] **************************************************************************************************************************************************************************
+2018-04-24 15:14:24.127 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - [0;32mok: [dcs-db-c00aee9f.iad1][0m
+2018-04-24 15:14:24.839 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - 
+2018-04-24 15:14:24.840 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - TASK [Record crontab result] ******************************************************************************************************************************************************************
+2018-04-24 15:14:25.021 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - [0;31mfatal: [dcs-db-c00aee9f.iad1]: FAILED! => {"changed": false, "msg": "Parameter 'value' is required"}[0m
+2018-04-24 15:14:25.044 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - 	to retry, use: --limit @/opt/ansible/dbbackup_mysql_query_1f6cdf8c-c25e-4f56-9eec-27bf5f5e3aae.retry
+2018-04-24 15:14:25.044 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - 
+2018-04-24 15:14:25.045 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - PLAY RECAP ************************************************************************************************************************************************************************************
+2018-04-24 15:14:25.045 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - [0;31mdcs-db-c00aee9f.iad1[0m       : [0;32mok=1   [0m changed=0    unreachable=0    [0;31mfailed=1   [0m
+2018-04-24 15:14:25.149 - pyansibleinv - dbbackup_mysql_query_stdout -  INFO - --- Total Excution time: 0:00:05.282808 ---
+2018-04-24 15:14:25.150 - pyansibleinv - dbbackup_mysql_query_stderr - ERROR - ('1f6cdf8c-c25e-4f56-9eec-27bf5f5e3aae', ['dcs-db-c00aee9f.iad1'])

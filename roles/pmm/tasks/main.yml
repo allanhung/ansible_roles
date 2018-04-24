@@ -1,4 +1,4 @@
 ---
 - name: configure pmm
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.pmm_stage }}"
+  loop: "{{ pillar.pmm_stage }}"

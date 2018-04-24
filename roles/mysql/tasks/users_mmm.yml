@@ -12,7 +12,7 @@
     state: "{{ item.state | default('present') }}"
     append_privs: "{{ item.append_privs | default('no') }}"
     sql_log_bin: no
-  with_items: "{{ pillar.mysql_user.mmm_monitor }}"
+  loop: "{{ pillar.mysql_user.mmm_monitor }}"
 
 - name: Ensure MySQL mmm agent users are present.
   mysql_user:
@@ -27,4 +27,4 @@
     state: "{{ item.state | default('present') }}"
     append_privs: "{{ item.append_privs | default('no') }}"
     sql_log_bin: no
-  with_items: "{{ pillar.mysql_user.mmm_agent }}"
+  loop: "{{ pillar.mysql_user.mmm_agent }}"

@@ -9,4 +9,4 @@
     limit_type: "{{ item.type }}"
     limit_item: "{{ item.item }}"
     value: "{{ item.value }}"
-  with_items: "{{ pillar.mysql_limits }}"
+  loop: "{{ pillar.mysql_limits }}"

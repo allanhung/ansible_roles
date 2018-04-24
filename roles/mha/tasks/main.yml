@@ -4,4 +4,4 @@
 
 - name: configure mha.
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.mha_stage }}"
+  loop: "{{ pillar.mha_stage }}"

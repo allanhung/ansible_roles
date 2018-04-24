@@ -7,7 +7,7 @@
     group: mysql
     mode: 0644
     force: no
-  with_items: "{{ pillar.mysql_run_script }}"
+  loop: "{{ pillar.mysql_run_script }}"
 
 - name: import mysql scripts
   mysql_db:
@@ -17,4 +17,4 @@
     name: "{{ item.name }}"
     target: "/tmp/{{ item.sql }}"
     state: import
-  with_items: "{{ pillar.mysql_run_script }}"
+  loop: "{{ pillar.mysql_run_script }}"

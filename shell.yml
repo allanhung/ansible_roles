@@ -1,0 +1,12 @@
+---
+- name: shell test
+  hosts: shell
+  gather_facts: False
+  tasks:
+    - name: run_shell
+      shell: /tmp/cron.py
+      register: shell_out
+
+    - name: Record crontab result
+      debug:
+        var: shell_out

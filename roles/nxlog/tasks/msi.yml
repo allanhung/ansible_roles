@@ -32,11 +32,11 @@
   win_copy:
     src: "{{ item }}"
     dest: "{{ win_software_dir }}\\{{ item }}"
-  with_items: "{{ pillar.nxlog_win_pkg }}"
+  loop: "{{ pillar.nxlog_win_pkg }}"
 
 - name: Install an MSI file
   win_msi:
     path: "{{ win_software_dir }}\\{{ item }}"
     state: present
     wait: true
-  with_items: "{{ pillar.nxlog_win_pkg }}"
+  loop: "{{ pillar.nxlog_win_pkg }}"

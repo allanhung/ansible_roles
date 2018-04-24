@@ -4,4 +4,4 @@
 
 - name: configure mmm.
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.mmm_stage }}"
+  loop: "{{ pillar.mmm_stage }}"

@@ -1,4 +1,4 @@
 ---
 - name: configure MySQL.
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.mysql_stage }}"
+  loop: "{{ pillar.mysql_stage }}"

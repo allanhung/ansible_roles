@@ -14,7 +14,7 @@
     login_password: "{{ pillar.proxysql_common.admin_password }}"
     variable: mysql-monitor_username
     value: "{{ item.name }}"
-  with_items: "{{ pillar.mysql_user.monitor }}"
+  loop: "{{ pillar.mysql_user.monitor }}"
 
 - name: proxysql set monitor password
   proxysql_global_variables:
@@ -22,7 +22,7 @@
     login_password: "{{ pillar.proxysql_common.admin_password }}"
     variable: mysql-monitor_password
     value: "{{ item.password }}"
-  with_items: "{{ pillar.mysql_user.monitor }}"
+  loop: "{{ pillar.mysql_user.monitor }}"
 
 - name: set listener
   proxysql_global_variables:

@@ -2,4 +2,4 @@
 - name: configure heartbeat
   include: "{{ item }}.yml"
   static: no
-  with_items: "{{ pillar.heartbeat_stage }}"
+  loop: "{{ pillar.heartbeat_stage }}"

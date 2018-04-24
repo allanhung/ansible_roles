@@ -13,11 +13,11 @@
     dest: "{{ pillar.pmm_common.software_dir }}/{{ item }}"
     mode: 0644
     force: no
-  with_items: "{{ pillar.pmm_admin_pkg }}"
+  loop: "{{ pillar.pmm_admin_pkg }}"
 
 - name: Ensure PMM packages are installed.
   yum: "name={{ pillar.pmm_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.pmm_admin_pkg }}"
+  loop: "{{ pillar.pmm_admin_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -25,5 +25,5 @@
 
 - name: Ensure PMM packages are installed.
   yum: "name={{ pillar.pmm_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.pmm_admin_pkg }}"
+  loop: "{{ pillar.pmm_admin_pkg }}"
   when: "pillar.proxy.proxy == 'no_proxy'"

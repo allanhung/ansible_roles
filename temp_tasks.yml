@@ -11,4 +11,4 @@
         dest: "{{ pillar.mmm_common.software_dir }}/{{ item }}"
         mode: 0644
         force: no
-      with_items: "{{ pillar.mmm_pkg }}"    
+      loop: "{{ pillar.mmm_pkg }}"    

@@ -1,0 +1,44 @@
+2018-04-24 15:00:11.096 - pyansibleinv -        dbbackup_mysql_list -  INFO - args:{'--cluster_id': None,
+ '--data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57',
+ '--dbfqdn': 'dcs-db-c00aee9f.iad1',
+ '--dbtype': 'mysql',
+ '--ssh_try_limit': '600',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': False,
+ '--workdir': '/opt/ansible',
+ 'dbbackup': True,
+ 'debug': False,
+ 'list': True}
+2018-04-24 15:00:11.097 - pyansibleinv -        dbbackup_mysql_list -  INFO - dict:{'ssh_try_limit': '600', 'workdir': '/opt/ansible', 'sshkey': '/opt/ansible/db.pem', 'template_only': False, 'dbtype': 'mysql', 'backup': True, 'taskid': None, 'task_id': '  external_task_id: 76e49160-59ca-4941-8cbf-5823c4028c40\n', 'st': True, 'cluster_id': None, 'sshpass': 'LR1!Ika', 'dbfqdn': 'dcs-db-c00aee9f.iad1', 'data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57', 'bug': False, 'uuid': '76e49160-59ca-4941-8cbf-5823c4028c40'}
+2018-04-24 15:00:11.097 - pyansibleinv -        dbbackup_mysql_list -  INFO - create ansible hosts: /opt/ansible/inventory/76e49160-59ca-4941-8cbf-5823c4028c40/hosts
+2018-04-24 15:00:11.097 - pyansibleinv -        dbbackup_mysql_list -  INFO - craete ansible playbooks: /opt/ansible/dbbackup_mysql_list_76e49160-59ca-4941-8cbf-5823c4028c40.yml
+2018-04-24 15:00:11.100 - pyansibleinv -        dbbackup_mysql_list -  INFO - check ssh availability
+2018-04-24 15:00:11.100 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:00:11.166 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:00:11.167 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:00:11.234 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:00:11.235 - pyansibleinv -        dbbackup_mysql_list -  INFO - run ansible from python
+2018-04-24 15:00:11.827 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - 
+2018-04-24 15:00:11.828 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - PLAY [list backup sets] ***********************************************************************************************************************************************************************
+2018-04-24 15:00:12.579 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - 
+2018-04-24 15:00:12.579 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - TASK [list mysql backup set] ******************************************************************************************************************************************************************
+2018-04-24 15:00:15.628 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - [0;33mchanged: [dcs-db-c00aee9f.iad1][0m
+2018-04-24 15:00:16.335 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - 
+2018-04-24 15:00:16.335 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - TASK [Record backup result] *******************************************************************************************************************************************************************
+2018-04-24 15:00:16.579 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - [0;32mok: [dcs-db-c00aee9f.iad1][0m
+2018-04-24 15:00:16.611 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - 
+2018-04-24 15:00:16.611 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - PLAY RECAP ************************************************************************************************************************************************************************************
+2018-04-24 15:00:16.611 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - [0;33mdcs-db-c00aee9f.iad1[0m       : [0;32mok=2   [0m [0;33mchanged=1   [0m unreachable=0    failed=0
+2018-04-24 15:00:16.651 - pyansibleinv - dbbackup_mysql_list_stdout -  INFO - --- Total Excution time: 0:00:05.555644 ---
+2018-04-24 15:00:16.692 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - Traceback (most recent call last):
+2018-04-24 15:00:16.692 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR -   File "/usr/bin/pyansibleinv", line 11, in <module>
+2018-04-24 15:00:16.693 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - load_entry_point('pyansibleinv==0.1.0', 'console_scripts', 'pyansibleinv')()
+2018-04-24 15:00:16.693 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/pyansibleinv.py", line 34, in main
+2018-04-24 15:00:16.693 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - return getattr(module_script, func)(module_args)
+2018-04-24 15:00:16.693 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/inv_module/dbbackup.py", line 144, in list
+2018-04-24 15:00:16.693 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - return bak_dict['Value']
+2018-04-24 15:00:16.693 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - KeyError
+2018-04-24 15:00:16.694 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - :
+2018-04-24 15:00:16.694 - pyansibleinv - dbbackup_mysql_list_stderr - ERROR - 'Value'

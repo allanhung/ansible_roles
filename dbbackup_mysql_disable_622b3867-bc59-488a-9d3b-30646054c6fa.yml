@@ -1,0 +1,22 @@
+---
+- name: crontab
+  hosts: all
+  gather_facts: False
+  external_task_id: 622b3867-bc59-488a-9d3b-30646054c6fa
+  tasks:
+    - name: set crontab
+      mycron:
+        name: "MySQL Backup Scheduler"
+        state: absent
+
+    - name: query crontab
+      mycron:
+        name: "MySQL Backup Scheduler"
+        state: query
+      register: crontab
+
+    - name: Record crontab result
+      ara_record:
+        key: "mybak_{{ inventory_hostname }}"
+        value: "{{ crontab }}"
+

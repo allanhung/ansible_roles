@@ -1,7 +1,7 @@
 ---
 - name: compile cfssl packages
   shell: "GOPATH={{ pillar.golang.gopath }} go get -u {{ pillar.ca_common.cfssl_url }}/{{ item }}/"
-  with_items: "{{ pillar.cfssl_pkgs }}"
+  loop: "{{ pillar.cfssl_pkgs }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -9,12 +9,12 @@
 
 - name: compile cfssl packages
   shell: "GOPATH={{ pillar.golang.gopath }} go get -u {{ pillar.ca_common.cfssl_url }}/{{ item }}/"
-  with_items: "{{ pillar.cfssl_pkgs }}"
+  loop: "{{ pillar.cfssl_pkgs }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: copy cfssl bin
   command: "/bin/cp -f {{ pillar.golang.gopath }}/bin/{{ item }} /usr/bin/{{ item }}"
-  with_items: "{{ pillar.cfssl_pkgs }}"
+  loop: "{{ pillar.cfssl_pkgs }}"
 
 - name: create ca dir
   file:
@@ -36,7 +36,7 @@
   template:
     src: "{{ item }}.j2"
     dest: "{{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/{{ item }}"
-  with_items: "{{ pillar.ca_files }}"
+  loop: "{{ pillar.ca_files }}"
 
 - name: generating a new CA key and certificate from CSR
   shell: "cfssl gencert -initca {{ pillar.ca_common.config_dir }}/{{ pillar.ca_common.ca_config_dir }}/ca-csr.json | cfssljson -bare ca"

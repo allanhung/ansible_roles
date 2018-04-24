@@ -1,4 +1,4 @@
 ---
 - name: configure docker.
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.docker_stage }}"
+  loop: "{{ pillar.docker_stage }}"

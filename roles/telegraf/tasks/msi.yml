@@ -8,7 +8,7 @@
   win_copy:
     src: "{{ item }}"
     dest: "{{ pillar.telegraf_win.install_path }}\\{{ item }}"
-  with_items: "{{ pillar.telegraf_win_files }}"
+  loop: "{{ pillar.telegraf_win_files }}"
   notify: restart telegraf for windows
 
 - name: Copy conf file to target

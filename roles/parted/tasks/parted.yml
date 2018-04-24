@@ -2,7 +2,7 @@
 - name: check partition status
   parted:
     device: "{{ item.device }}"
-  with_items: "{{ pillar.parted }}"
+  loop: "{{ pillar.parted }}"
   register: partition_info
 
 - name: create partition
@@ -19,4 +19,4 @@
   filesystem:
     fstype: "{{ item.fstype }}"
     dev: "{{ item.device }}"
-  with_items: "{{ pillar.mkfs }}" 
+  loop: "{{ pillar.mkfs }}" 

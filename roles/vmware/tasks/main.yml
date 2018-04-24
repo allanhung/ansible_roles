@@ -2,4 +2,4 @@
 - name: configure vmware.
   include: "{{ item }}.yml"
   static: no
-  with_items: "{{ pillar.vmware_stage }}"
+  loop: "{{ pillar.vmware_stage }}"

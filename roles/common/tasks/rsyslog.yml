@@ -14,7 +14,7 @@
     owner: root
     group: root
     mode: 0644
-  with_items: "{{ pillar.rsyslog_conf }}"
+  loop: "{{ pillar.rsyslog_conf }}"
 
 - name: config logrotate
   template:

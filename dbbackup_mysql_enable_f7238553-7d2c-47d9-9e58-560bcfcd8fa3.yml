@@ -1,0 +1,28 @@
+---
+- name: crontab
+  hosts: all
+  gather_facts: False
+  external_task_id: f7238553-7d2c-47d9-9e58-560bcfcd8fa3
+  tasks:
+    - name: set crontab
+      mycron:
+        name: "MySQL Backup Scheduler"
+        minute: "2"
+        hour: "23"
+        day: "*"
+        month: "*"
+        weekday: "None"
+        job:  "/dbbackup/pyxbackup cron"
+        state: present
+
+    - name: query crontab
+      mycron:
+        name: "MySQL Backup Scheduler"
+        state: query
+      register: crontab
+
+    - name: Record crontab result
+      ara_record:
+        key: "mybak_{{ inventory_hostname }}"
+        value: "{{ crontab }}"
+

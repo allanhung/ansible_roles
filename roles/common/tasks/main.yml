@@ -1,4 +1,4 @@
 ---
 - name: run task
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.common_stage }}"
+  loop: "{{ pillar.common_stage }}"

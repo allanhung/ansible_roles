@@ -5,4 +5,4 @@
     dest: "{{ pillar.mysql_config.plugin_dir }}/{{ item.dest }}"
     mode: 0755
     force: no
-  with_items: "{{ pillar.mysql_plugin_file }}"
+  loop: "{{ pillar.mysql_plugin_file }}"

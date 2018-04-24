@@ -14,11 +14,11 @@
     dest: "{{ pillar.nxlog_common.software_dir }}/{{ item }}"
     mode: 0644
     force: no
-  with_items: "{{ pillar.nxlog_pkg }}"
+  loop: "{{ pillar.nxlog_pkg }}"
 
 - name: Ensure nxlog packages are installed.
   yum: "name={{ pillar.nxlog_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.nxlog_pkg }}"
+  loop: "{{ pillar.nxlog_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -26,7 +26,7 @@
 
 - name: Ensure nxlog packages are installed.
   yum: "name={{ pillar.nxlog_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.nxlog_pkg }}"
+  loop: "{{ pillar.nxlog_pkg }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure nxlog is enabled on boot.

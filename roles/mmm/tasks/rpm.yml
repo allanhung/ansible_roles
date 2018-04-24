@@ -13,11 +13,11 @@
     dest: "{{ pillar.mmm_common.software_dir }}/{{ item }}"
     mode: 0644
     force: yes
-  with_items: "{{ pillar.mmm_pkg }}"
+  loop: "{{ pillar.mmm_pkg }}"
 
 - name: Ensure mmm packages are installed.
   yum: "name={{ pillar.mmm_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.mmm_pkg }}"
+  loop: "{{ pillar.mmm_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -25,7 +25,7 @@
 
 - name: Ensure mmm packages are installed.
   yum: "name={{ pillar.mmm_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.mmm_pkg }}"
+  loop: "{{ pillar.mmm_pkg }}"
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: load profile in mmm agent

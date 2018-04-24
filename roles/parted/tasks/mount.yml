@@ -6,5 +6,5 @@
     fstype: "{{ item.fstype }}"
     opts: "{{ item.opts | default('defaults') }}"
     state: mounted
-  with_items: "{{ pillar.mount }}" 
+  loop: "{{ pillar.mount }}" 
   ignore_errors: True

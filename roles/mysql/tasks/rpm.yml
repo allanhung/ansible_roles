@@ -13,11 +13,11 @@
     dest: "{{ pillar.mysql_common.software_dir }}/{{ item }}"
     mode: 0644
     force: no
-  with_items: "{{ pillar.mysql_local_pkg }}"
+  loop: "{{ pillar.mysql_local_pkg }}"
 
 - name: Ensure MySQL local packages are installed.
   yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.mysql_local_pkg }}"
+  loop: "{{ pillar.mysql_local_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -25,12 +25,12 @@
 
 - name: Ensure MySQL local packages are installed.
   yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.mysql_local_pkg }}"
+  loop: "{{ pillar.mysql_local_pkg }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure MySQL packages are installed.
   yum: "name={{ item }} state=installed"
-  with_items: "{{ pillar.mysql_pkg }}"
+  loop: "{{ pillar.mysql_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -38,7 +38,7 @@
 
 - name: Ensure MySQL packages are installed.
   yum: "name={{ item }} state=installed"
-  with_items: "{{ pillar.mysql_pkg }}"
+  loop: "{{ pillar.mysql_pkg }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: fix max num of process
@@ -46,7 +46,7 @@
     dest: /usr/lib/systemd/system/{{ pillar.mysql_daemon.mysql_daemon }}.service
     regexp: "^{{ item.property }}"
     line: "{{ item.property }}={{ item.value }}"
-  with_items:
+  loop:
     - { property: 'LimitNOFILE', value: "{{ pillar.mysql_limits.mysql.nofile }}" }
     - { property: 'LimitNPROC', value: "{{ pillar.mysql_limits.mysql.nproc }}" }
   when: pillar.myhost.os_ver == "7"
@@ -56,7 +56,7 @@
     dest: /usr/lib/systemd/system/{{ pillar.mysql_daemon.mysql_daemon }}@.service
     regexp: "^{{ item.property }}"
     line: "{{ item.property }}={{ item.value }}"
-  with_items:
+  loop:
     - { property: 'LimitNOFILE', value: "{{ pillar.mysql_limits.mysql.nofile }}" }
     - { property: 'LimitNPROC', value: "{{ pillar.mysql_limits.mysql.nproc }}" }
   when: pillar.myhost.os_ver == "7"

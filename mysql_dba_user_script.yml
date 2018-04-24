@@ -17,10 +17,10 @@
       debug:
         msg: "GRANT ALL PRIVILEGES ON *.* TO '{{ item.name }}'@'{{ item.host | default('localhost') }}' IDENTIFIED BY PASSWORD '{{ item.password }}' WITH GRANT OPTION;"
       when: item.state is not defined or item.state == 'present'
-      with_items: "{{ pillar.mysql_user.dba }}"
+      loop: "{{ pillar.mysql_user.dba }}"
 
     - name: show script for drop mysql user.
       debug:
         msg: "DROP USER '{{ item.name }}'@'{{ item.host | default('localhost') }}';"
       when: item.state is defined and item.state == 'absent'
-      with_items: "{{ pillar.mysql_user.dba }}"
+      loop: "{{ pillar.mysql_user.dba }}"

@@ -21,11 +21,11 @@
     dest: "{{ pillar.proxysql_common.software_dir }}/{{ item }}"
     mode: 0644
     force: no
-  with_items: "{{ pillar.proxysql_pkg }}"
+  loop: "{{ pillar.proxysql_pkg }}"
 
 - name: Ensure proxysql pre packages are installed.
   yum: "name={{ item }} state=installed"
-  with_items: "{{ pillar.proxysql_pre_pkg }}"
+  loop: "{{ pillar.proxysql_pre_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -33,12 +33,12 @@
 
 - name: Ensure proxysql pre packages are installed.
   yum: "name={{ item }} state=installed"
-  with_items: "{{ pillar.proxysql_pre_pkg }}"
+  loop: "{{ pillar.proxysql_pre_pkg }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure proxysql packages are installed.
   yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.proxysql_pkg }}"
+  loop: "{{ pillar.proxysql_pkg }}"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -46,7 +46,7 @@
 
 - name: Ensure proxysql packages are installed.
   yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
-  with_items: "{{ pillar.proxysql_pkg }}"
+  loop: "{{ pillar.proxysql_pkg }}"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: mark monitor username

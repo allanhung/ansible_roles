@@ -1,0 +1,72 @@
+2018-04-24 15:39:21.617 - pyansibleinv -        dbbackup_mysql_enable -  INFO - args:{'--cluster_id': None,
+ '--data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57',
+ '--day': '*',
+ '--day_of_week': None,
+ '--dbfqdn': 'dcs-db-c00aee9f.iad1',
+ '--dbtype': 'mysql',
+ '--hour': '23',
+ '--isets': '2',
+ '--minute': '2',
+ '--month': '*',
+ '--rsets': '3',
+ '--ssh_try_limit': '600',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': False,
+ '--workdir': '/opt/ansible',
+ 'dbbackup': True,
+ 'debug': False,
+ 'disable': False,
+ 'enable': True,
+ 'list': False,
+ 'status': False}
+2018-04-24 15:39:21.617 - pyansibleinv -        dbbackup_mysql_enable -  INFO - dict:{'template_only': False, 'rsets': '3', 'month': '*', 'cluster_id': None, 'data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57', 'sshkey': '/opt/ansible/db.pem', 'atus': False, 'dbtype': 'mysql', 'able': True, 'day': '*', 'taskid': None, 'dbfqdn': 'dcs-db-c00aee9f.iad1', 'workdir': '/opt/ansible', 'sable': False, 'sshpass': 'LR1!Ika', 'bug': False, 'minute': '2', 'uuid': '8e7562c9-f5c5-4392-84d8-a906b4f4948d', 'ssh_try_limit': '600', 'task_id': '  external_task_id: 8e7562c9-f5c5-4392-84d8-a906b4f4948d\n', 'hour': '23', 'day_of_week': None, 'st': False, 'backup': True, 'isets': '2'}
+2018-04-24 15:39:21.617 - pyansibleinv -        dbbackup_mysql_enable -  INFO - create ansible hosts: /opt/ansible/inventory/8e7562c9-f5c5-4392-84d8-a906b4f4948d/hosts
+2018-04-24 15:39:21.618 - pyansibleinv -        dbbackup_mysql_enable -  INFO - craete ansible playbooks: /opt/ansible/dbbackup_mysql_enable_8e7562c9-f5c5-4392-84d8-a906b4f4948d.yml
+2018-04-24 15:39:21.621 - pyansibleinv -        dbbackup_mysql_enable -  INFO - check ssh availability
+2018-04-24 15:39:21.621 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:39:21.689 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:39:21.690 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:39:21.763 - pyansibleinv - dbbackup_mysql_enable_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:39:21.764 - pyansibleinv -        dbbackup_mysql_enable -  INFO - run ansible from python
+2018-04-24 15:39:21.808 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - Traceback (most recent call last):
+2018-04-24 15:39:21.808 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/bin/pyansibleinv", line 11, in <module>
+2018-04-24 15:39:21.808 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - load_entry_point('pyansibleinv==0.1.0', 'console_scripts', 'pyansibleinv')()
+2018-04-24 15:39:21.808 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/pyansibleinv.py", line 34, in main
+2018-04-24 15:39:21.808 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - return getattr(module_script, func)(module_args)
+2018-04-24 15:39:21.808 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/inv_module/dbbackup.py", line 145, in enable
+2018-04-24 15:39:21.809 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - return json.dumps(dbbackup(args, 'enable', fields))
+2018-04-24 15:39:21.809 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansibleinv/inv_module/dbbackup.py", line 103, in dbbackup
+2018-04-24 15:39:21.809 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - runner.run()
+2018-04-24 15:39:21.809 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/pyansible/playbooks.py", line 131, in run
+2018-04-24 15:39:21.824 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - self.pbex.run()
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/executor/playbook_executor.py", line 81, in run
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - pb = Playbook.load(playbook_path, variable_manager=self._variable_manager, loader=self._loader)
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/playbook/__init__.py", line 55, in load
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - pb._load_playbook_data(file_name=file_name, variable_manager=variable_manager)
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/playbook/__init__.py", line 79, in _load_playbook_data
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - ds = self._loader.load_from_file(os.path.basename(file_name))
+2018-04-24 15:39:21.825 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/parsing/dataloader.py", line 91, in load_from_file
+2018-04-24 15:39:21.826 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - parsed_data = self.load(data=file_data, file_name=file_name, show_content=show_content)
+2018-04-24 15:39:21.826 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/parsing/dataloader.py", line 74, in load
+2018-04-24 15:39:21.826 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - return from_yaml(data, file_name, show_content, self._vault.secrets)
+2018-04-24 15:39:21.826 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/parsing/utils/yaml.py", line 85, in from_yaml
+2018-04-24 15:39:21.826 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - _handle_error(yaml_exc, file_name, show_content)
+2018-04-24 15:39:21.826 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   File "/usr/lib/python2.7/site-packages/ansible/parsing/utils/yaml.py", line 41, in _handle_error
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - raise AnsibleParserError(YAML_SYNTAX_ERROR % to_native(err_msg), obj=err_obj, show_content=show_content, orig_exc=yaml_exc)
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - ansible.errors
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - .
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - AnsibleParserError
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - :
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - Syntax Error while loading YAML.
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -   did not find expected alphabetic or numeric character
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - 
+2018-04-24 15:39:21.827 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - The error appears to have been in '/opt/ansible/dbbackup_mysql_enable_8e7562c9-f5c5-4392-84d8-a906b4f4948d.yml': line 12, column 15, but may
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - be elsewhere in the file depending on the exact syntax problem.
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - 
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - The offending line appears to be:
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR - 
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -         hour: 23
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -         day: *
+2018-04-24 15:39:21.828 - pyansibleinv - dbbackup_mysql_enable_stderr - ERROR -               ^ here

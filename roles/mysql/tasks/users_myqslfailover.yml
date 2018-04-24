@@ -12,4 +12,4 @@
     state: "{{ item.state | default('present') }}"
     append_privs: "{{ item.append_privs | default('no') }}"
     sql_log_bin: no
-  with_items: "{{ pillar.mysql_user.mysqlfailover }}"
+  loop: "{{ pillar.mysql_user.mysqlfailover }}"

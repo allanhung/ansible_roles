@@ -1,4 +1,4 @@
 ---
 - name: configure k8s.
   include_tasks: "{{ item }}.yml"
-  with_items: "{{ pillar.k8s_stage }}"
+  loop: "{{ pillar.k8s_stage }}"

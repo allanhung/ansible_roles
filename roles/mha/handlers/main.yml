@@ -1,4 +1,4 @@
 ---
 - name: restart mha_manager
   service: "name=mha@{{ item }} state=restarted sleep=10"
-  with_items: "{{ pillar.mha_setting.group_list }}"
+  loop: "{{ pillar.mha_setting.group_list }}"

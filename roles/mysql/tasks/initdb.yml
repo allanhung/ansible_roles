@@ -64,7 +64,7 @@
 
 - name: mysql secure installation
   command: mysql -S {{ pillar.mysql_common.socket }} -NBe "{{ item }}"
-  with_items: ["DELETE FROM mysql.user WHERE User=''", "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')", "update mysql.user set password_expired='N' where user='root'", "flush privileges"]
+  loop: ["DELETE FROM mysql.user WHERE User=''", "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')", "update mysql.user set password_expired='N' where user='root'", "flush privileges"]
 
 - name: Remove MySQL test database.
   mysql_db:
@@ -80,7 +80,7 @@
 # Set root password
 - name: Update MySQL root password for localhost root account
   shell: mysql -S {{ pillar.mysql_common.socket }} -NBe 'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ pillar.mysql_root.password }}");'
-  with_items: "{{ mysql_root_hosts.stdout_lines | default([]) }}"
+  loop: "{{ mysql_root_hosts.stdout_lines | default([]) }}"
 
 - name: check MySQL version
   include_tasks: check_version.yml

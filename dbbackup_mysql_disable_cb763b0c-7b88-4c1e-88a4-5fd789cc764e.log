@@ -1,0 +1,48 @@
+2018-04-24 15:51:21.787 - pyansibleinv -        dbbackup_mysql_disable -  INFO - args:{'--cluster_id': None,
+ '--data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57',
+ '--day': '*',
+ '--day_of_week': '*',
+ '--dbfqdn': 'dcs-db-c00aee9f.iad1',
+ '--dbtype': 'mysql',
+ '--hour': '23',
+ '--isets': '2',
+ '--minute': '2',
+ '--month': '*',
+ '--rsets': '3',
+ '--ssh_try_limit': '600',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': False,
+ '--workdir': '/opt/ansible',
+ 'dbbackup': True,
+ 'debug': False,
+ 'disable': True,
+ 'enable': False,
+ 'list': False,
+ 'status': False}
+2018-04-24 15:51:21.787 - pyansibleinv -        dbbackup_mysql_disable -  INFO - dict:{'template_only': False, 'rsets': '3', 'month': '*', 'cluster_id': None, 'data_host': 'dcs-db-c00aee9f.iad1:10.41.234.57', 'sshkey': '/opt/ansible/db.pem', 'atus': False, 'dbtype': 'mysql', 'able': False, 'day': '*', 'taskid': None, 'dbfqdn': 'dcs-db-c00aee9f.iad1', 'workdir': '/opt/ansible', 'sable': True, 'sshpass': 'LR1!Ika', 'bug': False, 'minute': '2', 'uuid': 'cb763b0c-7b88-4c1e-88a4-5fd789cc764e', 'ssh_try_limit': '600', 'task_id': '  external_task_id: cb763b0c-7b88-4c1e-88a4-5fd789cc764e\n', 'hour': '23', 'day_of_week': '*', 'st': False, 'backup': True, 'isets': '2'}
+2018-04-24 15:51:21.788 - pyansibleinv -        dbbackup_mysql_disable -  INFO - create ansible hosts: /opt/ansible/inventory/cb763b0c-7b88-4c1e-88a4-5fd789cc764e/hosts
+2018-04-24 15:51:21.788 - pyansibleinv -        dbbackup_mysql_disable -  INFO - craete ansible playbooks: /opt/ansible/dbbackup_mysql_disable_cb763b0c-7b88-4c1e-88a4-5fd789cc764e.yml
+2018-04-24 15:51:21.790 - pyansibleinv -        dbbackup_mysql_disable -  INFO - check ssh availability
+2018-04-24 15:51:21.790 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:51:21.858 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:51:21.858 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - Attempting to connect to 10.41.234.57 on port 22
+2018-04-24 15:51:21.925 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - Connected to 10.41.234.57 on port 22
+2018-04-24 15:51:21.925 - pyansibleinv -        dbbackup_mysql_disable -  INFO - run ansible from python
+2018-04-24 15:51:22.533 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - 
+2018-04-24 15:51:22.533 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - PLAY [crontab] ***************************************************************************************************************************************************************************************************************************************************************
+2018-04-24 15:51:23.288 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - 
+2018-04-24 15:51:23.289 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - TASK [set crontab] ***********************************************************************************************************************************************************************************************************************************************************
+2018-04-24 15:51:25.388 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - [0;33mchanged: [dcs-db-c00aee9f.iad1][0m
+2018-04-24 15:51:26.113 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - 
+2018-04-24 15:51:26.113 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - TASK [query crontab] *********************************************************************************************************************************************************************************************************************************************************
+2018-04-24 15:51:28.089 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - [0;32mok: [dcs-db-c00aee9f.iad1][0m
+2018-04-24 15:51:28.793 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - 
+2018-04-24 15:51:28.793 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - TASK [Record crontab result] *************************************************************************************************************************************************************************************************************************************************
+2018-04-24 15:51:28.904 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - [0;32mok: [dcs-db-c00aee9f.iad1][0m
+2018-04-24 15:51:28.927 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - 
+2018-04-24 15:51:28.927 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - PLAY RECAP *******************************************************************************************************************************************************************************************************************************************************************
+2018-04-24 15:51:28.927 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - [0;33mdcs-db-c00aee9f.iad1[0m       : [0;32mok=3   [0m [0;33mchanged=1   [0m unreachable=0    failed=0
+2018-04-24 15:51:28.962 - pyansibleinv - dbbackup_mysql_disable_stdout -  INFO - --- Total Excution time: 0:00:07.175533 ---
+2018-04-24 15:51:29.005 - pyansibleinv - dbbackup_mysql_disable_stderr - ERROR - {"dcs-db-c00aee9f.iad1": {"job_context": "", "job_exists": false}}

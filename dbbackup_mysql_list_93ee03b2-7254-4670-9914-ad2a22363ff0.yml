@@ -1,0 +1,15 @@
+---
+- name: list backup sets
+  hosts: all
+  gather_facts: False
+  external_task_id: 93ee03b2-7254-4670-9914-ad2a22363ff0
+  tasks:
+    - name: list mysql backup set
+      shell: pyxbackup list --api 1
+      register: backup_list
+    
+    - name: Record backup result
+      ara_record:
+        key: "mybak_{{ inventory_hostname }}"
+        value: "{{ backup_list.stdout }}"
+

@@ -6,4 +6,4 @@
 - name: configure telegraf
   include: "{{ item }}.yml"
   static: no
-  with_items: "{{ pillar.telegraf_stage_by_os }}"
+  loop: "{{ pillar.telegraf_stage_by_os }}"

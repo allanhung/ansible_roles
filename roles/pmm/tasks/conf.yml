@@ -13,12 +13,12 @@
     
 - name: generate mysql metrics
   shell: "pmm-admin add mysql --user {{ item.name }} --password '{{ item.password }}' --socket '{{ mysql_config.socket }}' --query-source perfschema"
-  with_items: "{{ pillar.mysql_user.monitor }}"
+  loop: "{{ pillar.mysql_user.monitor }}"
   when: pillar.service_group == 'mysql'
 
 - name: generate mongodb metrics
   shell: "pmm-admin add mongodb --uri {{ item.name }}:{{ item.password }}@localhost:27017"
-  with_items: "{{ pillar.mongodb_user.monitor }}"
+  loop: "{{ pillar.mongodb_user.monitor }}"
   when: pillar.service_group == 'mongodb'
     
 - name: start linux metrics
