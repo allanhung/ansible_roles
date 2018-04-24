@@ -1,7 +1,0 @@
----
-- name: mysql backup job
-  hosts: all
-  pre_tasks:
-    - pillar: {}
-  roles:
-    - mysql_backup
