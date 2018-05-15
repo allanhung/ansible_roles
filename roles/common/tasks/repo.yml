@@ -11,17 +11,15 @@
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure extenal repo is installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.repo_list }}"
+  yum: "name={{ pillar.repo_list | join(', ') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
-  when: "pillar.proxy.proxy != 'no_proxy'"
+  when: "pillar.proxy.proxy != 'no_proxy' and (pillar.repo_list | length) > 0"
 
 - name: Ensure extenal repo is installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.repo_list }}"
-  when: "pillar.proxy.proxy != 'no_proxy'"
+  yum: "name={{ pillar.repo_list | join(', ') }} state=installed"
+  when: "pillar.proxy.proxy != 'no_proxy' and (pillar.repo_list | length) > 0"
 
 - name: repo file
   template:

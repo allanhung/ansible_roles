@@ -1,0 +1,6 @@
+---
+- name: install windows feature
+  win_feature:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ pillar.win_feature }}"

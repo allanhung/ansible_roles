@@ -1,0 +1,7 @@
+[pyxbackup]
+mysql_user = {{ pillar.mysql_user.backup[0].name }}
+mysql_pass = {{ pillar.mysql_user.backup[0].password }}
+stor_dir = {{ pillar.mysql_backup.backup_data_dir }}/stor
+work_dir = {{ pillar.mysql_backup.backup_data_dir }}/work
+retention_sets = {{ pillar.mysql_backup.retention_sets }}
+incr_retention_sets = {{ pillar.mysql_backup.incr_retention_sets }}

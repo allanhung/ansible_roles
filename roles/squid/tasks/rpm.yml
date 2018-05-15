@@ -1,15 +1,13 @@
 ---
 - name: Ensure squid packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.squid_pkg }}"
+  yum: "name={{ pillar.squid_pkg | join(', ') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure squid packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.squid_pkg }}"
+  yum: "name={{ pillar.squid_pkg | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure squid is enabled on boot.

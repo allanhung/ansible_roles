@@ -1,0 +1,161 @@
+[ Data center name ( Valid value: SJDC, SJC1, FRA1, MUC1, UDC2, IAD1 ) ]
+DataCenter={{ ansible_hostname[:4] }}
+
+[ Environment ( Valid value: Production, Staging, Testing. ) Staging: no backup, no database alert, no index rebuild. Test: same feature like production, but add Test tag for qa report. ]
+Environment={{ pillar.mssql_conf.env_state }}
+
+[ Deploy SQL backup jobs( Valid value: Yes, No ) ]
+DeployDatabaseBackup=Yes
+BackupDirectory={{ bak_disk }}{{ pillar.mssql_common.bak_folder }}
+
+[ House keeping: index rebuild module. This function uses parameter BackupDiskLabel and BackupDataMixedInSameDisk.( Valid value: Yes, No ) ]
+DeployIndexRebuild=Yes
+BackupDiskLabel={{ bak_disk }}{{ pillar.mssql_common.bak_folder }}
+BackupDataMixedInSameDisk=Yes
+
+[ Run QA report only ( Valid value: Yes, No ) When set to Yes, no creation/modification tasks will be carried out.]
+RunQAreportOnly=No
+
+[ Change house keeper password only ( Valid value: Yes, No ) When set to Yes, no other creation/modification tasks will be carried out.  ]
+ChangeHouseKeeperPasswordOnly=No
+
+[ SQL Service IP or SQL cluster VIP ]
+SQLServiceIP=127.0.0.1
+
+[ Change MSSQL service login account ( Valid value: Yes, No ) Attention: This will cause SQL server, SQL Agent and SQL Browser service restart. ]
+ChangeSQLServiceAcct=Yes
+
+[ MSSQL service login account, must provide encrpted password file as ..\lib\service_acct.pass ]
+SQLServiceAcctName={{ pillar.mssql_conf.service_account }}
+
+[ Change SA Password ( Valid value: Yes, No ) ]
+ChangeSAPassword=No
+
+[ Original SA Password, specify this if you set ChangeSAPassword=Yes]
+OldSQLAdminPassword={{ pillar.mssql_password.default_sa_password }}
+
+[ SQL Server SA login password ]
+SQLAdminPassword={{ pillar.mssql_password.sa_password }}
+
+[ AD user for DBA, mutliple values to be separated by comma ]
+ADadminUser={{ pillar.mssql_conf.admin_account }}
+
+[ AD user for operator, mutliple values to be separated by comma ]
+ADoperUser={{ pillar.mssql_conf.oper_account }}
+
+[ AD user for monitoring, used by Zenoss ]
+ADreadOnlyUser={{ pillar.mssql_conf.ro_account }}
+
+[ Script base ]
+ScriptBase={{ pillar.mssql_common.dba_folder }}
+
+[ Change Hostname Registered In SQL Server ( Valid value: Yes, No ) ]
+ChangeSQLHostName=No
+
+[ Create database users ( monitoring, DBA AD account ) ( Valid value: Yes, No ) ]
+CreateEssentialUsers=Yes
+
+[ Create house keeper dbop ) ( Valid value: Yes, No ) ]
+CreateHouseKeeper=Yes
+
+[ SQL Server house keeper dbop password ]
+SQLOperatorPassord={{ pillar.mssql_password.oper_password }}
+
+[ Recreate DB Mail operator using {{ pillar.mssql_conf.mail_admin }} ( Valid value: Yes, No ) ]
+RecreateDBOperator=Yes
+
+[ RD user mail distribution list, used to send Top SQL report. ]
+USERmailGroup={{ pillar.mssql_conf.mail_admin }}
+
+[ Alert: database alert on server error. ( Valid value: Yes, No ) ]
+DeployDatabaseAlert=Yes
+
+[ Alert: SQL service restart alert. ( Valid value: Yes, No ) ]
+DeploySQLRestartAlert=Yes
+
+[ House keeping: configure resource governor to restrict resource usage of house keeper. ( Valid value: Yes, No ) ]
+DeployResourceGovernor=Yes
+
+[ SQL tuning: high load active SQL scanner.( Valid value: Yes, No ) ]
+DeployHighLoadSQL=Yes
+
+[ SQL tuning: blocking SQL scanner. ( Valid value: Yes, No ) ]
+DeployBlockingSQL=Yes
+
+[ SQL tuning: top SQL report to send to user. ( Valid value: Yes, No ) ]
+DeployTopSQLReport=Yes
+
+[ SQL instance parameter: remote admin connection ( Valid value: Yes, No ) ]
+EnableDAC=Yes
+
+[ SQL instance parameter: max degree of parallelism ( Valid value: Yes, No ) ]
+SetMaxParallelDegree=Yes
+
+[ SQL instance parameter: max server memory ( Valid value: Yes, No ) ]
+SetMaxServerMemory=Yes
+
+[ SQL instance parameter: max worker threads ( Valid value: Yes, No ) ]
+SetMaxWorkerThread=Yes
+
+[ SQL instance parameter: MSDTC in-doubt xact resolution ( Valid value: Yes, No ) ]
+AbortMSDTCInDoubtTranx=Yes
+
+[ SQL server configuration: more temp database files( Valid value: Yes, No ) ]
+CreateMoreTempFiles=Yes
+
+[ SQL server configuration: more SQL server error logs( Valid value: Yes, No ) ]
+CreateMoreErrLogs=Yes
+
+[ SQL server configuration: database administration audit ( Valid value: Yes, No ) ]
+CreateServerAudit=Yes
+
+[ Windows: set SQL browser service startup mode to automatic.( Valid value: Yes, No ) ]
+SetSQLBrowserStartupAuto=Yes
+
+[ Windows: grant local administrator group to SQL server startup account.( Valid value: Yes, No ) ]
+SetLocalAdminToSQLsvcAcct=Yes
+
+[ Windows: set lock page in memory and volume maintenance.( Valid value: Yes, No ) ]
+SetLockPageInMemory=Yes
+
+[ Windows: enable complete memory dump when crash ( Valid value: Yes, No ) ]
+SetCompleteMemoryDump=Yes
+
+[ Windows: enable dump for Office Scan ( Valid value: Yes, No ) ]
+SetSoftwareCrashDump=Yes
+
+[ Tools: deploy other tools for troublshooting or other operation. ( Valid value: Yes, No ) ]
+DeployTools=Yes
+
+[ QA: check and generate QA report ( Valid value: Yes, No ) ]
+QAChecknGenReport=Yes
+
+[ QA: QA report receiver's email ]
+QAReportReceiver={{ pillar.mssql_conf.mail_qa }}
+
+[ QA: QA all worked items ( Valid value: Yes, No ) ]
+QAOverWorkItem=Yes
+
+[ QA: enable check details ( Valid value: Yes, No ) ]
+QAEssentialUsers=Yes
+QADBOperator=Yes
+QADatabaseAlert=Yes
+QABlockingSQL=Yes
+QASQLRestartAlert=Yes
+QAHighLoadSQL=Yes
+QAIndexRebuild=Yes
+QAResourceGovernor=Yes
+QAEnableDAC=Yes
+QAMaxServerMemory=Yes
+QAMaxParallelDegree=Yes
+QAMaxWorkerThread=Yes
+QAAbortMSDTCInDoubtTranx=Yes
+QAMoreTempFiles=Yes
+QALocalAdminToSQLsvcAcct=Yes
+QALockPageInMemory=Yes
+QAMoreErrLogs=Yes
+QADatabaseBackup=Yes
+QASQLBrowserStartupAuto=Yes
+QATopSQLReport=Yes
+QADeployTools=Yes
+QAServerAudit=Yes

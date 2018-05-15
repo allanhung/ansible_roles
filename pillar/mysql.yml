@@ -75,6 +75,14 @@ mysql_common:
     slow_log: mysql-slow.log
     port: 3306
 
+mysql_backup:
+  default:
+    backup_root_dir: /dbbackup
+    backup_data_dir: /dbbackup
+    retention_sets: 3
+    incr_retention_sets: 2
+    enable: True
+ 
 mysql_root:
   default:
 #    password: root123
@@ -142,8 +150,9 @@ mysql_config:
     join_buffer_size: 4M
     key_buffer_size: 256M
     log_bin: mysql-bin
-    log_slave_updates: 1
     log_queries_not_using_indexes: "1"
+    log_slave_updates: 1
+    log_warnings: 2
     long_query_time: 10
     lower_case_table_names: "0"
     master_info_repository: table

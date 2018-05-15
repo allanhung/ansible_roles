@@ -17,16 +17,14 @@
   loop: "{{ pillar.nxlog_pkg }}"
 
 - name: Ensure nxlog packages are installed.
-  yum: "name={{ pillar.nxlog_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.nxlog_pkg }}"
+  yum: "name={{ pillar.nxlog_common.software_dir }}/{{ pillar.nxlog_pkg | join(', '+pillar.nxlog_common.software_dir+'/') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure nxlog packages are installed.
-  yum: "name={{ pillar.nxlog_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.nxlog_pkg }}"
+  yum: "name={{ pillar.nxlog_common.software_dir }}/{{ pillar.nxlog_pkg | join(', '+pillar.nxlog_common.software_dir+'/') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure nxlog is enabled on boot.

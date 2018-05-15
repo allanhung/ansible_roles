@@ -2,10 +2,16 @@
 - name: check MySQL version
   include_tasks: check_version.yml
 
+- name: check if already init
+  stat:
+    path: "{{ pillar.mysql_common.data_dir }}/mysql"
+  register: mysql_exists
+
 - name: generate mysql config without plugin
   gen_mysql_cnf:
     mysql_version: "{{ pillar.mysql_version }}"
     with_plugin: False
+  when: not mysql_exists.stat.exists
 
 - name: my.cnf for initdb
   template:
@@ -14,6 +20,7 @@
     owner: root
     group: root
     mode: 0644
+  when: not mysql_exists.stat.exists
 
 - name: Create mysql data dir if it does not exist
   file:
@@ -43,14 +50,14 @@
   become: true
   become_user: mysql
   become_method: sudo
-  when: pillar.mysql_version.main == '5.6'
+  when: pillar.mysql_version.main == '5.6' and (not mysql_exists.stat.exists)
 
 - name: mysql install db single instance
   command: mysqld --initialize-insecure
   become: true
   become_user: mysql
   become_method: sudo
-  when: pillar.mysql_version.main == '5.7'
+  when: pillar.mysql_version.main == '5.7' and (not mysql_exists.stat.exists)
 
 - name: Change owner for mysql data dir
   file:
@@ -65,6 +72,7 @@
 - name: mysql secure installation
   command: mysql -S {{ pillar.mysql_common.socket }} -NBe "{{ item }}"
   loop: ["DELETE FROM mysql.user WHERE User=''", "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')", "update mysql.user set password_expired='N' where user='root'", "flush privileges"]
+  when: not mysql_exists.stat.exists
 
 - name: Remove MySQL test database.
   mysql_db:
@@ -72,21 +80,25 @@
     login_unix_socket: "{{ pillar.mysql_common.socket }}"
     name: test
     state: absent
+  when: not mysql_exists.stat.exists
 
 - name: Get list of hosts for the root user.
   command: "mysql -NBe \"SELECT Host FROM mysql.user WHERE User = 'root' ORDER BY (Host='localhost') ASC\""
   register: mysql_root_hosts
+  when: not mysql_exists.stat.exists
 
 # Set root password
 - name: Update MySQL root password for localhost root account
   shell: mysql -S {{ pillar.mysql_common.socket }} -NBe 'SET PASSWORD FOR "root"@"{{ item }}" = PASSWORD("{{ pillar.mysql_root.password }}");'
   loop: "{{ mysql_root_hosts.stdout_lines | default([]) }}"
+  when: not mysql_exists.stat.exists
 
 - name: check MySQL version
   include_tasks: check_version.yml
 
 - name: copy plugin file
   include_tasks: plugin.yml  
+  when: not mysql_exists.stat.exists
 
 - name: my.cnf
   template:

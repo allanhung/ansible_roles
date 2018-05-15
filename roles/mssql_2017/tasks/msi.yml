@@ -1,0 +1,104 @@
+---
+- name: check driver d exists
+  win_stat:
+    path: "d:"
+  register: driver_d
+
+- name: check driver e exists
+  win_stat:
+    path: "e:"
+  register: driver_e
+
+- name: set install disk
+  set_fact:
+    install_disk: C:\
+
+- name: set install disk
+  set_fact:
+    install_disk: D:\
+  when: driver_d.stat.exists
+
+- name: set bak disk
+  set_fact:
+    bak_disk: D:\
+  when: driver_d.stat.exists
+
+- name: set bak disk
+  set_fact:
+    bak_disk: E:\
+  when: driver_e.stat.exists
+
+- name: Create DBA folder
+  win_file:
+    path: "{{ pillar.mssql_common.dba_folder }}"
+    state: directory
+
+- name: Create Software folder
+  win_file:
+    path: "{{ pillar.mssql_common.software_folder }}"
+    state: directory
+
+- name: check mssql iso
+  win_stat:
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_common.iso_2017 }}"
+  register: iso_file
+
+- name: Copy mssql iso
+  win_copy:
+    src: "{{ pillar.mssql_common.iso_2017 }}"
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_common.iso_2017 }}"
+  when: not iso_file.stat.exists
+
+- name: check kb file exists
+  win_stat:
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ items }}"
+  loop: "{{ pillar.mssql_kb.2017 }}"
+  register: kb_files
+
+- name: download kb file
+  win_get_url:
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ item[1] }}"
+    url: "{{ pillar.mssql_conf.download_server }}/{{ item[1] }}"
+  when: not item[0].stat.exists
+  with_nested:
+    - "{{ kb_files.results }}"
+    - "{{ pillar.mssql_kb.2017 }}"
+
+- name: install kb
+  win_hotfix:
+    source: "{{ pillar.mssql_common.software_folder }}\\{{ items }}"
+    state: present
+  loop: "{{ pillar.mssql_kb.2017 }}"
+  register: kb_install
+
+- name: check reboot require for KB2919355
+  win_reboot:
+  when: "True in kb_install.results"
+
+- name: copy unattended config file
+  win_template:
+    src: "{{ pillar.mssql_unattended.2017 }}.j2"
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_unattended.2017 }}"
+
+- name: mounted iso file
+  win_disk_image:
+    image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_common.iso_2017 }}"
+    state: present
+  register: iso_mount
+
+- name: run sql server setup
+  win_package:
+    path: "{{ iso_mount.mount_path }}setup.exe"
+    product_id: "{{ pillar.mssql_productid.2017 }}"
+    arguments: "/Q /SQLSVCPASSWORD={{ pillar.mssql_password.default_svc_password }} /AGTSVCPASSWORD={{ pillar.mssql_password.default_agent_password }} /SAPWD={{ pillar.mssql_password.default_sa_password }} /ConfigurationFile={{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_unattended.2017 }}"
+    state: present
+  register: sqlserver_install
+
+- name: unmount iso
+  win_disk_image:
+    image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_common.iso_2017 }}"
+    state: absent
+
+- name: check reboot require for sqlserver install
+  win_reboot:
+  when: sqlserver_install.reboot_required

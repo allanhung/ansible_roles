@@ -49,12 +49,13 @@
   meta: flush_handlers
 
 - name: reboot 
-  shell: shutdown -r now
-  async: 0
+  shell: "sleep 3 && shutdown -r now"
+  async: 1
   poll: 0
   when: ifcfg_eth0_ori.stat.exists == False
 
 - name: wait for system reboot
   wait_for_connection: 
-    delay: 5
+    delay: 30
+    timeout: 900
   when: ifcfg_eth0_ori.stat.exists == False

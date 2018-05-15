@@ -1,6 +1,6 @@
 ---
 - name: docker
-  hosts: all
+  hosts: vtr
   pre_tasks:
     - pillar: {}
   roles:

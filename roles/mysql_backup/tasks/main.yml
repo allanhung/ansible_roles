@@ -1,4 +1,0 @@
----
-- name: configure MySQL backup
-  include_tasks: "{{ item }}.yml"
-  loop: "{{ pillar.mysql_backup_stage }}"

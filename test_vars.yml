@@ -2,8 +2,6 @@
 - name: with dict
   hosts: shell
   gather_facts: True
-  pre_tasks:
-    - pillar: {} 
   tasks:
     - name: repo file
       debug:

@@ -1,0 +1,4 @@
+---
+- name: setup windows common installation
+  include_tasks: "{{ item }}"
+  loop: "{{ pillar.win_common_stage }}"

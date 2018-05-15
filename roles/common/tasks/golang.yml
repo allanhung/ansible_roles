@@ -2,6 +2,8 @@
 - name: Ensure golang packages are installed
   yum: "name={{ item }} state=installed"
   loop: "{{ pillar.golang_pkgs }}"
+  retries: 5
+  delay: 2
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
@@ -10,6 +12,8 @@
 - name: Ensure golang packages are installed
   yum: "name={{ item }} state=installed"
   loop: "{{ pillar.golang_pkgs }}"
+  retries: 5
+  delay: 2
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: insert/update GOPATH setting

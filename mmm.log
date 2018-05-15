@@ -1,0 +1,21 @@
+2018-05-02 11:40:20.120 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'conca',
+ '--data_host': 'tr-p-concad01.sjc1:10.42.220.113,tr-p-concad02.sjc1:10.42.220.114',
+ '--monitor_host': 'tr-p-concadmm01.sjc1:10.42.220.115,tr-p-concadmm02.sjc1:10.42.220.116',
+ '--monitor_vip': '10.42.220.120',
+ '--password': 'My@dm1n!@#',
+ '--reader_vip': '10.42.220.118,10.42.220.119',
+ '--ssh_try_limit': '600',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': False,
+ '--workdir': '/opt/ansible',
+ '--writer_vip': '10.42.220.117',
+ 'TASKID': None,
+ 'mmm': True}
+2018-05-02 11:40:20.121 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/d6913e63-2e1a-46aa-94e3-c449ad2c5a6e/hosts
+2018-05-02 11:40:20.121 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_d6913e63-2e1a-46aa-94e3-c449ad2c5a6e.yml
+2018-05-02 11:40:20.123 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/d6913e63-2e1a-46aa-94e3-c449ad2c5a6e/pillar/mmm.yml
+2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/d6913e63-2e1a-46aa-94e3-c449ad2c5a6e/hosts /opt/ansible/mmm_d6913e63-2e1a-46aa-94e3-c449ad2c5a6e.yml
+2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.016112 ---
+2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
+2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -pMy@dm1n!@# -h10.42.220.117

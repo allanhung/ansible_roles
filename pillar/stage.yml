@@ -130,16 +130,22 @@ mha_stage:
     - ssh
     - conf
 
-mysql_backup_stage:
+wincommon_stage:
   args:
     type: list
-  example:
-    all:
-      - conf
-      - cron
   default:
+    - partition
+
+mssql_stage:
+  args:
+    type: list
+  default:
+    - msi
+    - patch
+    - client
     - conf
-    - cron
+    - database
+    - users
 
 mysql_stage:
   args:
@@ -150,6 +156,7 @@ mysql_stage:
       - common
       - rpm
       - conf
+      - backup
       - limits
       - initdb
       - databases
@@ -265,3 +272,10 @@ vmware_stage:
     type: list
   default:
     - create_vm
+
+win_common_stage:
+  args:
+    type: list
+  default:
+    - parted
+    - feature

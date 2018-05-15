@@ -1,0 +1,29 @@
+---
+- name: Create mysql backup dir if it does not exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+  loop:
+    - "{{ pillar.mysql_backup.backup_data_dir }}/stor"
+    - "{{ pillar.mysql_backup.backup_data_dir }}/work"
+
+- name: mysql backup config
+  template:
+    src: pyxbackup.cnf.j2
+    dest: /etc/pyxbackup.cnf
+    mode: 0644
+
+- name: set backup crontab
+  mycron:
+    name: "MySQL Backup Scheduler"
+    minute: "2"
+    hour: "23"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    job:  "/dbbackup/pyxbackup cron"
+    state: present
+  when: "pillar.mysql_backup.enable == True"

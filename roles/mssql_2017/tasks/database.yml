@@ -1,0 +1,9 @@
+---
+- name: copy create database powershell script
+  win_copy:
+    src: create_database.ps1
+    dest: "{{ pillar.mssql_common.dba_folder }}\\create_database.ps1"
+
+- name: run create database powershell script
+  win_shell: "{{ pillar.mssql_common.dba_folder }}\\create_database.ps1  -databasename {{ item }}"
+  loop: "{{ pillar.mssql_database }}"

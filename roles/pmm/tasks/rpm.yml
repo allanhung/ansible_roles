@@ -16,14 +16,12 @@
   loop: "{{ pillar.pmm_admin_pkg }}"
 
 - name: Ensure PMM packages are installed.
-  yum: "name={{ pillar.pmm_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.pmm_admin_pkg }}"
+  yum: "name={{ pillar.pmm_common.software_dir }}/{{ pillar.pmm_admin_pkg | join(', '+pillar.pmm_common.software_dir+'/') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure PMM packages are installed.
-  yum: "name={{ pillar.pmm_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.pmm_admin_pkg }}"
+  yum: "name={{ pillar.pmm_common.software_dir }}/{{ pillar.pmm_admin_pkg | join(', '+pillar.pmm_common.software_dir+'/') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"

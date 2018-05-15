@@ -5,6 +5,7 @@ pillar/config
 pillar/protect
 site*
 *rpm
+*iso
 *pyc
 *retry
 *csv

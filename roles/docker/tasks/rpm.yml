@@ -1,15 +1,13 @@
 ---
 - name: Ensure docker packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.docker_pkg }}"
+  yum: "name={{ pillar.docker_pkg | join(', ') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure docker packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.docker_pkg }}"
+  yum: "name={{ pillar.docker_pkg | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure docker is enabled on boot.

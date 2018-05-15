@@ -24,29 +24,25 @@
   loop: "{{ pillar.proxysql_pkg }}"
 
 - name: Ensure proxysql pre packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.proxysql_pre_pkg }}"
+  yum: "name={{ pillar.proxysql_pre_pkg | join(', ') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure proxysql pre packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.proxysql_pre_pkg }}"
+  yum: "name={{ pillar.proxysql_pre_pkg | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Ensure proxysql packages are installed.
-  yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.proxysql_pkg }}"
+  yum: "name={{ pillar.proxysql_common.software_dir }}/{{ pillar.proxysql_pkg | join(', '+pillar.proxysql_common.software_dir+'/') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure proxysql packages are installed.
-  yum: "name={{ pillar.proxysql_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.proxysql_pkg }}"
+  yum: "name={{ pillar.proxysql_common.software_dir }}/{{ pillar.proxysql_pkg | join(', '+pillar.proxysql_common.software_dir+'/') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: mark monitor username

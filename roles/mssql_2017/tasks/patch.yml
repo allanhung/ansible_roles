@@ -1,0 +1,26 @@
+---
+- name: check patch file exists
+  win_stat:
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ items }}"
+  loop: "{{ pillar.mssql_patch.2017 }}"
+  register: patch_files
+
+- name: download kb file
+  win_get_url:
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ item[1] }}"
+    url: "{{ pillar.mssql_conf.download_server }}/{{ item[1] }}"
+  when: not item[0].stat.exists
+  with_nested:
+    - "{{ patch_files.results }}"
+    - "{{ pillar.mssql_patch.2017 }}"
+
+- name: install kb
+  win_hotfix:
+    source: "{{ pillar.mssql_common.software_folder }}\\{{ items }}"
+    state: present
+  loop: "{{ pillar.mssql_patch.2017 }}"
+  register: kb_install
+
+- name: check reboot require for KB2919355
+  win_reboot:
+  when: "True in kb_install.results"

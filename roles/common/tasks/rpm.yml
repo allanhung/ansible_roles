@@ -19,16 +19,14 @@
   ignore_errors: true
 
 - name: install common tool 
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.common_tool_pkgs }}"
+  yum: "name={{ pillar.common_tool_pkgs | join(', ') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: install common tool 
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.common_tool_pkgs }}"
+  yum: "name={{ pillar.common_tool_pkgs | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: install python tool

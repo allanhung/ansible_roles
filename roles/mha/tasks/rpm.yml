@@ -17,16 +17,14 @@
   loop: "{{ pillar.mha_pkg }}"
 
 - name: Ensure mha packages are installed.
-  yum: "name={{ pillar.mha_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.mha_pkg }}"
+  yum: "name={{ pillar.mha_common.software_dir }}/{{ pillar.mha_pkg | join(', '+pillar.mha_common.software_dir+'/') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
 - name: Ensure mha packages are installed.
-  yum: "name={{ pillar.mha_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.mha_pkg }}"
+  yum: "name={{ pillar.mha_common.software_dir }}/{{ pillar.mha_pkg | join(', '+pillar.mha_common.software_dir+'/') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: Copy mha systemd unit

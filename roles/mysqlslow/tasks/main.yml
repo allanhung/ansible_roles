@@ -1,9 +1,25 @@
 ---
 - name: install epel
   yum: "name=epel-release state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: install epel
+  yum: "name=epel-release state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: install pyparsing
   yum: "name=pyparsing state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: install pyparsing
+  yum: "name=pyparsing state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: get mysql config
   get_mysql_config:

@@ -1,0 +1,35 @@
+---
+- name: Create DBA folder at C drive
+  win_file:
+    path: "C:\\DBA"
+    state: directory
+
+- name: copy rename DVD script
+  win_copy:
+    src: renameDriveLetter.ps1
+    dest: "C:\\DBA\\renameDriveLetter.ps1"
+
+- name: run rename DVD powershell script
+  win_shell: "C:\\DBA\\renameDriveLetter.ps1  -NewDrvLetter Z:"
+
+
+- name: copy format disk script
+  win_copy:
+    src: FormatDisk.ps1
+    dest: "C:\\DBA\\FormatDisk.ps1"
+
+- name: debug
+  debug:
+    msg: powershell.exe -noprofile -NoExit -command  "&{start-process powershell -ArgumentList '-NoExit -noprofile -file C:\DBA\FormatDisk.ps1' -verb RunAs}"
+
+- name: check driver d exists
+  win_stat:
+    path: "d:"
+  register: driver_d
+
+- name: run format disk powershell script
+  win_shell: C:\DBA\FormatDisk.ps1
+  become: yes
+  become_method: runas
+  become_user: SYSTEM
+  when: driver_d.stat.exists == false

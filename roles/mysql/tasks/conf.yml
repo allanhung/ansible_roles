@@ -20,4 +20,3 @@
 
 - name: Ensure MySQL is enabled on boot.
   service: "name={{ pillar.mysql_daemon.mysql_daemon }} enabled=yes"
-

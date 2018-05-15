@@ -1,0 +1,5 @@
+win_feature:
+  args:
+    type: list
+  default:
+    - Telnet-Client

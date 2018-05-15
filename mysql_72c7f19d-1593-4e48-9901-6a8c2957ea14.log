@@ -1,0 +1,19 @@
+2018-05-14 18:57:34.427 - pyansibleinv -        mysql -  INFO - args:{'--cluster_id': None,
+ '--database': 'db1',
+ '--hostname': 'dcs-allan-bbk.iad1',
+ '--ip': '10.41.238.55',
+ '--password': 'password',
+ '--service_name': 'dcs',
+ '--ssh_try_limit': '120',
+ '--sshkey': '/opt/ansible/db.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': True,
+ '--tenant': 'mytenant',
+ '--without_backup': False,
+ '--workdir': '/opt/ansible',
+ 'mysql': True}
+2018-05-14 18:57:34.427 - pyansibleinv -        mysql -  INFO - create ansible hosts: /opt/ansible/inventory/72c7f19d-1593-4e48-9901-6a8c2957ea14/hosts
+2018-05-14 18:57:34.428 - pyansibleinv -        mysql -  INFO - craete ansible playbooks: /opt/ansible/mysql_72c7f19d-1593-4e48-9901-6a8c2957ea14.yml
+2018-05-14 18:57:34.430 - pyansibleinv -        mysql -  INFO - create mysql single instance setting: /opt/ansible/inventory/72c7f19d-1593-4e48-9901-6a8c2957ea14/pillar/mysql.yml
+2018-05-14 18:57:34.436 - pyansibleinv - mysql_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/72c7f19d-1593-4e48-9901-6a8c2957ea14/hosts /opt/ansible/mysql_72c7f19d-1593-4e48-9901-6a8c2957ea14.yml

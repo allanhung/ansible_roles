@@ -15,30 +15,33 @@
     force: no
   loop: "{{ pillar.mysql_local_pkg }}"
 
+- name: Copy backup script to backup dir
+  copy: 
+    src: "pyxbackup"
+    dest: "{{ pillar.mysql_backup.backup_root_dir }}/pyxbackup"
+    mode: 0755
+    force: no
+
 - name: Ensure MySQL local packages are installed.
-  yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.mysql_local_pkg }}"
+  yum: "name={{ pillar.mysql_common.software_dir }}/{{ pillar.mysql_local_pkg | join(', '+pillar.mysql_common.software_dir+'/') }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy' and (pillar.mysql_local_pkg | length) > 0"
+
+- name: Ensure MySQL local packages are installed.
+  yum: "name={{ pillar.mysql_common.software_dir }}/{{ pillar.mysql_local_pkg | join(', '+pillar.mysql_common.software_dir+'/') }} state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy' and (pillar.mysql_local_pkg | length) > 0"
+
+- name: Ensure MySQL packages are installed.
+  yum: "name={{ pillar.mysql_pkg | join(', ') }} state=installed"
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
   when: "pillar.proxy.proxy != 'no_proxy'"
 
-- name: Ensure MySQL local packages are installed.
-  yum: "name={{ pillar.mysql_common.software_dir }}/{{ item }} state=installed"
-  loop: "{{ pillar.mysql_local_pkg }}"
-  when: "pillar.proxy.proxy == 'no_proxy'"
-
 - name: Ensure MySQL packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.mysql_pkg }}"
-  environment:
-    http_proxy: http://{{ pillar.proxy.proxy }}
-    https_proxy: http://{{ pillar.proxy.proxy }}
-  when: "pillar.proxy.proxy != 'no_proxy'"
-
-- name: Ensure MySQL packages are installed.
-  yum: "name={{ item }} state=installed"
-  loop: "{{ pillar.mysql_pkg }}"
+  yum: "name={{ pillar.mysql_pkg | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: fix max num of process

@@ -1,0 +1,6 @@
+- name: mysql single instance
+  hosts: all
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mysql

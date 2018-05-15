@@ -1,0 +1,23 @@
+---
+- name: check client file exists
+  win_stat:
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_client.2017.client_package }}"
+  register: client_files
+
+- name: download client file
+  win_get_url:
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_client.2017.client_package }}"
+    url: "{{ pillar.mssql_conf.download_server }}/{{ pillar.mssql_client.2017.client_package }}"
+  when: not client_files.stat.exists
+
+- name: install client
+  win_package:
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_client.2017.client_package }}"
+    product_id: "{DED314CA-0EFE-4593-9D66-EF75E5289A4C}"
+    arguments: "/q /IAcceptSQLServerLicenseTerms /Action=Patch /InstanceName=MSSQLSERVER"
+    state: present
+  register: sqlserver_patch_install
+
+- name: check reboot require for sqlserver patch install
+  win_reboot:
+  when: sqlserver_patch_install.reboot_required
