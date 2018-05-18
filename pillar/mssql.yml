@@ -14,7 +14,7 @@ mssql_server:
   default:
     2017: 
       - name: sqlserver_2017.iso
-        product_id: "{A41DE5B2-F5F8-4797-AB55-27C8B309C5AD}"
+        product_id: "Microsoft SQL Server SQL2017"
         unattended: SQL2017_SilentInstall_StandAlone.ini
         check: "Microsoft SQL Server 2017 Setup (English)"
 

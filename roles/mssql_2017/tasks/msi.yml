@@ -62,14 +62,6 @@
     src: "{{ pillar.mssql_server.2017[0].unattended }}.j2"
     dest: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].unattended }}"
 
-mssql_server:
-  default:
-    2017:
-      - name: sqlserver_2017.iso
-        product_id: "{A41DE5B2-F5F8-4797-AB55-27C8B309C5AD}"
-        unattended: SQL2017_SilentInstall_StandAlone.ini
-        check: "Microsoft SQL Server 2017 Setup (English)"
-
 - name: run sql server setup
   win_package:
     path: "{{ iso_mount.mount_path }}setup.exe"
@@ -80,7 +72,7 @@ mssql_server:
 
 - name: unmount iso
   win_disk_image:
-    image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_common.iso_2017 }}"
+    image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
     state: absent
 
 - name: check reboot require for sqlserver install
