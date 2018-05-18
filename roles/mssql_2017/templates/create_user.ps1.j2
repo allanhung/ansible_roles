@@ -1,0 +1,35 @@
+#Author      : Stella Pat
+#Purpose     : Create SQL User
+#DateCreated : 2018/4/23
+#Example     : .\create_user.ps1 -username <username> -password <password> -dbrole <dbrole>
+#            : .\create_user.ps1 -username admin -password Password123 -dbrole dbcreater
+
+Param(
+  [Parameter(Position=0)] [string] $username,
+  [Parameter(Position=1)] [string] $password,
+  [Parameter(Position=2)] [string] $dbrole
+)
+
+$sapassword = ConvertTo-SecureString -String {{ pillar.mssql_password.sa_password }} -AsPlainText -Force
+$sqlcred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList sa, $sapassword
+$sql_smo = Connect-DbaInstance -SqlServer localhost -Credential $sqlcred
+
+# Check if Role entered Correctly
+$sqlrole = $sql_smo.Roles[$dbrole]
+if ($sqlrole -eq $null) {
+    Write-Host " $dbrole is not a valid Role"
+}
+else {
+    # create user if not exists
+    if (!($sql_smo.Logins.Contains($username))) {
+        $secpass = ConvertTo-SecureString -String $password -AsPlainText -Force
+        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $secpass
+        Add-SqlLogin -ServerInstance "localhost" -LoginName $username -LoginType "SQLLogin" -LoginPSCredential $credential -Enable -GrantConnectSql
+    }
+    # add role to user
+    $sqluser = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Login -ArgumentList $sql_smo, $username
+    $loginname = $sqluser.Name
+    if ($dbrole -notcontains "public") {
+       $sqlrole.AddMember($loginname)
+    }
+}

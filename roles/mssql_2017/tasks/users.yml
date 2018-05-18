@@ -1,9 +1,9 @@
 ---
 - name: copy create user powershell script
-  win_copy:
+  win_template:
     src: create_user.ps1
     dest: "{{ pillar.mssql_common.dba_folder }}\\create_user.ps1"
 
 - name: run create user powershell script
-  win_shell: "{{ pillar.mssql_common.dba_folder }}\\create_user.ps1  -User {{ item.username }} -Password {{ item.password }}"
+  win_shell: "{{ pillar.mssql_common.dba_folder }}\\create_user.ps1  -username {{ item.username }} -password {{ item.password }} -dbrole {{ item.dbrole }}"
   with_items: "{{ pillar.mssql_user }}""

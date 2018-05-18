@@ -1,0 +1,33 @@
+---
+- name: check driver d exists
+  win_stat:
+    path: "d:"
+  register: driver_d
+
+- name: check driver e exists
+  win_stat:
+    path: "e:"
+  register: driver_e
+
+- name: set install disk
+  set_fact:
+    install_disk: C
+
+- name: set install disk
+  set_fact:
+    install_disk: D
+  when: driver_d.stat.exists
+
+- name: set bak disk
+  set_fact:
+    bak_disk: C
+
+- name: set bak disk
+  set_fact:
+    bak_disk: D
+  when: driver_d.stat.exists
+
+- name: set bak disk
+  set_fact:
+    bak_disk: E
+  when: driver_e.stat.exists

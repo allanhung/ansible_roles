@@ -1,45 +1,35 @@
 ---
-- name: check driver d exists
-  win_stat:
-    path: "d:"
-  register: driver_d
+- name: add a powershell module
+  win_psmodule:
+    name: "{{ item }}"
+    allow_clobber: True
+    state: present
+  loop: "{{ pillar.mssql_psmodule }}"
 
-- name: check driver e exists
-  win_stat:
-    path: "e:"
-  register: driver_e
-
-- name: set bak disk
-  set_fact:
-    bak_disk: D:\
-  when: driver_d.stat.exists
-
-- name: set bak disk
-  set_fact:
-    bak_disk: E:\
-  when: driver_e.stat.exists
+- name: set disk vars
+  include_tasks: check_disk.yml
 
 - name: check Auto Provision zip file
   win_stat:
-    path: "{{ dba_folder }}\\Auto_Provision_SQLserver.zip"
+    path: "{{ pillar.mssql_common.dba_folder }}\\Auto_Provision_SQLserver.zip"
   register: installer_file
 
 - name: download Auto Provision zip file
-  win_get_url:
-    dest: "{{ dba_folder }}\\Auto_Provision_SQLserver.zip"
-    url: "{{ download_server }}/Auto_Provision_SQLserver.zip"
+  win_copy:
+    src: Auto_Provision_SQLserver.zip
+    dest: "{{ pillar.mssql_common.dba_folder }}\\Auto_Provision_SQLserver.zip"
   when: not installer_file.stat.exists
         
 - name: unzip Auto Provision zip file
   win_unzip:   
-    src: "{{ dba_folder }}\\Auto_Provision_SQLserver.zip"
-    dest: "{{ dba_folder }}\\"
+    src: "{{ pillar.mssql_common.dba_folder }}\\Auto_Provision_SQLserver.zip"
+    dest: "{{ pillar.mssql_common.dba_folder }}\\"
 
 - name: Copy setup config file
   win_template:
     src: setup.conf.j2
-    dest: "{{ dba_folder }}\\Auto_Provision_SQLserver\\setup.conf"
+    dest: "{{ pillar.mssql_common.dba_folder }}\\Auto_Provision_SQLserver\\setup.conf"
     
 - name: run Auto Provision file
-  win_command: "{{ dba_folder }}\\Auto_Provision_SQLserver\\setup.bat  {{ dba_folder }}\\Auto_Provision_SQLserver "
-  when: installer_files.stat.exists = False
+  win_command: "{{ pillar.mssql_common.dba_folder }}\\Auto_Provision_SQLserver\\setup.bat  {{ pillar.mssql_common.dba_folder }}\\Auto_Provision_SQLserver "
+  when: not installer_file.stat.exists

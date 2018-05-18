@@ -10,3 +10,7 @@ site*
 *retry
 *csv
 *xls*
+Auto_Provision_SQLserver.zip
+SQLServer*.exe
+SSMS*.exe
+*msu

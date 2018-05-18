@@ -1,7 +1,10 @@
 ---
+- name: set disk vars
+  include_tasks: check_disk.yml
+
 - name: copy create database powershell script
-  win_copy:
-    src: create_database.ps1
+  win_template:
+    src: create_database.ps1.j2
     dest: "{{ pillar.mssql_common.dba_folder }}\\create_database.ps1"
 
 - name: run create database powershell script

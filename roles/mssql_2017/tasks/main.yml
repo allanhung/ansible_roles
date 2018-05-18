@@ -1,4 +1,4 @@
 ---
 - name: setup sql server installation
-  include_tasks: "{{ item }}"
+  include_tasks: "{{ item }}.yml"
   loop: "{{ pillar.mssql_stage }}"

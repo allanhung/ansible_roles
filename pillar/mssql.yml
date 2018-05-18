@@ -3,29 +3,39 @@ mssql_common:
     dba_folder: "D:\\dba"
     software_folder: "D:\\software"
     bak_folder: "SQLBCK"
-    iso_2017: sqlserver_2017.iso
 
 mssql_kb:
   default:
-    2017:
+    2016:
       - Windows8.1-KB2919442-x64.msu
       - Windows8.1-KB2919355-x64.msu
 
-mssql_unattended:
+mssql_server:
   default:
-    2017: SQL2017_SilentInstall_StandAlone.ini
-
-mssql_productid:
-  default:
-    2017: Microsoft SQL Server SQL2017
+    2017: 
+      - name: sqlserver_2017.iso
+        product_id: "{A41DE5B2-F5F8-4797-AB55-27C8B309C5AD}"
+        unattended: SQL2017_SilentInstall_StandAlone.ini
+        check: "Microsoft SQL Server 2017 Setup (English)"
 
 mssql_patch:
   default:
     2017:
-      - SQLServer2017-KB4052987-x64.exe
+      - name: SQLServer2017-KB4052987-x64.exe
+        product_id: "{DED314CA-0EFE-4593-9D66-EF75E5289A4C}"
+        args: "/q /IAcceptSQLServerLicenseTerms /Action=Patch /InstanceName=MSSQLSERVER"
+        check: "SQL Server 2017 Database Engine Services"
 
 mssql_client:
   default:
     2017:
-      client_package: Server2017-KB4052987-x64.exe
-      product_id: '{DED314CA-0EFE-4593-9D66-EF75E5289A4C}'
+      - name: SSMS-Setup-ENU-SQL2017.exe
+        product_id: '{281BC3BA-FCB0-4056-B2B6-01D567D0D88C}'
+        args: "/install /quiet"
+        check: "SQL Server Management Studio"
+
+mssql_psmodule:
+  args:
+    type: list
+  default:
+    - SqlServer

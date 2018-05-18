@@ -1,26 +1,30 @@
 ---
 - name: check patch file exists
   win_stat:
-    path: "{{ pillar.mssql_common.software_folder }}\\{{ items }}"
-  loop: "{{ pillar.mssql_patch.2017 }}"
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ item.name }}"
+  with_items: "{{ pillar.mssql_patch.2017 }}"
+  when: (pillar.mssql_patch.2017 is defined)
   register: patch_files
 
-- name: download kb file
-  win_get_url:
-    dest: "{{ pillar.mssql_common.software_folder }}\\{{ item[1] }}"
-    url: "{{ pillar.mssql_conf.download_server }}/{{ item[1] }}"
-  when: not item[0].stat.exists
+- name: download patch file
+  win_copy:
+    src: "{{ item[1].name }}"
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ item[1].name }}"
+  when: (pillar.mssql_patch.2017 is defined and not item[0].stat.exists)
   with_nested:
     - "{{ patch_files.results }}"
     - "{{ pillar.mssql_patch.2017 }}"
 
-- name: install kb
-  win_hotfix:
-    source: "{{ pillar.mssql_common.software_folder }}\\{{ items }}"
+- name: install patch
+  win_package:
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ item.name }}"
+    product_id: "{{ item.product_id }}"
+    arguments: "{{ item.args }}"
     state: present
-  loop: "{{ pillar.mssql_patch.2017 }}"
-  register: kb_install
+  with_items: "{{ pillar.mssql_patch.2017 }}"
+  when: (pillar.mssql_patch.2017 is defined)
+  register: patch_install
 
-- name: check reboot require for KB2919355
+- name: check reboot require for patch
   win_reboot:
-  when: "True in kb_install.results"
+  when: (patch_install.results is defined and True in patch_install.results)

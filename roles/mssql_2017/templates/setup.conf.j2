@@ -6,11 +6,11 @@ Environment={{ pillar.mssql_conf.env_state }}
 
 [ Deploy SQL backup jobs( Valid value: Yes, No ) ]
 DeployDatabaseBackup=Yes
-BackupDirectory={{ bak_disk }}{{ pillar.mssql_common.bak_folder }}
+BackupDirectory={{ bak_disk }}:\{{ pillar.mssql_common.bak_folder }}
 
 [ House keeping: index rebuild module. This function uses parameter BackupDiskLabel and BackupDataMixedInSameDisk.( Valid value: Yes, No ) ]
 DeployIndexRebuild=Yes
-BackupDiskLabel={{ bak_disk }}{{ pillar.mssql_common.bak_folder }}
+BackupDiskLabel={{ bak_disk }}:\{{ pillar.mssql_common.bak_folder }}
 BackupDataMixedInSameDisk=Yes
 
 [ Run QA report only ( Valid value: Yes, No ) When set to Yes, no creation/modification tasks will be carried out.]
@@ -32,7 +32,7 @@ SQLServiceAcctName={{ pillar.mssql_conf.service_account }}
 ChangeSAPassword=No
 
 [ Original SA Password, specify this if you set ChangeSAPassword=Yes]
-OldSQLAdminPassword={{ pillar.mssql_password.default_sa_password }}
+OldSQLAdminPassword={{ pillar.mssql_password.sa_password }}
 
 [ SQL Server SA login password ]
 SQLAdminPassword={{ pillar.mssql_password.sa_password }}

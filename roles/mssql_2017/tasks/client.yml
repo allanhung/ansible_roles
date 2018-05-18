@@ -1,23 +1,30 @@
 ---
 - name: check client file exists
   win_stat:
-    path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_client.2017.client_package }}"
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ item.name }}"
+  with_items: "{{ pillar.mssql_client.2017 }}"
+  when: (pillar.mssql_client.2017 is defined)
   register: client_files
 
 - name: download client file
-  win_get_url:
-    dest: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_client.2017.client_package }}"
-    url: "{{ pillar.mssql_conf.download_server }}/{{ pillar.mssql_client.2017.client_package }}"
-  when: not client_files.stat.exists
+  win_copy:
+    src: "{{ item[1].name }}"
+    dest: "{{ pillar.mssql_common.software_folder }}\\{{ item[1].name }}"
+  when: (pillar.mssql_client.2017 is defined and not item[0].stat.exists)
+  with_nested:
+    - "{{ client_files.results }}"
+    - "{{ pillar.mssql_client.2017 }}"
 
 - name: install client
   win_package:
-    path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_client.2017.client_package }}"
-    product_id: "{DED314CA-0EFE-4593-9D66-EF75E5289A4C}"
-    arguments: "/q /IAcceptSQLServerLicenseTerms /Action=Patch /InstanceName=MSSQLSERVER"
+    path: "{{ pillar.mssql_common.software_folder }}\\{{ item.name }}"
+    product_id: "{{ item.product_id }}"
+    arguments: "{{ item.args }}"
     state: present
-  register: sqlserver_patch_install
+  with_items: "{{ pillar.mssql_client.2017 }}"
+  when: (pillar.mssql_client.2017 is defined)
+  register: client_install
 
-- name: check reboot require for sqlserver patch install
+- name: check reboot require for client
   win_reboot:
-  when: sqlserver_patch_install.reboot_required
+  when: (client_install.results is defined and True in client_install.results)

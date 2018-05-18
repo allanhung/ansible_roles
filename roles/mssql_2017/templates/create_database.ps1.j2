@@ -1,0 +1,14 @@
+#Author      : Stella Pat
+#Purpose     : Create database
+#DateCreated : 2018/4/20
+#Example     : .\create_database.ps1 -databasename <value>
+#            : .\create_database.ps1 -databasename NewDatabase
+
+Param([string]$databasename)
+
+$sapassword = ConvertTo-SecureString -String {{ pillar.mssql_password.sa_password }} -AsPlainText -Force
+$sqlcred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList sa, $sapassword
+$sql_smo = Connect-DbaInstance -SqlServer localhost -Credential $sqlcred
+
+$db = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Database -argumentlist $sql_smo, $databasename  
+$db.Create() 
