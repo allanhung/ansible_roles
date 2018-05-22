@@ -35,9 +35,9 @@
   environment:
     http_proxy: http://{{ pillar.proxy.proxy }}
     https_proxy: http://{{ pillar.proxy.proxy }}
-  when: "pillar.proxy.proxy != 'no_proxy'"
+  when: "pillar.common_python_pkgs is defined and pillar.proxy.proxy != 'no_proxy'"
 
 - name: install python tool
   shell: "echo y | pip install {{ item }}"
   loop: "{{ pillar.common_python_pkgs }}"
-  when: "pillar.proxy.proxy == 'no_proxy'"
+  when: "pillar.common_python_pkgs is defined and pillar.proxy.proxy == 'no_proxy'"

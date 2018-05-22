@@ -29,3 +29,4 @@
     group: root
     mode: 0644
   with_dict: "{{ pillar.repo_file }}"
+  when: pillar.repo_file is defined

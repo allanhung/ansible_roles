@@ -12,10 +12,7 @@ repo_file:
   args:
     check_osver: True
   default:
-    6:
-      epel: http://download.fedoraproject.org/pub/epel/6/$basearch
     7:
-      epel: http://download.fedoraproject.org/pub/epel/7/$basearch
       golang: https://mirror.go-repo.io/centos/7/$basearch/
 
 golang:
