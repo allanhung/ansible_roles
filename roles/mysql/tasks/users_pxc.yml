@@ -1,0 +1,15 @@
+---
+- name: Ensure MySQL pxc users are present.
+  mysql_user:
+    login_user: root
+    login_password: "{{ pillar.mysql_root.password }}"
+    login_unix_socket: "{{ pillar.mysql_common.socket }}"
+    name: "{{ item.name }}"
+    host: "{{ item.host | default('localhost') }}"
+    password: "{{ item.password }}"
+    encrypted: "{{ item.encrypted | default(False) }}"
+    priv: "{{ item.priv | default('*.*:USAGE') }}"
+    state: "{{ item.state | default('present') }}"
+    append_privs: "{{ item.append_privs | default('no') }}"
+    sql_log_bin: no
+  loop: "{{ pillar.mysql_user.pxc }}"

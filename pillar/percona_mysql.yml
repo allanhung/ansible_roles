@@ -1,0 +1,40 @@
+pxc_remove_pkg:
+  args:
+    type: list
+  default:
+    - mysql-community-client
+    - mysql-community-common
+    - mysql-community-libs
+    - mysql-community-libs-compat
+    - mysql-community-server
+
+pxc_common_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - Percona-XtraDB-Cluster-client-57-5.7.21-29.26.1.el7
+      - Percona-XtraDB-Cluster-shared-57-5.7.21-29.26.1.el7
+      - Percona-XtraDB-Cluster-shared-compat-57-5.7.21-29.26.1.el7
+
+pxc_server_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - openssl
+      - Percona-XtraDB-Cluster-server-57-5.7.21-29.26.1.el7
+      - Percona-XtraDB-Cluster-garbd-57-5.7.21-29.26.1.el7
+      - percona-toolkit
+
+pxc_group:
+  default:
+    pxcluster:
+      - hostname: dcs-allan-a01.iad1
+        role: monitor
+      - hostname: dcs-allan-a02.iad1
+        role: data
+      - hostname: dcs-allan-a03.iad1
+        role: data

@@ -10,6 +10,13 @@
     - "{{ pillar.mysql_backup.backup_data_dir }}/stor"
     - "{{ pillar.mysql_backup.backup_data_dir }}/work"
 
+- name: Copy backup script to backup dir
+  copy: 
+    src: "pyxbackup"
+    dest: "{{ pillar.mysql_backup.backup_root_dir }}/pyxbackup"
+    mode: 0755
+    force: no
+
 - name: mysql backup config
   template:
     src: pyxbackup.cnf.j2

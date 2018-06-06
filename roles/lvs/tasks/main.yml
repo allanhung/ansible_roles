@@ -1,0 +1,4 @@
+---
+- name: configure LVS.
+  include_tasks: "{{ item }}.yml"
+  loop: "{{ pillar.lvs_stage }}"

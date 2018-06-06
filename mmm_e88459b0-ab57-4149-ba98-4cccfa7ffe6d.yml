@@ -1,0 +1,9 @@
+- name: mysql mmm
+  hosts: mmm
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - common
+    - mmm
+    - heartbeat
+    - mysql

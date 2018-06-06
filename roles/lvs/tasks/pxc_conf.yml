@@ -1,0 +1,14 @@
+---
+- name: get lvs config for pxc
+  get_lvs_pxc_config: {}
+
+- name: ldirectord.cf
+  template:
+    src: ldirectord.cf.j2
+    dest: /etc/ha.d/ldirectord.cf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure ldirectord is running.
+  systemd: "name=ldirectord state=started"

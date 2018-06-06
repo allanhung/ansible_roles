@@ -1,0 +1,22 @@
+2018-05-30 11:21:28.861 - pyansibleinv -        pxc -  INFO - args:{'--cluster_id': None,
+ '--data_host': 'mps-db02.us-east-1b.aws:172.31.17.29,mps-db03.us-east-1c.aws:172.31.18.48',
+ '--db_vip': '192.168.1.1',
+ '--hostarg': 'ssh_private_key_file=~/dcs-v.pem ansible_become_user=root ansible_ssh_user=centos ansible_become=true',
+ '--monitor_host': 'mps-db01.us-east-1a.aws:172.31.16.187',
+ '--monitor_vip': '192.168.10.1',
+ '--password': 'password',
+ '--service_name': None,
+ '--ssh_try_limit': '120',
+ '--sshkey': '/root/dcs-v.pem',
+ '--sshpass': 'LR1!Ika',
+ '--taskid': None,
+ '--template_only': True,
+ '--tenant': None,
+ '--without_backup': False,
+ '--without_parted': False,
+ '--workdir': '/opt/ansible',
+ 'pxc': True}
+2018-05-30 11:21:28.862 - pyansibleinv -        pxc -  INFO - create ansible hosts: /opt/ansible/inventory/fef5a651-4c5b-4018-aa96-fef792ebe61e/hosts
+2018-05-30 11:21:28.862 - pyansibleinv -        pxc -  INFO - craete ansible playbooks: /opt/ansible/pxc_fef5a651-4c5b-4018-aa96-fef792ebe61e.yml
+2018-05-30 11:21:28.864 - pyansibleinv -        pxc -  INFO - create mysql with pxc setting: /opt/ansible/inventory/fef5a651-4c5b-4018-aa96-fef792ebe61e/pillar/pxc.yml
+2018-05-30 11:21:28.869 - pyansibleinv - pxc_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/fef5a651-4c5b-4018-aa96-fef792ebe61e/hosts /opt/ansible/pxc_fef5a651-4c5b-4018-aa96-fef792ebe61e.yml

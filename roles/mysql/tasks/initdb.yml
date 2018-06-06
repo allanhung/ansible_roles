@@ -67,7 +67,7 @@
     recurse: yes
 
 - name: start MySQL
-  service: "name={{ pillar.mysql_daemon.mysql_daemon }} state=started"
+  service: "name={{ pillar.mysql_daemon.mysql_daemon }} state=started  sleep=10"
 
 - name: mysql secure installation
   command: mysql -S {{ pillar.mysql_common.socket }} -NBe "{{ item }}"

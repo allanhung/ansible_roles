@@ -1,0 +1,10 @@
+---
+- name: adjust sysctl parameter for lvs
+  sysctl: 
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_dict: "{{ pillar.lvs_sysctl.client }}"
+  ignore_errors: yes

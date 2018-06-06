@@ -25,3 +25,14 @@
 - name: Ensure MySQL common packages are installed.
   yum: "name={{ pillar.mysql_common.software_dir }}/{{ pillar.mysql_common_pkg | join(', '+pillar.mysql_common.software_dir+'/') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy' and (pillar.mysql_common_pkg | length) > 0"
+
+- name: Ensure MySQL tool packages are installed.
+  yum: "name={{ pillar.mysql_tool_pkg | join(', ') }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure MySQL tool packages are installed.
+  yum: "name={{ pillar.mysql_tool_pkg | join(', ') }} state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy'"

@@ -21,7 +21,7 @@
 
 - name: download kb file
   win_copy:
-    src: "{{ items[1] }}"
+    src: "{{ item[1] }}"
     dest: "{{ pillar.mssql_common.software_folder }}\\{{ item[1] }}"
   when: (pillar.mssql_kb.2017 is defined and not item[0].stat.exists)
   with_nested:
@@ -56,6 +56,7 @@
     image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
     state: present
   register: iso_mount
+  notify: umount iso
 
 - name: copy unattended config file
   win_template:
@@ -70,7 +71,7 @@
     state: present
   register: sqlserver_install
 
-- name: unmount iso
+- name: umount iso
   win_disk_image:
     image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
     state: absent

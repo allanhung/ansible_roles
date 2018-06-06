@@ -1,5 +1,5 @@
 ---
 - name: restart mysql
   service: "name={{ pillar.mysql_daemon.mysql_daemon }} state=restarted sleep=10"
-  
+  when: (not dont_restart_mysql is defined) and (not dont_restart_mysql)  
 

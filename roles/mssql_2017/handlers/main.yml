@@ -1,0 +1,5 @@
+---
+- name: umount iso
+  win_disk_image:
+    image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
+    state: absent

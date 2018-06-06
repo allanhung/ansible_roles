@@ -1,5 +1,5 @@
 ---
 - name: configure pacemaker
-  include: "{{ item }}.yml"
+  include_tasks: "{{ item }}.yml"
   static: no
   loop: "{{ pillar.pacemaker_stage }}"

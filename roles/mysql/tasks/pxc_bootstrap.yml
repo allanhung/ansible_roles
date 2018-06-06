@@ -1,0 +1,71 @@
+---
+- name: check if already bootstrap
+  stat:
+    path: "{{ pillar.mysql_common.data_dir }}/mysql/grastate.dat"
+  register: bootstrap_exists
+
+- name: set variable for not run handler
+  set_fact:
+    dont_restart_mysql: True
+  when: (not bootstrap_exists.stat.exists)
+
+- name: get PXC node list
+  get_pxc_node: {}
+
+- name: garb.cnf
+  template:
+    src: garb.j2
+    dest: /etc/sysconfig/garb
+    owner: root
+    group: root
+    mode: 0644
+
+- name: stop MySQL for bootstrap
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }} state=stopped"
+  when: (not bootstrap_exists.stat.exists) and item.bootstrap and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: bootstrap PXC
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }}@bootstrap state=started"
+  when: (not bootstrap_exists.stat.exists) and item.bootstrap and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: start data nodes in PXC
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }} state=restarted"
+  when: (not bootstrap_exists.stat.exists) and (not item.bootstrap) and (item.role == 'data') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: disable arbitrator on boot at data node
+  systemd: "name=garb enabled=no state=stopped"
+  when: (item.role == 'data') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: stop mysql on arbitrator node
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }}@bootstrap state=stopped"
+  when: (item.role == 'arbitrator') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: start arbitrator nodes in PXC
+  systemd: "name=garb state=restarted"
+  when: (not bootstrap_exists.stat.exists) and (not item.bootstrap) and (item.role == 'arbitrator') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: enable arbitrator on boot
+  systemd: "name=garb enabled=yes"
+  when: (item.role == 'arbitrator') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: disable mysql on boot at arbitrator node
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }} enabled=no state=stopped"
+  when: (item.role == 'arbitrator') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: stop bootstrap MySQL
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }}@bootstrap state=stopped"
+  when: (not bootstrap_exists.stat.exists) and item.bootstrap and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"
+
+- name: start MySQL on bootstrap node
+  systemd: "name={{ pillar.mysql_daemon.mysql_daemon }} state=started"
+  when: (not bootstrap_exists.stat.exists) and item.bootstrap and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"

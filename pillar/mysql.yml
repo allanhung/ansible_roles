@@ -34,7 +34,7 @@ mysql_local_pkg:
       - percona-toolkit-3.0.1-1.el7.x86_64.rpm
       - qpress-11-1.el7.x86_64.rpm
 
-mysql_pkg:
+mysql_tool_pkg:
   args:
     type: list
     check_osver: True
@@ -96,10 +96,12 @@ mysql_config:
     character_set_filesystem: utf8
     character_set_server: utf8
     connect_timeout: "10"
+    default_storage_engine: InnoDB
     expire_logs_days: "7"
     explicit_defaults_for_timestamp: "1"
     event_scheduler: "1"
     innodb_autoextend_increment: "10"
+    innodb_autoinc_lock_mode: "2"
 # innodb_buffer_pool_size: 50% of total RAM for RAM <: 16G
 # innodb_buffer_pool_size: 55% of total RAM for RAM > 16G and <:24G
 # innodb_buffer_pool_size: 60% of total RAM for RAM > 24G and <:32G
@@ -215,6 +217,13 @@ mysql_config_by_version:
         - NO_ENGINE_SUBSTITUTION
       transaction_isolation: 'READ-COMMITTED'
 
+mysql_plugin:
+  args:
+    type: list
+  default:
+    - audit
+    - validate_password
+  
 mysql_plugin_file:
   args:
     type: list
@@ -248,6 +257,15 @@ mysql_config_by_plugin:
       validate_password_number_count: 1
       validate_password_policy: 1
       validate_password_special_char_count: 1
+    wsrep:
+      pxc_strict_mode: ENFORCING
+      wsrep_cluster_name: pxcluster
+      wsrep_cluster_address: "gcomm://{{ pxc_cluster_addr }}"
+      wsrep_node_name: "{{ hostname }}"
+      wsrep_node_address: "{{ ip }}"
+      wsrep_provider: /usr/lib64/libgalera_smm.so
+      wsrep_sst_auth: "sstuser:passw0rd"
+      wsrep_sst_method: "xtrabackup-v2"
 
 mysql_database:
   args:

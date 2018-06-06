@@ -1,0 +1,38 @@
+pacemaker_user:
+  default:
+    user: hacluster
+    password: hacluster
+    # python -c 'import crypt; print crypt.crypt("hacluster", "$1$mysalt$")'
+    enc_pass: "$1$mysalt$6egZOUOWFLFJW32JaR4oF/"
+
+lvs_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - ipvsadm
+
+lvs_local_pkg:
+  args:
+    type: list
+    check_osver: True
+  default:
+    7:
+      - ldirectord-4.1.1-1.el7.1.x86_64.rpm
+
+lvs_check_script:
+  args:
+    type: list
+  default:
+    - check_pxc.py
+
+lvs_sysctl:
+  default:
+    server:
+      net.ipv4.ip_forward: 1
+    client:
+      net.ipv4.conf.lo.arp_ignore: 1
+      net.ipv4.conf.lo.arp_announce: 2
+      net.ipv4.conf.all.arp_ignore: 1
+      net.ipv4.conf.all.arp_announce: 2

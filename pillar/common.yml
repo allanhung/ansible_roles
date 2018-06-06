@@ -2,7 +2,7 @@ repo_list:
   args:
     type: list
     check_osver: True
-  example:
+  default:
     6:
       - epel-release
     7:
@@ -13,6 +13,8 @@ repo_file:
     check_osver: True
   default:
     7:
+      percona_arch: http://repo.percona.com/release/7/RPMS/$basearch
+      percona_noarch: http://repo.percona.com/release/7/RPMS/noarch
       golang: https://mirror.go-repo.io/centos/7/$basearch/
 
 golang:
@@ -144,7 +146,13 @@ ssh_config:
 
 sshd_config:
   domain:
-    useast1.aws:
+    us-east-1a.aws:
+      PasswordAuthentication: "yes"
+      PermitRootLogin: "no"
+    us-east-1b.aws:
+      PasswordAuthentication: "yes"
+      PermitRootLogin: "no"
+    us-east-1c.aws:
       PasswordAuthentication: "yes"
       PermitRootLogin: "no"
   hostname:

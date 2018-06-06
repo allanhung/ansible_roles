@@ -3,11 +3,7 @@
   get_pacemaker_setting: {}
 
 - name: Enable and start PCS daemon
-  systemd: name=pcsd enabled=yes state=started
-
-- name: Ensure and pacemaker manage service is disabled and stopped
-  systemd: name={{ item }} enabled=no state=stopped
-  loop: "{{ pillar.pacemaker_manage_service }}"
+  service: name=pcsd enabled=yes state=started
 
 - name: Ensure the password for the cluster user
   user:
@@ -15,13 +11,13 @@
     password: "{{ pillar.pacemaker_user.enc_pass }}"
 
 - name: Authenticate all nodes
-  shell: "unset HTTPS_PROXY && unset https_proxy && pcs cluster auth {{ pillar.pacemaker_setting.nodes|join(' ') }} -u {{ pillar.pacemaker_user.user }} -p {{ pillar.pacemaker_user.password }}"
+  command: "pcs cluster auth {{ pillar.pacemaker_setting.nodes|join(' ') }} -u {{ pillar.pacemaker_user.user }} -p {{ pillar.pacemaker_user.password }}"
   run_once: true
   args:
     creates: /var/lib/pcsd/tokens
 
 - name: setup cluster message bus
-  shell: "unset HTTPS_PROXY && unset https_proxy && pcs cluster setup --name {{ pillar.pacemaker_setting.cluster_name }} {{ pillar.pacemaker_setting.nodes|join(' ') }}"
+  command: "pcs cluster setup --name {{ pillar.pacemaker_setting.cluster_name }} {{ pillar.pacemaker_setting.nodes|join(' ') }}"
   run_once: true
   args:
     creates: /etc/corosync/corosync.conf
@@ -33,25 +29,25 @@
     - pacemaker
 
 - name: set cluster properties
-  shell: unset HTTPS_PROXY && unset https_proxy && pcs property set {{ item.key }}={{ item.value }}
+  command: pcs property set {{ item.key }}={{ item.value }}
   run_once: true
   with_dict: "{{ pillar.pacemaker_setting.property }}"
   when: (pillar.pacemaker_setting.property|length > 0)
 
 - name: Create resources
-  shell: 
-    "unset HTTPS_PROXY && unset https_proxy && pcs resource create {{ item.id }} {{ item.type }}
+  command: >
+    pcs resource create {{ item.id }} {{ item.type }}
     {% if item.options is defined %}
       {% for k, v in item.options.items() %}
         {{ k }}={{ v }}
       {% endfor %}
     {% endif %}
     {% if item.op is defined %}
-      op 
+      op
       {% for op in item.op %}
         {{ op.action }}
         {% for k, v in op.options.items() %}
-          {{ k }}={{ v }}
+          {{ k}}={{ v }}
         {% endfor %}
       {% endfor %}
     {% endif %}
@@ -64,13 +60,11 @@
       {% endif %}
     {% endif %}
     {% if item.clone is defined %}
-      {% if item.clone %} 
-        --clone
-      {% endif %}
+      {% if item.clone %} --clone {% endif %}
     {% elif item.masterslave is defined %}
       --master
       {% if item.masterslave.name is defined %}
-        {{ item.masterslave.name }} \
+        {{ item.masterslave.name }}
       {% endif %}
     {% elif item.group is defined %}
       --group {{ item.group.name }}
@@ -81,13 +75,13 @@
       {% endif %}
     {% endif %}
     {% if item.disabled is defined %}
-      {% if item.disabled %}
-        --disabled
-      {% endif %}
+      {% if item.disabled %} --disabled {% endif %}
     {% endif %}
     {% if item.wait is defined %}
       wait={{ item.wait }}
-    {% endif %}"
+    {% endif %}
   run_once: true
   loop: "{{ pillar.pacemaker_setting.resource }}"
   when: (pillar.pacemaker_setting.resource|length > 0)
+  environment:
+    no_proxy: "10.0.0.0/8"

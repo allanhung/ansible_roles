@@ -93,6 +93,13 @@ inv_stage:
   default:
     - inv_rd
 
+lvs_stage:
+  args:
+    type: list
+  default:
+    - rpm
+    - conf
+
 mmm_stage:
   args:
     type: list

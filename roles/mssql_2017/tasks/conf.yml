@@ -1,10 +1,11 @@
 ---
+- name: copy create database powershell script
+  win_template:
+    src: install_ps_module.ps1.j2
+    dest: "{{ pillar.mssql_common.dba_folder }}\\install_ps_module.ps1"
+
 - name: add a powershell module
-  win_psmodule:
-    name: "{{ item }}"
-    allow_clobber: True
-    state: present
-  loop: "{{ pillar.mssql_psmodule }}"
+  win_shell: "{{ pillar.mssql_common.dba_folder }}\\install_ps_module.ps1"
 
 - name: set disk vars
   include_tasks: check_disk.yml

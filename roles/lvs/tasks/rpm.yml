@@ -1,0 +1,45 @@
+---
+- name: Copy rpm to /tmp
+  copy: 
+    src: "{{ item }}"
+    dest: /tmp/{{ item }}
+    mode: 0644
+    force: no
+  loop: "{{ pillar.lvs_local_pkg }}"
+
+- name: Ensure LVS local packages are installed.
+  yum: "name=/tmp/{{ pillar.lvs_local_pkg | join(', /tmp/') }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy' and (pillar.mysql_local_pkg | length) > 0"
+
+- name: Ensure LVS local packages are installed.
+  yum: "name=/tmp/{{ pillar.mysql_local_pkg | join(', /tmp/') }} state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy' and (pillar.mysql_local_pkg | length) > 0"
+
+- name: Ensure LVS packages are installed.
+  yum: "name={{ pillar.lvs_pkg | join(', ') }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure LVS packages are installed.
+  yum: "name={{ pillar.lvs_pkg | join(', ') }} state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy'"
+
+- name: Ensure ldirectord is enabled on boot.
+  systemd: "name=ldirectord enabled=yes"
+
+- name: Ensure ipvsadm is disabled on boot.
+  systemd: "name=ipvsadm enabled=no"
+
+- name: check_pxc
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ pillar.lvs_check_script }}"

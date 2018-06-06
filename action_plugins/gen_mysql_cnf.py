@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function)
 from ansible.plugins.action import ActionBase
 from copy import deepcopy
 
-def get_mycnf(myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, config_by_version, config_by_plugin, mysql_version, with_plugin):
+def get_mycnf(pillar, hostvars, myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, config_by_version, config_by_plugin, mysql_version, with_plugin):
     """
     mysql_daemon:
       default:
@@ -81,11 +81,24 @@ def get_mycnf(myhost, ip, cpucount, memory, mysql_daemon, mysql_common, config, 
 
     if with_plugin:
         for k, v in config_by_plugin.items():
-            for m, n in v.items():
-                if m in config.keys():
-                    config[m].update(n)
-                else:
-                    config[m]=n
+            if k in with_plugin:
+                for m, n in v.items():
+                    if m in config.keys():
+                        config[m].update(n)
+                    else:
+                        config[m]=n
+                if k == 'wsrep':
+                    cluster_ip_list = []
+                    for node in pillar['pxc_group']['pxcluster']:
+                        if 'vip' in node.keys():
+                            cluster_ip_list.append(node['vip'])
+                        else:
+                            cluster_ip_list.append(hostvars[node['hostname']]['ansible_ssh_host'])
+                        cluster_ip_list=list(set(cluster_ip_list))
+                    config['wsrep_cluster_address']='gcomm://'+','.join(cluster_ip_list)
+                    config['wsrep_node_address']=ip
+                    config['wsrep_node_name']=myhost['hostname']+'.'+myhost['domain']
+                    config['wsrep_sst_auth']='{}:{}'.format(pillar['mysql_user']['pxc'][0]['name'],pillar['mysql_user']['pxc'][0]['password'])
 
     for k, v in config.items():
         if k == 'sql_mode':
@@ -145,6 +158,7 @@ class ActionModule(ActionBase):
             return result
         
         pillar = task_vars.get('pillar', {})
+        hostvars = task_vars.get('hostvars', {})
         myhost = pillar['myhost']
         daemon = pillar['mysql_daemon']
         common = pillar['mysql_common']
@@ -156,7 +170,7 @@ class ActionModule(ActionBase):
         memory = task_vars['ansible_memtotal_mb']
         mysql_version = self._task.args.get('mysql_version', {})
         with_plugin = self._task.args.get('with_plugin', False)
-        my_cnf = get_mycnf(myhost, ip, cpucount, memory, daemon, common, config, config_by_version, config_by_plugin, mysql_version, with_plugin)
+        my_cnf = get_mycnf(pillar, hostvars, myhost, ip, cpucount, memory, daemon, common, config, config_by_version, config_by_plugin, mysql_version, with_plugin)
         facts['mysql_cnf']={'my_cnf': my_cnf}
 
         result['failed'] = False

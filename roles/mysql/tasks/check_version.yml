@@ -4,13 +4,24 @@
   register: mysql_version
   ignore_errors: true
 
+- name: Get MySQL version.
+  shell: 'rpm --queryformat "%{VERSION}" -q `rpm -qa |grep -i percona|grep -i server`'
+  register: pxc_version
+  when: mysql_version.rc > 0
+  ignore_errors: true
+
 - name: Set MySQL version in pillar
   get_mysql_main_version:
     mysql_version: "{{ mysql_version.stdout }}"
   when: mysql_version.rc == 0
 
+- name: Set MySQL version in pillar
+  get_mysql_main_version:
+    mysql_version: "{{ pxc_version.stdout }}"
+  when: mysql_version.rc > 0
+
 - name: generate mysql config
   gen_mysql_cnf:
     mysql_version: "{{ pillar.mysql_version }}"
-    with_plugin: True
+    with_plugin: "{{ pillar.mysql_plugin }}"
   when: pillar.mysql_version is defined

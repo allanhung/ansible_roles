@@ -1,0 +1,6 @@
+- name: pxc installation
+  hosts: pxc
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mysql

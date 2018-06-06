@@ -1,0 +1,29 @@
+---
+- name: Ensure MySQL packages are installed.
+  yum: "name={{ pillar.pxc_server_pkg | join(', ') }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure MySQL packages are installed.
+  yum: "name={{ pillar.pxc_server_pkg | join(', ') }} state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy'"
+
+- name: fix max num of process
+  lineinfile:
+    path: /usr/lib/systemd/system/{{ item[0] }}.service
+    regexp: "^{{ item[1].property }}"
+    line: "{{ item[1].property }}={{ item[1].value }}"
+  with_nested:
+    - [ "{{ pillar.mysql_daemon.mysql_daemon }}", "{{ pillar.mysql_daemon.mysql_daemon }}@"]
+    - [{ property: 'LimitNOFILE', value: "{{ pillar.mysql_limits.mysql.nofile }}" }, { property: 'LimitNPROC', value: "{{ pillar.mysql_limits.mysql.nproc }}" }]
+  when: pillar.myhost.os_ver == "7"
+
+- name: force systemd to reread configs
+  systemd:
+    daemon_reload: yes  
+  when: pillar.myhost.os_ver == "7"
+
+- name: Ensure MySQL is disabled on boot.
+  service: "name={{ pillar.mysql_daemon.mysql_daemon }} enabled=no"

@@ -1,0 +1,14 @@
+---
+- name: get lvs config for pxc
+  get_lvs_pxc_config: {}
+
+- name: ifcfg-lo:0
+  template:
+    src: ifcfg-lo:0.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-lo:0
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ifup lo:0
+  shell: ifup lo:0

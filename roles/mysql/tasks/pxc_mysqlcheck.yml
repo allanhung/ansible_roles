@@ -1,0 +1,36 @@
+---
+- name: Copy checkmysql to /usr/bin
+  copy:
+    src: checkmysql
+    dest: /usr/bin/checkmysql
+    mode: 0755
+    force: no
+  notify: restart mysql
+
+- name: Copy checkmysql unit to systemd
+  copy:
+    src: checkmysql.service
+    dest: /usr/lib/systemd/system/checkmysql.service
+    mode: 0644
+    force: yes
+
+- name: force systemd to reread configs
+  systemd:
+    daemon_reload: yes
+
+- name: change default username and password in clustercheck
+  lineinfile:
+    path: /usr/bin/clustercheck
+    regexp: "^{{ item.property }}"
+    line: "{{ item.property }}=\"{{ item.value }}\""
+  with_items:
+    - { property: 'MYSQL_USERNAME', value: "${1-{{ pillar.mysql_user.pxc[0].name }}}"} 
+    - { property: 'MYSQL_PASSWORD', value: "${2-{{ pillar.mysql_user.pxc[0].password }}}"}
+
+- name: start mysql check service
+  systemd:
+    name: checkmysql
+    enabled: yes
+    state: started
+  when: (item.role == 'data') and inventory_hostname == item.hostname
+  loop: "{{ pillar.pxc_group.pxcluster }}"

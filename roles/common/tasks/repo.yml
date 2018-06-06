@@ -10,6 +10,9 @@
   yum: "name=yum-utils state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
+- name: remove extenal repo first.
+  yum: "name={{ pillar.repo_list | join(', ') }} state=removed"
+
 - name: Ensure extenal repo is installed.
   yum: "name={{ pillar.repo_list | join(', ') }} state=installed"
   environment:
@@ -19,7 +22,7 @@
 
 - name: Ensure extenal repo is installed.
   yum: "name={{ pillar.repo_list | join(', ') }} state=installed"
-  when: "pillar.proxy.proxy != 'no_proxy' and (pillar.repo_list | length) > 0"
+  when: "pillar.proxy.proxy == 'no_proxy' and (pillar.repo_list | length) > 0"
 
 - name: repo file
   template:
