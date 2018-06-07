@@ -98,7 +98,7 @@ mysql_config:
     connect_timeout: "10"
     default_storage_engine: InnoDB
     expire_logs_days: "7"
-    explicit_defaults_for_timestamp: "1"
+    explicit_defaults_for_timestamp: "0"
     event_scheduler: "1"
     innodb_autoextend_increment: "10"
     innodb_autoinc_lock_mode: "2"

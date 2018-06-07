@@ -34,11 +34,15 @@
     state: present
   loop: "{{ pillar.mssql_kb.2017 }}"
   when: (pillar.mssql_kb.2017 is defined)
-  register: kb_install
 
-- name: check reboot require for KB2919355
+- name: reboot server
+  win_zreboot:
+    state: present
+  register: result_rs
+
+- name: check reboot require for kb
   win_reboot:
-  when: (kb_install.results is defined and True in kb_install.results)
+  when: result_rs.reboot_required
 
 - name: check mssql iso
   win_stat:
@@ -69,13 +73,17 @@
     product_id: "{{ pillar.mssql_server.2017[0].product_id }}"
     arguments: "/Q /SQLSVCPASSWORD={{ pillar.mssql_password.svc_password }} /AGTSVCPASSWORD={{ pillar.mssql_password.agent_password }} /SAPWD={{ pillar.mssql_password.sa_password }} /ConfigurationFile={{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].unattended }}"
     state: present
-  register: sqlserver_install
 
 - name: umount iso
   win_disk_image:
     image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
     state: absent
 
+- name: reboot server
+  win_zreboot:
+    state: present
+  register: result_rs
+
 - name: check reboot require for sqlserver install
   win_reboot:
-  when: sqlserver_install.reboot_required
+  when: result_rs.reboot_required

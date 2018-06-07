@@ -1,7 +1,8 @@
 ---
 - name: common
-  hosts: test
+  hosts: otter
   pre_tasks:
     - pillar: {}
   roles:
     - common
+    - docker
