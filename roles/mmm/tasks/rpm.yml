@@ -24,7 +24,7 @@
 
 - name: Ensure mmm packages are installed.
   yum: "name={{ pillar.mmm_common.software_dir }}/{{ pillar.mmm_pkg | join(', '+pillar.mmm_common.software_dir+'/') }} state=installed"
-  when: "pillar.proxy.proxy != 'no_proxy'"
+  when: "pillar.proxy.proxy == 'no_proxy'"
 
 - name: load profile in mmm agent
   lineinfile:

@@ -1,8 +1,8 @@
 ---
 - name: restart mmm monitor
   service: name=mysql-mmm-monitor state=restarted sleep=10
-  when: "{{ pillar.mmm_setting.mmm_role == 'monitor' }}"
+  when: pillar.mmm_setting.mmm_role == 'monitor' 
 
 - name: restart mmm agent
   service: name=mysql-mmm-agent state=restarted sleep=10
-  when: "{{ pillar.mmm_setting.mmm_role != 'monitor' }}"
+  when: pillar.mmm_setting.mmm_role != 'monitor'

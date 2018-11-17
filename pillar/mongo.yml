@@ -1,0 +1,22 @@
+mongo_pkgs:
+  args:
+    check_osver: True
+  default:
+    7:
+      - mongodb-org-4.0.1-1.el7
+
+mongo_pip:
+  default:
+    - pymongo
+
+mongo_limits:
+  default:
+    mongod:
+      nofile: 64000
+      nproc: 64000
+
+mongo_conf:
+  default:
+    datadir: /data/db
+    max_connection: 1024
+    oplog_size: 2048

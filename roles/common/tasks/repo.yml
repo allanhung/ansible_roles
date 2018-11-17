@@ -1,4 +1,14 @@
 ---
+- name: repo file
+  template:
+    src: "repo.conf.j2"
+    dest: "/etc/yum.repos.d/{{ item.key }}.repo"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ pillar.repo_file }}"
+  when: pillar.repo_file is defined
+
 - name: Ensure yum-utils is installed.
   yum: "name=yum-utils state=installed"
   environment:
@@ -23,13 +33,3 @@
 - name: Ensure extenal repo is installed.
   yum: "name={{ pillar.repo_list | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy' and (pillar.repo_list | length) > 0"
-
-- name: repo file
-  template:
-    src: "repo.conf.j2"
-    dest: "/etc/yum.repos.d/{{ item.key }}.repo"
-    owner: root
-    group: root
-    mode: 0644
-  with_dict: "{{ pillar.repo_file }}"
-  when: pillar.repo_file is defined

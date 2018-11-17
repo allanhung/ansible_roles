@@ -1,0 +1,8 @@
+---
+- name: insert dba inventory
+  hosts: mmm
+  remote_user: root
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mmm

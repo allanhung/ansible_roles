@@ -10,6 +10,7 @@ site*
 *retry
 *csv
 *xls*
+*swp
 Auto_Provision_SQLserver.zip
 SQLServer*.exe
 SSMS*.exe

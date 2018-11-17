@@ -1,7 +1,6 @@
 ---
 - name: nxlog
-  hosts: rerun
-  remote_user: root
+  hosts: mssql
   pre_tasks:
     - pillar: {}
   roles:

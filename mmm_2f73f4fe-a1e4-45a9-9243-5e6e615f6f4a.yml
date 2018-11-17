@@ -2,5 +2,5 @@
   hosts: mmm
   pre_tasks:
     - pillar: {}
-  roles:
-    - mysql
+#  roles:
+#    - mysql

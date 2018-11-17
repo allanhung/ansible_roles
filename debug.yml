@@ -1,0 +1,8 @@
+---
+- name: nd
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: run show version on remote devices
+      dellos10_command:
+        commands: show version    

@@ -4,6 +4,8 @@ from dbinv import dbinv
 def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars):
     oraDB = dbinv.OracleDB(options['host'], options['user'], options['pass'], options['port'], options['sid'])
     oraDB.connect()
+#    del_sql = "delete configmg.item_database where HOST_NAME like '%p-concad%'"
+#    oraDB.execute(del_sql)
     # get_data.py --password TrendAdm2012
     for host in mmm_group[mmm_setting['group_name']]['hosts']:
         rows = oraDB.execute("select * from configmg.item_database where host_name = '{}'".format(host['hostname']))
@@ -17,20 +19,22 @@ def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars):
             column.append('DATA_CENTER')
             value.append("'{}'".format(myhost['domain'].upper()))
             column.append('DB_BRAND')
-            if 'mmm' in host['hostname']:
+            if 'mm' in host['hostname']:
+                value.append("'{}'".format('Not A Database'))
+                column.append('DB_VERSION')
                 value.append("'{}'".format('Not A Database'))
             else:
                 value.append("'{}'".format('MySQL'))
                 column.append('DB_VERSION')
-                value.append("'{}'".format('MySQL 5.6.33'))
+                value.append("'{}'".format('MySQL '+mmm_group[mmm_setting['group_name']]['mysql_ver']))
                 column.append('DB_EDITION')
                 value.append("'{}'".format('Community'))
                 column.append('HA_TECHNOLOGY')
                 value.append("'{}'".format('Replication 2-Way + MMM'))
-                column.append('SERVICE_PORT')
-                value.append("'{}'".format('3306'))
                 column.append('ZENOSS_TEMPLATE')
                 value.append("'{}'".format("[''MySQL''; ''MySQL-Slave''; ''Check_Hardware''; ''Device_HighMemory'']"))
+            column.append('SERVICE_PORT')
+            value.append("'{}'".format('3306'))
             column.append('HA_PEER_1')
             value.append("'{}'".format(host['ha_peer']))
             column.append('ENVIRONMENT')
@@ -69,6 +73,10 @@ def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars):
             value.append("'{}'".format('ztrend'))
             column.append('ACCT_READER_PASSWD')
             value.append("'{}'".format('ztr3nD!@123'))
+            column.append('ACCT_WRITER')
+            value.append("'{}'".format('ztrend'))
+            column.append('ACCT_WRITER_PASSWD')
+            value.append("'{}'".format('ztr3nD!@123'))
             ins_sql = "insert into configmg.item_database ({}) values ({})".format(",".join(column), ",".join(value))
             oraDB.execute(ins_sql)
     oraDB.connection.commit()
@@ -92,6 +100,7 @@ class ActionModule(ActionBase):
         options = pillar['dba_inv']
         mmm_group = pillar['mmm_group']
         mmm_setting = pillar['mmm_setting']
+        debug = self._task.args.get('debug', False)
         insert_inv(myhost, options, mmm_group, mmm_setting, hostvars)
 
         result['failed'] = False

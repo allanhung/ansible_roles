@@ -1,0 +1,44 @@
+storage:
+  dbPath: "{{ pillar.mongo_conf.datadir }}"
+  directoryPerDB: true
+  journal:
+    enabled: true
+  engine: "wiredTiger"
+  wiredTiger:
+    engineConfig: 
+      journalCompressor: zlib
+    collectionConfig: 
+      blockCompressor: zlib 
+    indexConfig:
+      prefixCompression: true
+
+systemLog:
+  logRotate: rename
+  destination: file
+  path: "/var/log/mongodb/mongod.log"
+  logAppend: true
+  timeStampFormat: iso8601-utc
+
+processManagement:
+  pidFilePath: "/var/run/mongodb/mongod.pid"
+  fork: true
+
+net:
+  bindIp: 0.0.0.0
+  port: 27017
+  unixDomainSocket: 
+    enabled : true
+  maxIncomingConnections: {{ pillar.mongo_conf.max_connection }}
+#The options have been deprecated since version 3.2
+#  http:
+#    enabled: false
+#    RESTInterfaceEnabled: false
+#    JSONPEnabled: false
+
+security:
+  authorization: "enabled"
+  keyFile: "{{ pillar.mongo_conf.datadir }}/mongodb.key"
+
+replication:
+    replSetName: "{{ pillar.mongo_rsconf.rs_name }}"
+    oplogSizeMB: {{ pillar.mongo_conf.oplog_size }}

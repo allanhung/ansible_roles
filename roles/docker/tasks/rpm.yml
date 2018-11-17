@@ -10,5 +10,30 @@
   yum: "name={{ pillar.docker_pkg | join(', ') }} state=installed"
   when: "pillar.proxy.proxy == 'no_proxy'"
 
+- name: docker envirnment
+  template:
+    src: "docker.j2"
+    dest: "{{ pillar.docker_env.filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart docker
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: add env to service unit
+  lineinfile:
+    path: /usr/lib/systemd/system/docker.service
+    insertafter: '^Type=notify'
+    regexp: "^{{ item }}"
+    line: "{{ item }}"
+  with_items:
+    - "EnvironmentFile=-{{ pillar.docker_env.filename }}"
+  notify: restart docker
+
+- name: daemon reload for docker system unit
+  systemd:
+    name: docker.service
+    daemon_reload: yes
+
 - name: Ensure docker is enabled on boot.
-  service: "name=docker enabled=yes"
+  service: "name=docker enabled=yes state=started"

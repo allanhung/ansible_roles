@@ -1,0 +1,12 @@
+---
+- name: set mongo limits
+  set_limits:
+    limits_key: mongo_limits
+
+- name: mongod_soft_nofile
+  pam_limits:
+    domain: "{{ item.name }}"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.item }}"
+    value: "{{ item.value }}"
+  loop: "{{ pillar.mongo_limits }}"

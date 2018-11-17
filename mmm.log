@@ -1,65 +1,50 @@
-2018-05-02 11:40:20.120 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'conca',
- '--data_host': 'tr-p-concad01.sjc1:10.42.220.113,tr-p-concad02.sjc1:10.42.220.114',
- '--monitor_host': 'tr-p-concadmm01.sjc1:10.42.220.115,tr-p-concadmm02.sjc1:10.42.220.116',
- '--monitor_vip': '10.42.220.120',
- '--password': 'My@dm1n!@#',
- '--reader_vip': '10.42.220.118,10.42.220.119',
- '--ssh_try_limit': '600',
- '--sshkey': '/opt/ansible/db.pem',
- '--sshpass': 'LR1!Ika',
- '--taskid': False,
- '--workdir': '/opt/ansible',
- '--writer_vip': '10.42.220.117',
- 'TASKID': None,
- 'mmm': True}
-2018-05-02 11:40:20.121 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/d6913e63-2e1a-46aa-94e3-c449ad2c5a6e/hosts
-2018-05-02 11:40:20.121 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_d6913e63-2e1a-46aa-94e3-c449ad2c5a6e.yml
-2018-05-02 11:40:20.123 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/d6913e63-2e1a-46aa-94e3-c449ad2c5a6e/pillar/mmm.yml
-2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/d6913e63-2e1a-46aa-94e3-c449ad2c5a6e/hosts /opt/ansible/mmm_d6913e63-2e1a-46aa-94e3-c449ad2c5a6e.yml
-2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.016112 ---
-2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
-2018-05-02 11:40:20.136 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -pMy@dm1n!@# -h10.42.220.117
-2018-05-31 10:36:23.065 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'conca',
- '--data_host': 'tmscp-p-dbce01.muc1:10.36.161.122,tmscp-p-dbce02.muc1:10.36.161.123',
- '--monitor_host': 'tmscp-p-mmmce01.muc1:10.36.161.120,tmscp-p-mmmce02.muc1:10.36.161.121',
- '--monitor_vip': '10.36.161.131',
- '--password': 'password',
- '--reader_vip': '10.36.161.133,10.36.161.134',
- '--ssh_try_limit': '120',
- '--sshkey': '/opt/ansible/db.pem',
- '--sshpass': 'LR1!Ika',
- '--taskid': False,
- '--without_backup': False,
- '--workdir': '/opt/ansible',
- '--writer_vip': '10.36.161.132',
- 'TASKID': None,
- 'mmm': True}
-2018-05-31 10:36:23.079 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/2f73f4fe-a1e4-45a9-9243-5e6e615f6f4a/hosts
-2018-05-31 10:36:23.079 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_2f73f4fe-a1e4-45a9-9243-5e6e615f6f4a.yml
-2018-05-31 10:36:23.082 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/2f73f4fe-a1e4-45a9-9243-5e6e615f6f4a/pillar/mmm.yml
-2018-05-31 10:36:23.095 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/2f73f4fe-a1e4-45a9-9243-5e6e615f6f4a/hosts /opt/ansible/mmm_2f73f4fe-a1e4-45a9-9243-5e6e615f6f4a.yml
-2018-05-31 10:36:23.095 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.030936 ---
-2018-05-31 10:36:23.095 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
-2018-05-31 10:36:23.096 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -ppassword -h10.36.161.132
-2018-05-31 11:52:19.934 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'conca',
+2018-09-28 16:53:17.508 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'tmscp',
  '--data_host': 'tmscp-s-dbce01.muc1:10.36.161.126,tmscp-s-dbce02.muc1:10.36.161.127',
+ '--hostarg': '',
  '--monitor_host': 'tmscp-s-mmmce01.muc1:10.36.161.124,tmscp-s-mmmce02.muc1:10.36.161.125',
  '--monitor_vip': '10.36.161.135',
- '--password': 'password',
+ '--osver': '7',
+ '--password': 'My@dm1n!@#',
  '--reader_vip': '10.36.161.137,10.36.161.138',
  '--ssh_try_limit': '120',
- '--sshkey': '/opt/ansible/db.pem',
+ '--sshkey': None,
  '--sshpass': 'LR1!Ika',
+ '--sshport': '22',
  '--taskid': False,
  '--without_backup': False,
  '--workdir': '/opt/ansible',
  '--writer_vip': '10.36.161.136',
  'TASKID': None,
  'mmm': True}
-2018-05-31 11:52:19.934 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/e88459b0-ab57-4149-ba98-4cccfa7ffe6d/hosts
-2018-05-31 11:52:19.934 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_e88459b0-ab57-4149-ba98-4cccfa7ffe6d.yml
-2018-05-31 11:52:19.936 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/e88459b0-ab57-4149-ba98-4cccfa7ffe6d/pillar/mmm.yml
-2018-05-31 11:52:19.949 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/e88459b0-ab57-4149-ba98-4cccfa7ffe6d/hosts /opt/ansible/mmm_e88459b0-ab57-4149-ba98-4cccfa7ffe6d.yml
-2018-05-31 11:52:19.950 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.016565 ---
-2018-05-31 11:52:19.950 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
-2018-05-31 11:52:19.950 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -ppassword -h10.36.161.136
+2018-09-28 16:53:17.508 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/b2dc37f3-3d22-4df3-b03f-0213b7896496/hosts
+2018-09-28 16:53:17.508 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_b2dc37f3-3d22-4df3-b03f-0213b7896496.yml
+2018-09-28 16:53:17.544 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/b2dc37f3-3d22-4df3-b03f-0213b7896496/pillar/mmm.yml
+2018-09-28 16:53:17.567 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/b2dc37f3-3d22-4df3-b03f-0213b7896496/hosts /opt/ansible/mmm_b2dc37f3-3d22-4df3-b03f-0213b7896496.yml
+2018-09-28 16:53:17.567 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.060142 ---
+2018-09-28 16:53:17.567 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
+2018-09-28 16:53:17.567 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -pMy@dm1n!@# -h10.36.161.136
+2018-10-08 17:20:00.619 - pyansibleinv -        mmm -  INFO - args:{'--cluster_id': 'skyaid',
+ '--data_host': 'skya-p-skyaiddb01.sjc1:10.42.95.33,skya-p-skyaiddb02.sjc1:10.42.95.34',
+ '--hostarg': '',
+ '--monitor_host': 'skya-p-skyaiddbm01.sjc1:10.42.95.35,skya-p-skyaiddbm02.sjc1:10.42.95.36',
+ '--monitor_vip': '10.42.95.37',
+ '--osver': '7',
+ '--password': 'My@dm1n!@#',
+ '--reader_vip': '10.42.95.39,10.42.95.40',
+ '--ssh_try_limit': '120',
+ '--sshkey': None,
+ '--sshpass': 'LR1!Ika',
+ '--sshport': '22',
+ '--taskid': False,
+ '--without_backup': False,
+ '--workdir': '/opt/ansible',
+ '--writer_vip': '10.42.95.38',
+ 'TASKID': None,
+ 'mmm': True}
+2018-10-08 17:20:00.620 - pyansibleinv -        mmm -  INFO - create ansible hosts: /opt/ansible/inventory/cfb08a27-1da6-4f0f-9680-f198d6761002/hosts
+2018-10-08 17:20:00.620 - pyansibleinv -        mmm -  INFO - craete ansible playbooks: /opt/ansible/mmm_cfb08a27-1da6-4f0f-9680-f198d6761002.yml
+2018-10-08 17:20:00.652 - pyansibleinv -        mmm -  INFO - create mysql with mmm setting: /opt/ansible/inventory/cfb08a27-1da6-4f0f-9680-f198d6761002/pillar/mmm.yml
+2018-10-08 17:20:00.680 - pyansibleinv - mmm_stdout -  INFO - You can run ansible-playbook -i /opt/ansible/inventory/cfb08a27-1da6-4f0f-9680-f198d6761002/hosts /opt/ansible/mmm_cfb08a27-1da6-4f0f-9680-f198d6761002.yml
+2018-10-08 17:20:00.680 - pyansibleinv - mmm_stdout -  INFO - --- Total Excution time: 0:00:00.062263 ---
+2018-10-08 17:20:00.681 - pyansibleinv - mmm_stdout -  INFO - You can connect db with:
+2018-10-08 17:20:00.681 - pyansibleinv - mmm_stdout -  INFO -     mysql -uroot -pMy@dm1n!@# -h10.42.95.38

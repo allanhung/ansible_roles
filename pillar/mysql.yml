@@ -6,10 +6,10 @@ mysql_common_pkg:
     check_osver: True
   default:
     7:
-      - mysql-community-client-5.7.18-1.el7.x86_64.rpm
-      - mysql-community-common-5.7.18-1.el7.x86_64.rpm
-      - mysql-community-libs-5.7.18-1.el7.x86_64.rpm
-      - mysql-community-libs-compat-5.7.18-1.el7.x86_64.rpm
+      - mysql-community-client-5.7.21-1.el7.x86_64.rpm
+      - mysql-community-common-5.7.21-1.el7.x86_64.rpm
+      - mysql-community-libs-5.7.21-1.el7.x86_64.rpm
+      - mysql-community-libs-compat-5.7.21-1.el7.x86_64.rpm
 
 mysql_local_pkg:
   args:
@@ -28,7 +28,7 @@ mysql_local_pkg:
       - qpress-11-1.el6.x86_64.rpm
     7:
       - mysql-connector-python-2.1.7-1.el7.x86_64.rpm
-      - mysql-community-server-5.7.18-1.el7.x86_64.rpm
+      - mysql-community-server-5.7.21-1.el7.x86_64.rpm
       - mysql-utilities-1.6.5-1.el7.noarch.rpm
       - percona-xtrabackup-24-2.4.9-1.el7.x86_64.rpm
       - percona-toolkit-3.0.1-1.el7.x86_64.rpm
@@ -61,7 +61,7 @@ mysql_daemon:
       version: 5.6.33    
     7:
       mysql_daemon: mysqld
-      version: 5.7.18    
+      version: 5.7.21    
 
 mysql_common:
   default:
@@ -153,7 +153,8 @@ mysql_config:
     key_buffer_size: 256M
     log_bin: mysql-bin
     log_queries_not_using_indexes: "1"
-    log_slave_updates: 1
+    # if no slave under slave
+    log_slave_updates: 0
     log_warnings: 2
     long_query_time: 10
     lower_case_table_names: "0"
@@ -182,7 +183,8 @@ mysql_config:
     slow_query_log: "1"
     slow_query_log_file: my_datadir/mysql-slow.log
     sort_buffer_size: "4M"
-    sync_binlog: "1"
+    # https://www.percona.com/blog/2016/06/03/binary-logs-make-mysql-5-7-slower-than-5-6/
+    sync_binlog: "0"
     transaction_isolation: "READ-COMMITTED"
     table_open_cache : 0.1*my_memory
     thread_cache_size: "50"
@@ -208,7 +210,7 @@ mysql_config_by_version:
       innodb_undo_log_truncate: 1
       innodb_undo_tablespaces: 3 
       slave_parallel_type: LOGICAL_CLOCK
-      slave_parallel_workers: 4
+      slave_parallel_workers: 0
       sql_mode:
         - ONLY_FULL_GROUP_BY
         - STRICT_TRANS_TABLES
@@ -228,7 +230,7 @@ mysql_plugin_file:
   args:
     type: list
   default:
-    - src: libaudit_plugin.so.mysql-1.1.5-774
+    - src: libaudit_plugin.so.mysql-1.1.6-784
       dest: libaudit_plugin.so
 
 mysql_config_by_plugin:

@@ -16,6 +16,8 @@ repo_file:
       percona_arch: http://repo.percona.com/release/7/RPMS/$basearch
       percona_noarch: http://repo.percona.com/release/7/RPMS/noarch
       golang: https://mirror.go-repo.io/centos/7/$basearch/
+      mongodb: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/$basearch
+      docker: https://download.docker.com/linux/centos/7/$basearch/stable
 
 golang:
   default:
@@ -48,6 +50,7 @@ common_tool_pkgs:
   default:
     6:
       - glances
+      - git
       - iftop
       - jq
       - nethogs
@@ -58,10 +61,12 @@ common_tool_pkgs:
       - sshpass
       - tcpdump
       - telnet
+      - tree
       - vim
       - wget
     7:
       - glances
+      - git
       - iftop
       - jq
       - nc
@@ -73,6 +78,7 @@ common_tool_pkgs:
       - sshpass
       - tcpdump
       - telnet
+      - tree
       - vim
       - wget
 
@@ -107,6 +113,8 @@ sysctl:
     net.ipv4.tcp_wmem: "4096 65536 16777216"
     net.ipv6.conf.all.disable_ipv6: 1
     net.ipv6.conf.default.disable_ipv6: 1
+    vm.dirty_ratio: 15
+    vm.dirty_background_ratio: 5
     vm.min_free_kbytes: 65536
     vm.swappiness: 1
 

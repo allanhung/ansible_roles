@@ -1,0 +1,6 @@
+- name: mongodb
+  hosts: backup
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - mongo

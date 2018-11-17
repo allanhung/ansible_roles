@@ -1,0 +1,46 @@
+---
+- name: copy mongo config
+  template:
+    src: mongod.conf.init.j2
+    dest: /etc/mongod.conf
+
+- name: create mongodb directory
+  file:
+    path: "{{ pillar.mongo_conf.datadir }}"
+    state: directory
+    owner: mongod
+    group: mongod
+    mode: 0755
+
+- name: restart mongod
+  systemd:
+    name: mongod.service
+    state: restarted
+
+- name: create mongodb user
+  mongodb_user:
+    database: "{{ item.database }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    roles: "{{ item.roles | join(',') }}"
+    state: present
+  with_items: "{{ pillar.mongo_user }}"
+
+- name: copy mongo keyfile
+  copy:
+    src: mongodb.key
+    dest: "{{ pillar.mongo_conf.datadir }}/mongodb.key"
+    owner: mongod
+    group: mongod
+    mode: 0400
+    force: no
+
+- name: copy mongo config to remote
+  template:
+    src: mongod.conf.security.j2
+    dest: /etc/mongod.conf
+
+- name: restart mongod
+  systemd:
+    name: mongod.service
+    state: restarted

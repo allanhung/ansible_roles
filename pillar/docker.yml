@@ -1,7 +1,14 @@
 docker_pkg:
   args:
-    type: list
     check_osver: True
   default:
     7:
-      - docker
+      - docker-ce
+
+docker_python_pkg:
+  default:
+    - docker-compose
+
+docker_env:
+  default:
+    filename: /etc/sysconfig/docker  

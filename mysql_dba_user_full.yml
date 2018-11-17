@@ -1,0 +1,28 @@
+---
+- name: mysql dba account
+  hosts: new
+  gather_facts: True
+  pre_tasks:
+    - pillar: {}    
+  tasks:
+    - name: install mysql python module
+      yum: 
+        name: MySQL-python
+        state: installed
+      environment:
+        http_proxy: http://{{ pillar.proxy.proxy }}
+        https_proxy: https://{{ pillar.proxy.proxy }}
+
+    - name: Ensure MySQL dba users are present.
+      mysql_user:
+        login_user: root
+        login_password: "{{ pillar.mysql_root.password }}"
+        login_unix_socket: "{{ pillar.mysql_common.socket }}"
+        name: "{{ item.name }}"
+        host: "{{ item.host | default('localhost') }}"
+        password: "{{ item.password }}"
+        encrypted: "{{ item.encrypted }}"
+        priv: "{{ item.priv | default('*.*:USAGE') }}"
+        state: "{{ item.state | default('present') }}"
+        append_privs: "{{ item.append_privs | default('no') }}"
+      loop: "{{ pillar.mysql_user.dba }}"

@@ -12,7 +12,9 @@ EXAMPLES = '''
 '''
 
 def main():
-    fields = {}
+    fields = {
+        "debug": {"default": False, "type": "bool"}
+    }
     module = AnsibleModule(argument_spec=fields)
     module.exit_json(changed=False)
 

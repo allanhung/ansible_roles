@@ -1,0 +1,13 @@
+---
+- name: Ensure docker python packages are installed.
+  pip:
+    name: "{{ pillar.docker_python_pkg | join(', ') }}"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: Ensure docker python packages are installed.
+  pip:
+    name: "{{ pillar.docker_python_pkg | join(', ') }}"
+  when: "pillar.proxy.proxy == 'no_proxy'"

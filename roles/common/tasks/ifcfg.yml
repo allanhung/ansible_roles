@@ -3,47 +3,75 @@
   file:
     path: /etc/udev/rules.d/90-eno-fix.rules
     state: absent
+  when: pillar.myhost.os_ver > 6
     
 - name: remove dracut rule
   file:
     path: /etc/dracut.conf.d/90-eno-fix.conf
     state: absent
+  when: pillar.myhost.os_ver > 6
     
 - name: check ifcfg-eth0 file exists
   stat:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
   register: ifcfg_eth0_ori
+  when: pillar.myhost.os_ver > 6
 
 - name: check network device name
-  shell: ls -1 /sys/class/net |grep -v lo
+  shell: ls -1 /sys/class/net |grep -v lo|grep -v docker
   register: ifname
+  when: pillar.myhost.os_ver > 6
 
 - name: move network setting
   shell: "/bin/mv /etc/sysconfig/network-scripts/ifcfg-{{ ifname.stdout_lines[0] }} /etc/sysconfig/network-scripts/ifcfg-eth0"
-  when: ifcfg_eth0_ori.stat.exists == False
+  when: ifcfg_eth0_ori.stat.exists == False and pillar.myhost.os_ver > 6
 
 - name: check ifcfg-eth0 file exists
   stat:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
   register: ifcfg_eth0
+  when: pillar.myhost.os_ver > 6
 
 - name: modify eth0 name
   replace:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
     regexp: '^NAME=.*'
     replace: 'NAME=eth0'
-  when: ifcfg_eth0.stat.exists
+  when: ifcfg_eth0.stat.exists and pillar.myhost.os_ver > 6
 
 - name: modify eth0 device
   replace:
     path: /etc/sysconfig/network-scripts/ifcfg-eth0
     regexp: '^DEVICE=.*'
     replace: 'DEVICE=eth0'
-  when: ifcfg_eth0.stat.exists
+  when: ifcfg_eth0.stat.exists and pillar.myhost.os_ver > 6
 
 - name: add HWADDR in eth0 cfg
   shell: "grep HWADDR /etc/sysconfig/network-scripts/ifcfg-eth0 || echo \"HWADDR=`ip addr |egrep ^2: -A 1|grep ether|awk {'print $2'}`\" >> /etc/sysconfig/network-scripts/ifcfg-eth0"
-  when: ifcfg_eth0.stat.exists
+  when: ifcfg_eth0.stat.exists and pillar.myhost.os_ver > 6
+
+- name: check route-eth0 file exists
+  stat:
+    path: /etc/sysconfig/network-scripts/route-eth0
+  register: route_eth0_ori
+  when: pillar.myhost.os_ver > 6
+
+- name: move route setting
+  shell: "/bin/mv /etc/sysconfig/network-scripts/route-{{ ifname.stdout_lines[0] }} /etc/sysconfig/network-scripts/route-eth0"
+  when: route_eth0_ori.stat.exists and pillar.myhost.os_ver > 6
+
+- name: check route-eth0 file exists
+  stat:
+    path: /etc/sysconfig/network-scripts/route-eth0
+  register: route_eth0
+  when: pillar.myhost.os_ver > 6
+
+- name: modify eth0 name
+  replace:
+    path: /etc/sysconfig/network-scripts/route-eth0
+    regexp: "dev {{ ifname.stdout_lines[0] }}"
+    replace: 'dev eth0'
+  when: route_eth0.stat.exists and pillar.myhost.os_ver > 6
 
 - name: run all notified handlers
   meta: flush_handlers
@@ -52,10 +80,10 @@
   shell: "sleep 3 && shutdown -r now"
   async: 1
   poll: 0
-  when: ifcfg_eth0_ori.stat.exists == False
+  when: ifcfg_eth0_ori.stat.exists == False and pillar.myhost.os_ver > 6
 
 - name: wait for system reboot
   wait_for_connection: 
     delay: 30
     timeout: 900
-  when: ifcfg_eth0_ori.stat.exists == False
+  when: ifcfg_eth0_ori.stat.exists == False and pillar.myhost.os_ver > 6

@@ -1,6 +1,6 @@
 ---
 - name: docker
-  hosts: all
+  hosts: otter
   pre_tasks:
     - pillar: {}
   roles:

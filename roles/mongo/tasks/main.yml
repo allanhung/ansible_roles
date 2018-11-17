@@ -1,0 +1,4 @@
+---
+- name: configure mongodb.
+  include_tasks: "{{ item }}.yml"
+  loop: "{{ pillar.mongo_stage }}"

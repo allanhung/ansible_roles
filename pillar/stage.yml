@@ -7,22 +7,19 @@ azure_stage:
     - unauth
 
 common_stage:
-  args:
-    type: list
   example:
-    default:
-      - proxy
-      - repo
-      - rpm
-      - grub
-      - ifcfg
-      - sysctl
-      - limits
-      - snmpd
-      - ssh
-      - users
-      - postfix
-      - rsyslog
+    - proxy
+    - repo
+    - rpm
+    - grub
+    - ifcfg
+    - sysctl
+    - limits
+    - snmpd
+    - ssh
+    - users
+    - postfix
+    - rsyslog
   hostname:
     gate:
       - repo
@@ -67,10 +64,10 @@ docker_stage:
   example:
     all:
       - rpm
-      - conf
+      - pip
   default:
     - rpm
-    - conf
+    - pip
 
 heartbeat_stage:
   args:
@@ -101,13 +98,10 @@ lvs_stage:
     - conf
 
 mmm_stage:
-  args:
-    type: list
   example:
-    all:
-      - rpm
-      - conf
-      - inv_mmm
+    - rpm
+    - conf
+    - inv_mmm
   hostname:
     tmrm-mmm01:
       - conf
@@ -125,16 +119,19 @@ mmm_stage:
       - conf
 
 mha_stage:
-  args:
-    type: list
   example:
-    all:
-      - rpm
-      - ssh
-      - conf
+    - rpm
+    - ssh
+    - conf
   default:
     - rpm
     - ssh
+    - conf
+
+mongo_stage:
+  default:
+    - limits
+    - rpm    
     - conf
 
 wincommon_stage:
@@ -158,22 +155,21 @@ mysql_stage:
   args:
     type: list
   example:
-    all:
-      - check_version
-      - common
-      - rpm
-      - conf
-      - backup
-      - limits
-      - initdb
-      - databases
-      - users_app
-      - users_base
-      - users_dba
-      - users_mha
-      - users_mmm
-      - import
-      - replication
+     - check_version
+     - common
+     - rpm
+     - conf
+     - backup
+     - limits
+     - initdb
+     - databases
+     - users_app
+     - users_base
+     - users_dba
+     - users_mha
+     - users_mmm
+     - import
+     - replication
   hostname:
     tmrm-db01:
       - users_mmm
@@ -241,10 +237,9 @@ proxysql_stage:
   args:
     type: list
   example:
-    all:
-      - rpm
-      - conf
-      - users
+    - rpm
+    - conf
+    - users
   hostname:
     dcs-t-mysqlmha-managernode1:
       - rpm

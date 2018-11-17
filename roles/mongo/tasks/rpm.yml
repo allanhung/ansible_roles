@@ -1,0 +1,57 @@
+---
+- name: set block size for device
+  copy:
+    src: 61-device.rule
+    dest: /etc/udev/rules.d/61-device.rule
+    mode: 0644
+    force: no
+
+- name: set logrotate
+  copy:
+    src: mongodb.logrotate
+    dest: /etc/logrotate.d/mongodb
+    mode: 0644
+    force: no
+
+- name: install mongodb
+  yum: "name={{ pillar.mongo_pkgs | join(', ') }} state=installed"
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: install mongodb
+  yum: "name={{ pillar.mongo_pkgs | join(', ') }} state=installed"
+  when: "pillar.proxy.proxy == 'no_proxy'"
+
+- name: install python packages for mongo
+  pip:
+    name: "{{ pillar.mongo_pip | join(' ') }}"
+    state: forcereinstall
+  environment:
+    http_proxy: http://{{ pillar.proxy.proxy }}
+    https_proxy: http://{{ pillar.proxy.proxy }}
+  when: "pillar.proxy.proxy != 'no_proxy'"
+
+- name: install python packages for mongo
+  pip:
+    name: "{{ pillar.mongo_pip | join(' ') }}"
+    state: forcereinstall
+  when: "pillar.proxy.proxy == 'no_proxy'"
+
+- name: set resource limit
+  lineinfile:
+    path: /usr/lib/systemd/system/mongod.service
+    insertafter: '^[Service]'
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+  with_items:
+    - "LimitNOFILE: {{ pillar.mongo_limits.mongod.nofile }}"
+    - "LimitNPROC: {{ pillar.mongo_limits.mongod.nproc }}"
+  notify: restart mongod
+  when: pillar.myhost.os_ver == "7"
+
+- name: restart mongod
+  systemd:
+    name: mongod.service
+    daemon_reload: yes

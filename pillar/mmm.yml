@@ -4,10 +4,15 @@ mmm_pkg:
     check_osver: True
   default:
     6:
-      - mysql-mmm-2.2.1-4.el6.noarch.rpm
-      - mysql-mmm-agent-2.2.1-4.el6.noarch.rpm
-      - mysql-mmm-monitor-2.2.1-4.el6.noarch.rpm
-      - mysql-mmm-tools-2.2.1-4.el6.noarch.rpm
+      - mysql-mmm-2.2.1-5.el6.noarch.rpm
+      - mysql-mmm-agent-2.2.1-5.el6.noarch.rpm
+      - mysql-mmm-monitor-2.2.1-5.el6.noarch.rpm
+      - mysql-mmm-tools-2.2.1-5.el6.noarch.rpm
+    7:
+      - mysql-mmm-2.2.1-16.el7.noarch.rpm
+      - mysql-mmm-agent-2.2.1-16.el7.noarch.rpm
+      - mysql-mmm-monitor-2.2.1-16.el7.noarch.rpm
+      - mysql-mmm-tools-2.2.1-16.el7.noarch.rpm
 
 mmm_common:
   default:
@@ -16,3 +21,14 @@ mmm_common:
     agent_config_file: mmm_agent.conf
     common_config_file: mmm_common.conf
     monitor_config_file: mmm_mon.conf
+
+mmm_pid:
+  args:
+    check_osver: True
+  default:
+    6:
+      agent_pid_file: /var/run/mysql-mmm/mmm_agentd.pid
+      mon_pid_file: /var/run/mysql-mmm/mmm_mond.pid
+    7:
+      agent_pid_file: /run/mysql-mmm-agent.pid
+      mon_pid_file: /run/mysql-mmm-monitor.pid

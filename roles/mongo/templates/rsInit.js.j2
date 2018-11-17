@@ -1,0 +1,6 @@
+rs.initiate( {
+   _id : "{{ pillar.mongo_rsconf.rs_name }}",
+   members: [
+      { _id: 0, host: "{{ pillar.mongo_rsconf.hostname }}" },
+   ]
+})

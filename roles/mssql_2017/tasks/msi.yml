@@ -35,12 +35,12 @@
   loop: "{{ pillar.mssql_kb.2017 }}"
   when: (pillar.mssql_kb.2017 is defined)
 
-- name: reboot server
+- name: check reboot require for kb
   win_zreboot:
     state: present
   register: result_rs
 
-- name: check reboot require for kb
+- name: reboot server
   win_reboot:
   when: result_rs.reboot_required
 
@@ -67,23 +67,59 @@
     src: "{{ pillar.mssql_server.2017[0].unattended }}.j2"
     dest: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].unattended }}"
 
+- name: add or update registry for cryptography
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Cryptography\Protect\Providers\df9d8cd0-1501-11d1-8c7a-00c04fc297eb
+    name: ProtectionPolicy
+    data: 1
+    type: dword
+
 - name: run sql server setup
   win_package:
     path: "{{ iso_mount.mount_path }}setup.exe"
     product_id: "{{ pillar.mssql_server.2017[0].product_id }}"
     arguments: "/Q /SQLSVCPASSWORD={{ pillar.mssql_password.svc_password }} /AGTSVCPASSWORD={{ pillar.mssql_password.agent_password }} /SAPWD={{ pillar.mssql_password.sa_password }} /ConfigurationFile={{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].unattended }}"
     state: present
+  register: setup_result
+  ignore_errors: yes
+
+- name: check reboot require
+  win_zreboot:
+    state: present
+  register: result_rs
+  when: setup_result.rc > 0
+
+- name: reboot server
+  win_reboot:
+  when: result_rs.reboot_required
+  when: setup_result.rc > 0
+
+- name: mounted iso file
+  win_disk_image:
+    image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
+    state: present
+  register: iso_mount
+  notify: umount iso
+  when: setup_result.rc > 0
+
+- name: run sql server setup
+  win_package:
+    path: "{{ iso_mount.mount_path }}setup.exe"
+    product_id: "{{ pillar.mssql_server.2017[0].product_id }}"
+    arguments: "/Q /SQLSVCPASSWORD={{ pillar.mssql_password.svc_password }} /AGTSVCPASSWORD={{ pillar.mssql_password.agent_password }} /SAPWD={{ pillar.mssql_password.sa_password }} /ConfigurationFile={{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].unattended }}"
+    state: present
+  when: setup_result.rc > 0
 
 - name: umount iso
   win_disk_image:
     image_path: "{{ pillar.mssql_common.software_folder }}\\{{ pillar.mssql_server.2017[0].name }}"
     state: absent
 
-- name: reboot server
+- name: check reboot require
   win_zreboot:
     state: present
   register: result_rs
 
-- name: check reboot require for sqlserver install
+- name: reboot server
   win_reboot:
   when: result_rs.reboot_required

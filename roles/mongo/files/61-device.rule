@@ -1,0 +1,2 @@
+# set 16kb read-ahead
+ACTION=="add|change", KERNEL=="dm-*", ATTR{bdi/read_ahead_kb}="16"

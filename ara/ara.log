@@ -1,4 +1,147 @@
-2018-04-10 19:25:43,379 - ara - INFO - Initializing new DB from scratch
-2018-04-20 11:13:44,288 - ara - ERROR - Result 0728ae6b-0794-490d-990b-a48eeb31a1ca could not be found
-2018-04-20 11:17:21,326 - ara - ERROR - No recognized column names in ['Results']. Recognized columns are ['ID', 'Name', 'Playbook ID', 'Playbook Path', 'Play ID', 'Play Name', 'Task ID', 'Task Name', 'Host', 'Action', 'Status', 'Ignore Errors', 'Time Start', 'Time End', 'Duration'].
-2018-04-20 11:17:39,387 - ara - ERROR - No recognized column names in ['Result']. Recognized columns are ['ID', 'Name', 'Playbook ID', 'Playbook Path', 'Play ID', 'Play Name', 'Task ID', 'Task Name', 'Host', 'Action', 'Status', 'Ignore Errors', 'Time Start', 'Time End', 'Duration'].
+2018-07-02 01:08:32,656 INFO werkzeug:  * Running on http://0.0.0.0:9191/ (Press CTRL+C to quit)
+2018-07-02 01:09:06,433 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:09:06] "GET / HTTP/1.1" 500 -
+2018-07-02 01:09:07,065 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:09:07] "GET /favicon.ico HTTP/1.1" 500 -
+2018-07-02 01:09:34,714 ERROR sqlalchemy.pool.QueuePool: Exception during reset or similar
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/pool.py", line 712, in _finalize_fairy
+    fairy._reset(pool)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/pool.py", line 881, in _reset
+    self._reset_agent.rollback()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1632, in rollback
+    self._do_rollback()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1670, in _do_rollback
+    self.connection._rollback_impl()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 706, in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1413, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/util/compat.py", line 203, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 704, in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/dialects/mysql/base.py", line 1796, in do_rollback
+    dbapi_connection.rollback()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 793, in rollback
+    self._read_ok_packet()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 767, in _read_ok_packet
+    pkt = self._read_packet()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 1014, in _read_packet
+    packet.check_error()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 393, in check_error
+    err.raise_mysql_exception(self._data)
+  File "/usr/lib64/python2.7/site-packages/pymysql/err.py", line 107, in raise_mysql_exception
+    raise errorclass(errno, errval)
+ProgrammingError: (pymysql.err.ProgrammingError) (1146, u"Table 'ara.playbooks' doesn't exist") (Background on this error at: http://sqlalche.me/e/f405)
+2018-07-02 01:09:34,716 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:09:34] "GET /favicon.ico HTTP/1.1" 500 -
+2018-07-02 01:09:34,726 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:09:34] "GET / HTTP/1.1" 500 -
+2018-07-02 01:11:07,741 INFO werkzeug:  * Running on http://0.0.0.0:9191/ (Press CTRL+C to quit)
+2018-07-02 01:11:25,410 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:25] "GET / HTTP/1.1" 302 -
+2018-07-02 01:11:26,039 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /about/ HTTP/1.1" 200 -
+2018-07-02 01:11:26,550 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /static/packaged/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+2018-07-02 01:11:26,561 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /static/packaged/patternfly_bootstrap_treeview/js/bootstrap-treeview.min.js HTTP/1.1" 200 -
+2018-07-02 01:11:26,563 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /static/packaged/jquery/jquery.min.js HTTP/1.1" 200 -
+2018-07-02 01:11:26,569 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /static/js/ara.js HTTP/1.1" 200 -
+2018-07-02 01:11:26,573 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /static/packaged/patternfly/js/patternfly.min.js HTTP/1.1" 200 -
+2018-07-02 01:11:26,577 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:26] "GET /static/packaged/datatables/js/jquery.dataTables.min.js HTTP/1.1" 200 -
+2018-07-02 01:11:27,106 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:27] "GET /static/packaged/patternfly/css/patternfly.min.css HTTP/1.1" 200 -
+2018-07-02 01:11:27,327 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:27] "GET /static/packaged/patternfly/css/patternfly-additions.min.css HTTP/1.1" 200 -
+2018-07-02 01:11:27,493 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:27] "GET /static/packaged/patternfly_bootstrap_treeview/css/bootstrap-treeview.min.css HTTP/1.1" 200 -
+2018-07-02 01:11:27,627 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:27] "GET /static/css/pygments.css HTTP/1.1" 200 -
+2018-07-02 01:11:27,894 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:27] "GET /static/css/ara.css HTTP/1.1" 200 -
+2018-07-02 01:11:28,503 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:28] "GET /static/packaged/patternfly/fonts/OpenSans-Regular-webfont.woff2 HTTP/1.1" 200 -
+2018-07-02 01:11:28,683 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:28] "GET /static/images/logo-main.svg HTTP/1.1" 200 -
+2018-07-02 01:11:28,686 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:28] "GET /static/packaged/patternfly/fonts/OpenSans-Bold-webfont.woff2 HTTP/1.1" 200 -
+2018-07-02 01:11:28,691 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:28] "GET /static/images/logo-header.svg HTTP/1.1" 200 -
+2018-07-02 01:11:28,691 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:28] "GET /static/packaged/patternfly/fonts/OpenSans-Light-webfont.woff2 HTTP/1.1" 200 -
+2018-07-02 01:11:29,545 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:11:29] "GET /static/images/favicon.ico HTTP/1.1" 200 -
+2018-07-02 01:12:20,963 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:20] "GET /about/ HTTP/1.1" 200 -
+2018-07-02 01:12:21,445 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/jquery/jquery.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:21,449 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/patternfly/js/patternfly.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:21,457 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/datatables/js/jquery.dataTables.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:21,486 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:21,486 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/js/ara.js HTTP/1.1" 304 -
+2018-07-02 01:12:21,487 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/patternfly_bootstrap_treeview/js/bootstrap-treeview.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:21,884 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/patternfly/css/patternfly.min.css HTTP/1.1" 304 -
+2018-07-02 01:12:21,888 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/patternfly/css/patternfly-additions.min.css HTTP/1.1" 304 -
+2018-07-02 01:12:21,928 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:21] "GET /static/packaged/patternfly_bootstrap_treeview/css/bootstrap-treeview.min.css HTTP/1.1" 304 -
+2018-07-02 01:12:22,108 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:22] "GET /static/css/pygments.css HTTP/1.1" 304 -
+2018-07-02 01:12:22,322 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:22] "GET /static/css/ara.css HTTP/1.1" 304 -
+2018-07-02 01:12:22,582 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:22] "GET /static/images/logo-header.svg HTTP/1.1" 200 -
+2018-07-02 01:12:22,769 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:22] "GET /static/images/logo-main.svg HTTP/1.1" 304 -
+2018-07-02 01:12:23,831 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:23] "GET /reports/ HTTP/1.1" 200 -
+2018-07-02 01:12:24,368 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /static/images/logo-header.svg HTTP/1.1" 200 -
+2018-07-02 01:12:24,414 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /static/packaged/patternfly/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+2018-07-02 01:12:24,415 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /static/packaged/patternfly/fonts/PatternFlyIcons-webfont.ttf HTTP/1.1" 200 -
+2018-07-02 01:12:24,454 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /static/packaged/patternfly/fonts/OpenSans-Semibold-webfont.woff2 HTTP/1.1" 200 -
+2018-07-02 01:12:24,611 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /reports/ajax/parameters/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465144082 HTTP/1.1" 200 -
+2018-07-02 01:12:24,632 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /reports/ajax/plays/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465144083 HTTP/1.1" 200 -
+2018-07-02 01:12:24,904 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:24] "GET /reports/ajax/results/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465144084 HTTP/1.1" 200 -
+2018-07-02 01:12:34,095 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /reports/ HTTP/1.1" 200 -
+2018-07-02 01:12:34,540 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /static/packaged/datatables/js/jquery.dataTables.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:34,577 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /static/packaged/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:34,582 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /static/packaged/jquery/jquery.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:34,620 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /static/packaged/patternfly_bootstrap_treeview/js/bootstrap-treeview.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:34,621 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /static/packaged/patternfly/js/patternfly.min.js HTTP/1.1" 304 -
+2018-07-02 01:12:34,802 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:34] "GET /static/js/ara.js HTTP/1.1" 304 -
+2018-07-02 01:12:35,053 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /static/packaged/patternfly/css/patternfly.min.css HTTP/1.1" 304 -
+2018-07-02 01:12:35,099 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /static/packaged/patternfly/css/patternfly-additions.min.css HTTP/1.1" 304 -
+2018-07-02 01:12:35,227 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /static/packaged/patternfly_bootstrap_treeview/css/bootstrap-treeview.min.css HTTP/1.1" 304 -
+2018-07-02 01:12:35,230 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /static/css/pygments.css HTTP/1.1" 304 -
+2018-07-02 01:12:35,268 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /static/css/ara.css HTTP/1.1" 304 -
+2018-07-02 01:12:35,718 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /static/images/logo-header.svg HTTP/1.1" 200 -
+2018-07-02 01:12:35,793 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /reports/ajax/parameters/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465154718 HTTP/1.1" 200 -
+2018-07-02 01:12:35,872 ERROR sqlalchemy.pool.QueuePool: Exception during reset or similar
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/pool.py", line 712, in _finalize_fairy
+    fairy._reset(pool)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/pool.py", line 881, in _reset
+    self._reset_agent.rollback()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1632, in rollback
+    self._do_rollback()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1670, in _do_rollback
+    self.connection._rollback_impl()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 706, in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1413, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/util/compat.py", line 203, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 704, in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/dialects/mysql/base.py", line 1796, in do_rollback
+    dbapi_connection.rollback()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 793, in rollback
+    self._read_ok_packet()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 769, in _read_ok_packet
+    raise err.OperationalError(2014, "Command Out of Sync")
+OperationalError: (pymysql.err.OperationalError) (2014, 'Command Out of Sync') (Background on this error at: http://sqlalche.me/e/e3q8)
+2018-07-02 01:12:35,875 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /reports/ajax/stats/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465154719 HTTP/1.1" 200 -
+2018-07-02 01:12:35,877 ERROR sqlalchemy.pool.QueuePool: Exception during reset or similar
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/pool.py", line 712, in _finalize_fairy
+    fairy._reset(pool)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/pool.py", line 881, in _reset
+    self._reset_agent.rollback()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1632, in rollback
+    self._do_rollback()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1670, in _do_rollback
+    self.connection._rollback_impl()
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 706, in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 1413, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/util/compat.py", line 203, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/engine/base.py", line 704, in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+  File "/usr/lib64/python2.7/site-packages/sqlalchemy/dialects/mysql/base.py", line 1796, in do_rollback
+    dbapi_connection.rollback()
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 792, in rollback
+    self._execute_command(COMMAND.COM_QUERY, "ROLLBACK")
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 1092, in _execute_command
+    self._write_bytes(packet)
+  File "/usr/lib64/python2.7/site-packages/pymysql/connections.py", line 1044, in _write_bytes
+    "MySQL server has gone away (%r)" % (e,))
+OperationalError: (pymysql.err.OperationalError) (2006, "MySQL server has gone away (error(32, 'Broken pipe'))") (Background on this error at: http://sqlalche.me/e/e3q8)
+2018-07-02 01:12:35,880 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /reports/ajax/results/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465154721 HTTP/1.1" 500 -
+2018-07-02 01:12:35,883 INFO werkzeug: 10.28.28.85 - - [02/Jul/2018 01:12:35] "GET /reports/ajax/plays/195988bd-8fa7-461a-839a-6366fab87ce1.txt?_=1530465154720 HTTP/1.1" 500 -

@@ -2,7 +2,7 @@ active_master_role      writer
 
 <host default>
     cluster_interface       eth0
-    pid_path                /var/run/mysql-mmm/mmm_agentd.pid
+    pid_path                {{ pillar['mmm_pid']['agent_pid_file'] }}
     bin_path                /usr/libexec/mysql-mmm/
     replication_user        {{ pillar['mysql_user']['replication'][0]['name'] }}
     replication_password    {{ pillar['mysql_user']['replication'][0]['password'] }}

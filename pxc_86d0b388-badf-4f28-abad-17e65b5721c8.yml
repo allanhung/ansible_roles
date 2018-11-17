@@ -1,0 +1,9 @@
+- name: pxc installation
+  hosts: all
+  pre_tasks:
+    - pillar: {}
+  roles:
+    - common
+    - mysql
+    - pacemaker
+    - lvs

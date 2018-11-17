@@ -24,11 +24,11 @@
   with_items: "{{ pillar.mssql_client.2017 }}"
   when: (pillar.mssql_client.2017 is defined)
 
-- name: reboot server
+- name: check reboot require for client
   win_zreboot:
     state: present
   register: result_rs
 
-- name: check reboot require for client
+- name: reboot server
   win_reboot:
   when: result_rs.reboot_required

@@ -5,3 +5,4 @@
     - pillar: {}
   roles:
     - common
+    - docker
