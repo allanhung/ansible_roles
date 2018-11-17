@@ -5,6 +5,7 @@ pillar/config
 pillar/protect
 site*
 *rpm
+*log
 *iso
 *pyc
 *retry
@@ -15,3 +16,6 @@ Auto_Provision_SQLserver.zip
 SQLServer*.exe
 SSMS*.exe
 *msu
+mmm_*.yml
+mysql_*.yml
+pxc_*.yml
