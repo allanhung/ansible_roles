@@ -5,4 +5,4 @@
   pre_tasks:
     - pillar: {}
   roles:
-    - mmm
+    - mongo

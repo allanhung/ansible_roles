@@ -1,7 +1,29 @@
 ---
+- name: set mongolog
+  set_fact:
+    mongodb_log: /var/log/mongod.log
+
 - name: get mongodb log setting
-  shell: "cat /etc/mongod.conf|grep logpath|awk -F'=' {'print $2'}"
-  register: mongodb_log
+  shell: "cat /etc/mongod.conf|grep 'mongod.log'|awk -F'\"' {'print $2'}"
+  register: mongodb_log_a
+
+- name: set mongolog
+  set_fact:
+    mongodb_log: "{{ mongodb_log_a.stdout }}"
+  when: mongodb_log_a.stdout != ''
+
+- name: get mongodb log setting
+  shell: "ps aux |grep logpath|grep -v grep|awk -F 'logpath' '{print $2}'|awk '{print $1}'|grep -v print|head -1"
+  register: mongodb_log_b
+
+- name: set mongolog
+  set_fact:
+    mongodb_log: "{{ mongodb_log_b.stdout }}"
+  when: mongodb_log_b.stdout != ''
+
+- name: show variable
+  debug:
+    var: mongodb_log
 
 - name: nxlog config
   template:

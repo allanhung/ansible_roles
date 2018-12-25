@@ -1,6 +1,6 @@
 ---
 - name: nxlog
-  hosts: mssql
+  hosts: mongodb
   pre_tasks:
     - pillar: {}
   roles:

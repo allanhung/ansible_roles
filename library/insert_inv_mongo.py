@@ -2,13 +2,13 @@
 
 DOCUMENTATION = '''
 ---
-module: insert_inv_mmm
-short_description: insert dba inventory for mmm
+module: insert_inv_mongodb
+short_description: insert dba inventory for mongodb
 '''
 
 EXAMPLES = '''
-- name: insert mmm into inventory
-  insert_inv_mmm: {}
+- name: get mongodb setting
+  insert_inv_mongo: {}
 '''
 
 def main():

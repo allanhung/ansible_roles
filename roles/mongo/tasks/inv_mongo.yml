@@ -1,0 +1,4 @@
+---
+# service_name will be mmm group name in pillar
+- name: insert_inv_mongo
+  insert_inv_mongo: {}

@@ -21,7 +21,7 @@ LogLevel INFO
 
 <Input mongodb>
     Module           im_file
-    File             '{{ mongodb_log.stdout }}'
+    File             '{{ mongodb_log }}'
     SavePos          TRUE
     ReadFromLast     TRUE
     PollInterval     1

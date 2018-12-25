@@ -1,7 +1,7 @@
 from ansible.plugins.action import ActionBase
 from dbinv import dbinv
 
-def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars):
+def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars, user, password):
     oraDB = dbinv.OracleDB(options['host'], options['user'], options['pass'], options['port'], options['sid'])
     oraDB.connect()
 #    del_sql = "delete configmg.item_database where HOST_NAME like '%p-concad%'"
@@ -70,13 +70,13 @@ def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars):
             column.append('HARDWARE_TYPE')
             value.append("'{}'".format('VM'))
             column.append('ACCT_READER')
-            value.append("'{}'".format('ztrend'))
+            value.append("'{}'".format(user))
             column.append('ACCT_READER_PASSWD')
-            value.append("'{}'".format('ztr3nD!@123'))
+            value.append("'{}'".format(password))
             column.append('ACCT_WRITER')
-            value.append("'{}'".format('ztrend'))
+            value.append("'{}'".format(user))
             column.append('ACCT_WRITER_PASSWD')
-            value.append("'{}'".format('ztr3nD!@123'))
+            value.append("'{}'".format(password))
             ins_sql = "insert into configmg.item_database ({}) values ({})".format(",".join(column), ",".join(value))
             oraDB.execute(ins_sql)
     oraDB.connection.commit()
@@ -100,8 +100,10 @@ class ActionModule(ActionBase):
         options = pillar['dba_inv']
         mmm_group = pillar['mmm_group']
         mmm_setting = pillar['mmm_setting']
+        mmm_user = pillar['mysql_user']['monitor'][0]['name']
+        mmm_password = pillar['mysql_user']['monitor'][0]['password']
         debug = self._task.args.get('debug', False)
-        insert_inv(myhost, options, mmm_group, mmm_setting, hostvars)
+        insert_inv(myhost, options, mmm_group, mmm_setting, hostvars, mmm_user, mmm_password)
 
         result['failed'] = False
         result['changed'] = False
