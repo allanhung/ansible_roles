@@ -1,0 +1,7 @@
+{
+  "log-driver": "{{ pillar.dockerd.log.driver }}",
+  "log-opts": {
+    "max-size": "{{ pillar.dockerd.log.max_size }}",
+    "max-file": "{{ pillar.dockerd.log.max_file }}"
+  }
+}

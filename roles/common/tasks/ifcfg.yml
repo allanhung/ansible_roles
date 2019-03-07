@@ -46,6 +46,13 @@
     replace: 'DEVICE=eth0'
   when: ifcfg_eth0.stat.exists and pillar.myhost.os_ver > 6
 
+- name: modify eth0 ipv6 config
+  replace:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    regexp: '^IPV6INIT=.*'
+    replace: 'IPV6INIT=no'
+  when: ifcfg_eth0.stat.exists and pillar.myhost.os_ver > 6
+
 - name: add HWADDR in eth0 cfg
   shell: "grep HWADDR /etc/sysconfig/network-scripts/ifcfg-eth0 || echo \"HWADDR=`ip addr |egrep ^2: -A 1|grep ether|awk {'print $2'}`\" >> /etc/sysconfig/network-scripts/ifcfg-eth0"
   when: ifcfg_eth0.stat.exists and pillar.myhost.os_ver > 6

@@ -1,6 +1,6 @@
 ---
 - name: nxlog
-  hosts: mongodb
+  hosts: rerun
   pre_tasks:
     - pillar: {}
   roles:

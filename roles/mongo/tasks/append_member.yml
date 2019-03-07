@@ -1,0 +1,30 @@
+---
+- name: get mongo replica config
+  get_mongo_rsconf:
+
+- name: copy mongo config
+  template:
+    src: mongod.conf.rs.j2
+    dest: /etc/mongod.conf
+  when: pillar.mongo_rsconf.role != 'master'
+
+- name: restart mongod
+  systemd:
+    name: mongod.service
+    state: restarted
+  when: pillar.mongo_rsconf.role != 'master'
+
+- name: add member to replica set
+  debug: 
+    msg: mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.add("{{ pillar.mongo_rsconf.hostname }}")'
+  when: pillar.mongo_rsconf.role == 'slave'
+
+- name: add arbiter to replica set
+  debug: 
+    msg: mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.addArb("{{ pillar.mongo_rsconf.hostname }}")'
+  when: pillar.mongo_rsconf.role == 'arbiter'
+
+- name: add backup to replica set
+  debug:
+    msg: "mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.add({host: \"{{ pillar.mongo_rsconf.hostname }}\", hidden: true, priority: 0, votes: 0})'"
+  when: pillar.mongo_rsconf.role == 'backup'

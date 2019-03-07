@@ -8,8 +8,8 @@
     dest: /etc/mongod.conf
 
 - name: restart mongod
-  systemd:
-    name: mongod.service
+  service:
+    name: mongod
     state: restarted
 
 - name: copy mongo config
@@ -23,16 +23,16 @@
   when: pillar.mongo_rsconf.role == 'master'
 
 - name: add member to replica set
-  shell: mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.add("{{ item.hostname }}")'
+  shell: mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.add("{{ hostvars[item.hostname]['ansible_default_ipv4']['address'] }}")'
   when: pillar.mongo_rsconf.role == 'master' and item.role == 'slave'
   with_items: "{{ pillar.mongo_rsconf.members }}"
 
 - name: add arbiter to replica set
-  shell: mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.addArb("{{ item.hostname }}")'
+  shell: mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.addArb("{{ hostvars[item.hostname]['ansible_default_ipv4']['address'] }}")'
   when: pillar.mongo_rsconf.role == 'master' and item.role == 'arbiter'
   with_items: "{{ pillar.mongo_rsconf.members }}"
 
 - name: add backup to replica set
-  shell: "mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.add({host: \"{{ item.hostname }}\", hidden: true, priority: 0})'"
+  shell: "mongo 127.0.0.1:27017/admin -u {{ pillar.mongo_user[0].name }} -p {{ pillar.mongo_user[0].password }} --eval 'rs.add({host: \"{{ hostvars[item.hostname]['ansible_default_ipv4']['address'] }}\", hidden: true, priority: 0, votes: 0}'"
   when: pillar.mongo_rsconf.role == 'master' and item.role == 'backup'
   with_items: "{{ pillar.mongo_rsconf.members }}"

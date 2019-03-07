@@ -17,6 +17,7 @@ common_stage:
     - limits
     - snmpd
     - ssh
+    - sudoer
     - users
     - postfix
     - rsyslog
@@ -191,10 +192,13 @@ nxlog_stage:
     mssql:
       - msi
       - conf_mssql
-  example:
-    default:
-      - rpm
-      - conf
+  default1:
+    mysql:
+      - check_linux
+    mongodb:
+      - check_linux
+    mssql:
+      - check_windows
 
 parted_stage:
   args:

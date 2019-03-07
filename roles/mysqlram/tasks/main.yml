@@ -1,0 +1,28 @@
+---
+- name: get data dir 
+  shell: cat /etc/my.cnf|grep data|awk -F' = ' {'print $2'}
+  register: data_dir
+
+- name: get mysql size
+  shell: "echo -n \"{{ inventory_hostname }}: `uptime`\n================================================\nmysql data dir size: \" > /tmp/ramcalc.txt && du . {{ data_dir.stdout }} --max-depth 1 -h | tail -1 | awk {'print $1'} >> /tmp/ramcalc.txt"
+
+- name: current ram size
+  shell: "echo '\nfree -g' >> /tmp/ramcalc.txt && free -g >> /tmp/ramcalc.txt"
+
+- name: get mysql current active session
+  shell: "echo -n '\nmysql current active session: ' >> /tmp/ramcalc.txt && mysql -uroot --skip-column-names -e \"select * from information_schema.processlist where command <> 'Sleep'\"|wc -l >> /tmp/ramcalc.txt"
+
+- name: get mysql setting
+  shell: "echo '\nmysql parameter: ' >> /tmp/ramcalc.txt && cat /etc/my.cnf|grep -E 'innodb_buffer_pool_size|max_conn' >> /tmp/ramcalc.txt"
+
+- name: get sysctl setting
+  shell: "echo '\nsysctl parameter: ' >> /tmp/ramcalc.txt && sysctl -a |grep -E 'swap|somaxcon' >> /tmp/ramcalc.txt"
+
+- name: get sysctl setting
+  shell: "echo '================================================\n' >> /tmp/ramcalc.txt"
+
+- name: fetch log
+  fetch:
+    src: /tmp/ramcalc.txt
+    dest: /tmp/ram_analyze-{{ inventory_hostname }}
+    flat: yes

@@ -4,7 +4,7 @@ from dbinv import dbinv
 def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars, user, password):
     oraDB = dbinv.OracleDB(options['host'], options['user'], options['pass'], options['port'], options['sid'])
     oraDB.connect()
-#    del_sql = "delete configmg.item_database where HOST_NAME like '%p-concad%'"
+#    del_sql = "delete configmg.item_database where HOST_NAME like 'mars6-p-%'"
 #    oraDB.execute(del_sql)
     # get_data.py --password TrendAdm2012
     for host in mmm_group[mmm_setting['group_name']]['hosts']:
@@ -35,8 +35,9 @@ def insert_inv(myhost, options, mmm_group, mmm_setting, hostvars, user, password
                 value.append("'{}'".format("[''MySQL''; ''MySQL-Slave''; ''Check_Hardware''; ''Device_HighMemory'']"))
             column.append('SERVICE_PORT')
             value.append("'{}'".format('3306'))
-            column.append('HA_PEER_1')
-            value.append("'{}'".format(host['ha_peer']))
+            if 'ha_peer' in host.keys():
+                column.append('HA_PEER_1')
+                value.append("'{}'".format(host['ha_peer']))
             column.append('ENVIRONMENT')
             if '-p-' in host['hostname']:
                 value.append("'{}'".format('Production'))

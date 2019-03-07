@@ -12,6 +12,8 @@ repo_file:
   args:
     check_osver: True
   default:
+    6:
+      mongodb: https://repo.mongodb.org/yum/redhat/6/mongodb-org/4.0/$basearch
     7:
       percona_arch: http://repo.percona.com/release/7/RPMS/$basearch
       percona_noarch: http://repo.percona.com/release/7/RPMS/noarch

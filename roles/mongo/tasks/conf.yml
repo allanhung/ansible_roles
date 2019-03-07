@@ -13,8 +13,8 @@
     mode: 0755
 
 - name: restart mongod
-  systemd:
-    name: mongod.service
+  service:
+    name: mongod
     state: restarted
 
 - name: create mongodb user
@@ -25,6 +25,7 @@
     roles: "{{ item.roles | join(',') }}"
     state: present
   with_items: "{{ pillar.mongo_user }}"
+  ignore_errors: yes
 
 - name: copy mongo keyfile
   copy:
@@ -41,6 +42,6 @@
     dest: /etc/mongod.conf
 
 - name: restart mongod
-  systemd:
-    name: mongod.service
+  service:
+    name: mongod
     state: restarted

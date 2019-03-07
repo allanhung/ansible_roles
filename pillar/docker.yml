@@ -9,6 +9,11 @@ docker_python_pkg:
   default:
     - docker-compose
 
-docker_env:
+dockerd:
   default:
-    filename: /etc/sysconfig/docker  
+    env_file: /etc/sysconfig/docker
+    opt_file: /etc/docker/daemon.json.j2
+    log:
+      driver: json-file
+      max_size: 10m
+      max_file: 3

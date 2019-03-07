@@ -1,0 +1,3 @@
+---
+- name: no need tty for sudo
+  shell: sed -i -e '/^Defaults:/! s/Defaults.*requiretty/Defaults    !requiretty/g' /etc/sudoers
