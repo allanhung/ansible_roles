@@ -1,9 +1,0 @@
----
-- name: mysql mha
-  hosts: all
-  pre_tasks:
-    - pillar: {}
-  roles:
-    - common
-    - mysql
-    - mmm
